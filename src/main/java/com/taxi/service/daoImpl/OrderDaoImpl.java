@@ -9,7 +9,6 @@ import com.taxi.service.filter.OrderFilter;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
@@ -88,15 +87,9 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public Order addNew(Order order) {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement(SqlQueryList.INSERT_NEW_ORDER)) {
             getStatementForInsertEntity(preparedStatement, order);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            PreparedStatement getByUniqueValuePreparedStatement = getConnection().prepareStatement(SqlQueryList.ORDER_REVERSE_BY_COLUMNS_VALUES);
-            getByUniqueValuePreparedStatement.setString(1, order.getTitle());
-            getByUniqueValuePreparedStatement.setLong(2, order.getIdClient());
-            getByUniqueValuePreparedStatement.setDate(3, (Date) order.getCreateDate());
-
-            ResultSet returnOrderResultSet = getByUniqueValuePreparedStatement.executeQuery();
-            order = parseSingleResultSet(returnOrderResultSet);
+            preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            order = parseSingleResultSet(resultSet);
             return order;
         } catch (Exception e) {
             e.printStackTrace();

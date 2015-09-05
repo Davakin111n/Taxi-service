@@ -88,11 +88,9 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     public User addNew(User user) {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement(SqlQueryList.INSERT_NEW_USER)) {
             getStatementForInsertEntity(preparedStatement, user);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            PreparedStatement getByEmailPreparedStatement = getConnection().prepareStatement(SqlQueryList.SELECT_CLIENT_BY_EMAIL);
-            getByEmailPreparedStatement.setString(1, user.getEmail());
-            ResultSet returnUserResultSet = getByEmailPreparedStatement.executeQuery();
-            user = parseSingleResultSet(returnUserResultSet);
+            preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            user = parseSingleResultSet(resultSet);
             return user;
         } catch (Exception e) {
             e.printStackTrace();
