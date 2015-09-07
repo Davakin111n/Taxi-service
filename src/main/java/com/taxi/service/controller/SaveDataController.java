@@ -1,5 +1,7 @@
 package com.taxi.service.controller;
 
-public class SaveDataController {
+import javax.servlet.http.HttpServlet;
+
+public class SaveDataController extends HttpServlet {
 
 }

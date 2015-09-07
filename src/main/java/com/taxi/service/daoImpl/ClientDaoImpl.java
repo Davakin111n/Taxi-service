@@ -90,8 +90,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             getStatementForInsertEntity(preparedStatement, user);
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            user = parseSingleResultSet(resultSet);
-            return user;
+            return parseSingleResultSet(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
         }

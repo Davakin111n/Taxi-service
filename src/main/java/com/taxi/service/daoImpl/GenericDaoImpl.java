@@ -50,7 +50,7 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
         return identifier;
     }
 
-    public abstract T addNew(Identifier obj);
+    public abstract T addNew(? extends Identifier);
 
     public boolean isExists(Long id) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.SELECT_FROM

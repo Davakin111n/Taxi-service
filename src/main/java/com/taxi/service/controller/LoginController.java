@@ -1,4 +1,6 @@
 package com.taxi.service.controller;
 
-public class LoginController {
+import javax.servlet.http.HttpServlet;
+
+public class LoginController extends HttpServlet {
 }
