@@ -5,13 +5,13 @@ import com.taxi.service.entity.Identifier;
 import java.util.List;
 
 public interface GenericService<T extends Identifier> {
-    T get(long id);
+    T get(Long id);
 
-    boolean isExists(long id);
+    boolean isExists(Long id);
 
-    T save(T obj);
-
-    void delete(T obj);
+    void update(T obj);
 
     List<T> listAll();
+
+    Class getEntityClass();
 }

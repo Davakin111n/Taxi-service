@@ -26,9 +26,9 @@ public class DataBaseUtil {
         try {
             properties.load(DataBaseUtil.class.getClassLoader()
                     .getResourceAsStream("database.properties"));
-            Context ctx = new InitialContext();
-            Context envContext = (Context) ctx.lookup("java:comp/env");
-            connectionPool = (DataSource) envContext.lookup("jdbc/order_board");//TestDB is the Database Name
+            Context context = new InitialContext();
+            Context envContext = (Context) context.lookup("java:comp/env");
+            connectionPool = (DataSource) envContext.lookup("jdbc/order_board");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NamingException e) {
