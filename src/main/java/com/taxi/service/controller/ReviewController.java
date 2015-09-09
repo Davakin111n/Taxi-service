@@ -1,14 +1,14 @@
 package com.taxi.service.controller;
 
-import com.taxi.service.service.ClientService;
+import com.taxi.service.service.ReviewService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class LoginController extends HttpServlet {
+public class ReviewController extends HttpServlet {
 
-    private ClientService clientService;
+    private ReviewService reviewService;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

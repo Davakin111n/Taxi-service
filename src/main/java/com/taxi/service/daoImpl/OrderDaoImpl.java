@@ -45,12 +45,12 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
-    public void getStatementForUpdateEntity(PreparedStatement preparedStatement, Order order) {
+    public void getStatementForUpdateEntity(Order order, PreparedStatement preparedStatement) {
         ConverterFromEntity.convertUpdateOrderEntity(order, preparedStatement);
     }
 
     @Override
-    public void getStatementForInsertEntity(PreparedStatement preparedStatement, Order order) {
+    public void getStatementForInsertEntity(Order order, PreparedStatement preparedStatement) {
         ConverterFromEntity.convertNewOrderEntity(order, preparedStatement);
     }
 
@@ -83,10 +83,9 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         return null;
     }
 
-    @Override
     public Order addNew(Order order) {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement(SqlQueryList.INSERT_NEW_ORDER)) {
-            getStatementForInsertEntity(preparedStatement, order);
+            ConverterFromEntity.convertNewOrderEntity(order, preparedStatement);
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             order = parseSingleResultSet(resultSet);

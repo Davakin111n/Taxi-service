@@ -27,6 +27,10 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
 
     public abstract String getAllFromTableQuery();
 
+    public abstract void getStatementForUpdateEntity(T obj, PreparedStatement preparedStatement);
+
+    public abstract void getStatementForInsertEntity(T obj, PreparedStatement preparedStatement);
+
     public abstract T parseSingleResultSet(ResultSet resultSet);
 
     public abstract List<T> parseListResultSet(ResultSet resultSet);
@@ -50,8 +54,6 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
         return identifier;
     }
 
-    public abstract T addNew(? extends Identifier);
-
     public boolean isExists(Long id) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.SELECT_FROM
                 .concat(getSelectQuery()))) {
@@ -69,7 +71,7 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
     public void update(Identifier obj) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.INSERT_INTO
                 .concat(getInsertQuery()))) {
-            getStatementForUpdateEntity(preparedStatement, obj);
+            getStatementForUpdateEntity((T) obj, preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
 
         } catch (Exception e) {

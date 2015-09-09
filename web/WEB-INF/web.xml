@@ -3,19 +3,64 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-
+    <display-name>Korrida taxi-services</display-name>
     <servlet>
         <servlet-name>InitController</servlet-name>
         <servlet-class>com.taxi.service.controller.InitController</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>com.taxi.service.controller.LoginController</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>OrderController</servlet-name>
+        <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PrivateAreaController</servlet-name>
+        <servlet-class>com.taxi.service.controller.PrivateAreaController</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>InitController</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OrderController</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PrivateAreaController</servlet-name>
+        <url-pattern>/privateArea</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>45</session-timeout>
+    </session-config>
+
+    <resource-ref>
+        <description>DB Connection</description>
+        <res-ref-name>jdbc/order_board</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
 
 </web-app>

@@ -1,26 +1,37 @@
 package com.taxi.service.utils;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-
-/**
- * Connection jdbc class
- */
 public class DataBaseUtil {
+
+    public static DataSource connectionPool;
 
     private static Connection connection = null;
 
     private static Properties properties = new Properties();
 
+    public static Connection getConnection() throws SQLException {
+        return connectionPool.getConnection();
+    }
+
     static {
         try {
             properties.load(DataBaseUtil.class.getClassLoader()
                     .getResourceAsStream("database.properties"));
+            Context ctx = new InitialContext();
+            Context envContext = (Context) ctx.lookup("java:comp/env");
+            connectionPool = (DataSource) envContext.lookup("jdbc/order_board");//TestDB is the Database Name
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NamingException e) {
             e.printStackTrace();
         }
     }

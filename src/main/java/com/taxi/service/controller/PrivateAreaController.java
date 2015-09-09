@@ -1,9 +1,17 @@
 package com.taxi.service.controller;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by CODER11_32 on 26.08.2015.
- */
 public class PrivateAreaController extends HttpServlet {
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+
+    }
 }

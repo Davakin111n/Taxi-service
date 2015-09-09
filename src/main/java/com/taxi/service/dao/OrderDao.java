@@ -6,6 +6,8 @@ import com.taxi.service.filter.OrderFilter;
 import java.util.List;
 
 public interface OrderDao {
+    Order addNew(Order order);
+
     List<Order> listByFilter(OrderFilter orderFilter);
 
     List<Order> orderListByClient(Long clientId);

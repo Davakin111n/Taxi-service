@@ -17,12 +17,12 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     private DataSource dataSource;
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
     public ClientDaoImpl(Connection connection) {
         super(connection);
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -43,6 +43,16 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public String getAllFromTableQuery() {
         return SqlQueryList.CLIENT_TABLE;
+    }
+
+    @Override
+    public void getStatementForUpdateEntity(User user, PreparedStatement preparedStatement) {
+        ConverterFromEntity.convertUpdateClientEntity(user, preparedStatement);
+    }
+
+    @Override
+    public void getStatementForInsertEntity(User user, PreparedStatement preparedStatement) {
+        ConverterFromEntity.convertNewClientEntity(user, preparedStatement);
     }
 
     @Override
@@ -74,20 +84,9 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         return null;
     }
 
-    @Override
-    public void getStatementForUpdateEntity(PreparedStatement preparedStatement, User user) {
-        ConverterFromEntity.convertUpdateClientEntity(user, preparedStatement);
-    }
-
-    @Override
-    public void getStatementForInsertEntity(PreparedStatement preparedStatement, User user) {
-        ConverterFromEntity.convertNewClientEntity(user, preparedStatement);
-    }
-
-    @Override
     public User addNew(User user) {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement(SqlQueryList.INSERT_NEW_USER)) {
-            getStatementForInsertEntity(preparedStatement, user);
+            ConverterFromEntity.convertNewClientEntity(user, preparedStatement);
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             return parseSingleResultSet(resultSet);
