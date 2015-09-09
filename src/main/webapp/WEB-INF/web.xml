@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>Korrida taxi-services</display-name>
+    <display-name>Jean taxi-service</display-name>
     <servlet>
         <servlet-name>InitController</servlet-name>
         <servlet-class>com.taxi.service.controller.InitController</servlet-class>
@@ -15,13 +15,23 @@
     </servlet>
 
     <servlet>
-        <servlet-name>OrderController</servlet-name>
-        <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
+        <servlet-name>RegistrationController</servlet-name>
+        <servlet-class>com.taxi.service.controller.RegistrationController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>PrivateAreaController</servlet-name>
         <servlet-class>com.taxi.service.controller.PrivateAreaController</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>OrderController</servlet-name>
+        <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ReviewController</servlet-name>
+        <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -35,8 +45,18 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>RegistrationController</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/orderCreation</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ReviewController</servlet-name>
+        <url-pattern>/review</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
