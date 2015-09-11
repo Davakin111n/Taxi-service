@@ -9,6 +9,7 @@ public class User extends Identifier {
     }
 
     public User(String email,
+                String password,
                 String phone,
                 String address,
                 String clientName,
@@ -18,6 +19,7 @@ public class User extends Identifier {
                 boolean moderator,
                 boolean active) {
         this.email = email;
+        this.password = password;
         this.phone = phone;
         this.address = address;
         this.clientName = clientName;
@@ -30,6 +32,7 @@ public class User extends Identifier {
     }
 
     private String email;
+    private String password;
     private String phone;
     private String address;
     private String clientName;
@@ -50,6 +53,14 @@ public class User extends Identifier {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhone() {
@@ -128,6 +139,7 @@ public class User extends Identifier {
     public String toString() {
         return "Client{" +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", clientName='" + clientName + '\'' +

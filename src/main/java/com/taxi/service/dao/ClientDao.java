@@ -9,6 +9,8 @@ public interface ClientDao {
 
     List<User> listAllModerators();
 
+    List<User> listSimpleUsers();
+
     User getByEmail(String clientEmail);
 
     List<User> findBySearchRequest(String clientSearchQuery);

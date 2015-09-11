@@ -4,19 +4,22 @@ import com.taxi.service.dao.GenericDao;
 import com.taxi.service.dict.SqlQueryList;
 import com.taxi.service.entity.Identifier;
 
-import java.sql.Connection;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
 public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao {
 
-    private Connection connection;
-
+    private DataSource dataSource;
     private List<T> list;
 
-    public GenericDaoImpl(Connection connection) {
-        this.connection = connection;
+    public GenericDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
     }
 
     public abstract String getSelectQuery();
@@ -35,27 +38,21 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
 
     public abstract List<T> parseListResultSet(ResultSet resultSet);
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public Identifier get(Long id) {
+    public T get(Long id) {
         Identifier identifier = null;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.SELECT_FROM
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             identifier = parseSingleResultSet(resultSet);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return identifier;
+        return (T) identifier;
     }
 
     public boolean isExists(Long id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.SELECT_FROM
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -69,7 +66,7 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
     }
 
     public void update(Identifier obj) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.INSERT_INTO
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.INSERT_INTO
                 .concat(getInsertQuery()))) {
             getStatementForUpdateEntity((T) obj, preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -80,14 +77,13 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
     }
 
     public List listAll() {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SqlQueryList.SELECT_FROM
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.SELECT_FROM
                 .concat(getAllFromTableQuery()))) {
             ResultSet resultSet = preparedStatement.executeQuery();
             list = parseListResultSet(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return list;
     }
 

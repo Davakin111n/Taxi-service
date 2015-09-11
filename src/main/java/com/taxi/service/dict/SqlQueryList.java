@@ -19,6 +19,7 @@ public class SqlQueryList {
      */
     public static final String CLIENTS_ID = "order_board.client WHERE id = ?;";
     public static final String SELECT_ALL_MODERATORS = "SELECT * FROM order_board.client WHERE moderator = true;";
+    public static final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM order_board.client WHERE moderator = false AND admin = false;";
     public static final String SELECT_CLIENTS_BY_SEARCH_QUERY = "SELECT * FROM order_board.client WHERE email LIKE '%?%' OR address LIKE '%?%' OR phone LIKE '%?%' OR client_name LIKE '%?%' OR client_last_name LIKE '%?%' OR skype LIKE '%?%';";
     public static final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM order_board.client WHERE email =?";
 

@@ -7,9 +7,15 @@ import java.util.List;
 public interface ClientService {
     User addNew(User user);
 
+    boolean successLogin(String login, String password);
+
     List<User> listAllModerators();
 
-    User getByEmail(String clientEmail);
+    void madeModerator(Long userId);
+
+    List<User> listSimpleUsers();
+
+    User getByEmail(String userEmail);
 
     List<User> findBySearchRequest(String clientSearchQuery);
 }

@@ -34,6 +34,11 @@
         <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>AdminController</servlet-name>
+        <servlet-class>com.taxi.service.controller.AdminController</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>InitController</servlet-name>
         <url-pattern>/</url-pattern>
@@ -63,6 +68,15 @@
         <servlet-name>PrivateAreaController</servlet-name>
         <url-pattern>/privateArea</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AdminController</servlet-name>
+        <url-pattern>/adminPanel</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <location>/WEB-INF/pages/error.jsp</location>
+    </error-page>
 
     <session-config>
         <session-timeout>45</session-timeout>

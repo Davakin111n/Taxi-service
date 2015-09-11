@@ -14,7 +14,5 @@ public interface OrderService {
 
     List<Order> notActiveOrderListByClient(Long clientId);
 
-    List<Order> returnsOrderListByClient(Long clientId);
-
     List<Order> notActiveOrderList();
 }

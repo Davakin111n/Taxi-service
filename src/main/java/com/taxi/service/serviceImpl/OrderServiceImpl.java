@@ -10,7 +10,7 @@ import java.util.List;
 public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> implements OrderService {
     @Override
     public Order addNew(Order order) {
-        return null;
+        return dao.addNew(order);
     }
 
     @Override
@@ -20,21 +20,16 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
 
     @Override
     public List<Order> orderListByClient(Long clientId) {
-        return null;
+        return dao.orderListByClient(clientId);
     }
 
     @Override
     public List<Order> notActiveOrderListByClient(Long clientId) {
-        return null;
-    }
-
-    @Override
-    public List<Order> returnsOrderListByClient(Long clientId) {
-        return null;
+        return dao.notActiveOrderList();
     }
 
     @Override
     public List<Order> notActiveOrderList() {
-        return null;
+        return dao.notActiveOrderList();
     }
 }
