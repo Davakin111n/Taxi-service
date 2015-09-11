@@ -1,5 +1,9 @@
 package com.taxi.service.controller;
 
+import com.taxi.service.daoImpl.ClientDaoImpl;
+import com.taxi.service.daoImpl.OrderDaoImpl;
+import com.taxi.service.serviceImpl.ClientServiceImpl;
+import com.taxi.service.serviceImpl.OrderServiceImpl;
 import com.taxi.service.utils.DataBaseUtil;
 
 import javax.servlet.ServletConfig;
@@ -18,7 +22,11 @@ public class InitController extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        servletContext = config.getServletContext();
+        servletContext = this.getServletConfig().getServletContext();
+        servletContext.setAttribute("clientDao", new ClientDaoImpl(dataSource));
+        servletContext.setAttribute("orderDao", new OrderDaoImpl(dataSource));
+        servletContext.setAttribute("clientService", new ClientServiceImpl());
+        servletContext.setAttribute("orderService", new OrderServiceImpl());
     }
 
     @Override

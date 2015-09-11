@@ -14,7 +14,6 @@ import java.util.List;
 
 public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
-
     public ClientDaoImpl(DataSource dataSource) {
         super(dataSource);
     }
