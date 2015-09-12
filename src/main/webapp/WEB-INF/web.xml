@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <display-name>Jean taxi-service</display-name>
+
+    <listener>
+        <listener-class>com.taxi.service.utils.ApplicationContext</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>InitController</servlet-name>
         <servlet-class>com.taxi.service.controller.InitController</servlet-class>
@@ -74,12 +79,13 @@
         <url-pattern>/adminPanel</url-pattern>
     </servlet-mapping>
 
-    <error-page>
+    <!-- <error-page>
         <location>/WEB-INF/pages/error.jsp</location>
     </error-page>
+    -->
 
     <session-config>
-        <session-timeout>45</session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
 
     <resource-ref>
@@ -90,7 +96,7 @@
     </resource-ref>
 
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>/index.jsp</welcome-file>
     </welcome-file-list>
 
     <login-config>

@@ -15,7 +15,11 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
-    public boolean successLogin(String login, String password) {
+    public boolean successLogin(String email, String password) {
+        User user = dao.getByEmail(email);
+        if (user != null) {
+            return PasswordUtil.encryptPassword(password).equals(user.getPassword());
+        }
         return false;
     }
 
