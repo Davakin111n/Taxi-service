@@ -1,7 +1,6 @@
 package com.taxi.service.controller;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ public class InitController extends HttpServlet {
     public void init(ServletConfig servletConfig) {
         try {
             super.init(servletConfig);
-            ServletContext servletContext = servletConfig.getServletContext();
         } catch (ServletException e) {
             e.printStackTrace();
         }

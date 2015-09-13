@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class LoginController extends HttpServlet {
 
-    ClientService clientService = (ClientServiceImpl) this.getServletContext().getAttribute("clientService");
+    private ClientService clientService = (ClientServiceImpl) getServletConfig().getServletContext().getAttribute("clientService");
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -33,6 +33,7 @@ public class LoginController extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+
         if (!LoginValidator.validateLogin(request.getParameter("email"), request.getParameter("password"))) {
             //тут будет редирект на страницу с ошибкой и с текст ошибки - пустое поле
         }

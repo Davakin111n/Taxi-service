@@ -1,4 +1,4 @@
 package com.taxi.service.exception;
 
-public class ReviewException {
+public class ReviewException extends Exception {
 }
