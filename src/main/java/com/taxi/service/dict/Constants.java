@@ -10,6 +10,8 @@ public class Constants {
     public static final String ORDER = "order";
     public static final String ORDERS = "orders";
 
+    public static final String ORDER_LIST_BY_CLIENT = "orderList";
+    public static final String NOT_ACTIVE_ORDER_LIST_BY_CLIENT = "notActiveOrderList";
     /**
      * Jsp pages signatures
      */

@@ -1,12 +1,11 @@
 package com.taxi.service.controller;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AdminController extends HttpServlet {
+public class AdminController extends InitController {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
