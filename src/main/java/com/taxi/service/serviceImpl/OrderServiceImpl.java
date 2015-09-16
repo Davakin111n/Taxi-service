@@ -14,6 +14,11 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     }
 
     @Override
+    public void deleteOrder(Long orderId) {
+        dao.deleteOrder(orderId);
+    }
+
+    @Override
     public List<Order> listByFilter(OrderFilter orderFilter) {
         return null;
     }

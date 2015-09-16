@@ -91,6 +91,16 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
+    public void deleteOrder(Long orderId) {
+        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SqlQueryList.DELETE_ORDER)) {
+            preparedStatement.setLong(1, orderId);
+            preparedStatement.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<Order> listByFilter(OrderFilter orderFilter) {
         return null;
     }

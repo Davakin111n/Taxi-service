@@ -36,6 +36,13 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
+    public void changePassword(Long userId, String password) {
+        User user = dao.get(userId);
+        user.setPassword(PasswordUtil.encryptPassword(password));
+        dao.update(user);
+    }
+
+    @Override
     public List<User> listSimpleUsers() {
         return dao.listSimpleUsers();
     }

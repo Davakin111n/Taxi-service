@@ -1,6 +1,7 @@
 package com.taxi.service.utils;
 
 import com.taxi.service.daoImpl.ClientDaoImpl;
+import com.taxi.service.daoImpl.OrderDaoImpl;
 import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
 
@@ -12,7 +13,7 @@ public class ApplicationContext implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         servletContextEvent.getServletContext().setAttribute("clientDao", new ClientDaoImpl(DataBaseUtil.getConnectionPoolInstance()));
-        servletContextEvent.getServletContext().setAttribute("orderDao", new ClientDaoImpl(DataBaseUtil.getConnectionPoolInstance()));
+        servletContextEvent.getServletContext().setAttribute("orderDao", new OrderDaoImpl(DataBaseUtil.getConnectionPoolInstance()));
         servletContextEvent.getServletContext().setAttribute("clientService", new ClientServiceImpl());
         servletContextEvent.getServletContext().setAttribute("orderService", new OrderServiceImpl());
     }

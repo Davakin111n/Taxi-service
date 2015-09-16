@@ -34,7 +34,7 @@ public class RegistrationController extends InitController {
                 request.getParameter("secondaryPassword"),
                 request.getParameter("email"))) {
             try {
-                request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -44,7 +44,7 @@ public class RegistrationController extends InitController {
                 request.getParameter("password"),
                 request.getParameter("secondaryPassword"))) {
             try {
-                request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {

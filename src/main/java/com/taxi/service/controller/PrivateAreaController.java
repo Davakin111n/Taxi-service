@@ -12,22 +12,22 @@ public class PrivateAreaController extends InitController {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            if (request.getSession().getAttribute(Constants.USER) == null) {
-                request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+            User user = (User) request.getSession().getAttribute(Constants.USER);
+            if (user == null) {
+                request.getRequestDispatcher(Constants.LOGIN).forward(request, response);
+            }
+
+            if (user != null) {
+
             } else {
                 request.setAttribute(Constants.ORDER_LIST_BY_CLIENT, getOrderService().orderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST_BY_CLIENT, getOrderService().notActiveOrderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
-                request.getRequestDispatcher("WEB-INF/pages/privateArea.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.ADMIN_PANEL).forward(request, response);
             }
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     }
 }

@@ -1,9 +1,10 @@
 package com.taxi.service.filter;
 
+
 import javax.servlet.*;
 import java.io.IOException;
 
-public class OrderFilter implements Filter {
+public class ClientFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

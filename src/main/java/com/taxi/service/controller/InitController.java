@@ -1,11 +1,7 @@
 package com.taxi.service.controller;
 
-import com.taxi.service.dao.ClientDao;
-import com.taxi.service.dao.OrderDao;
 import com.taxi.service.daoImpl.ClientDaoImpl;
 import com.taxi.service.daoImpl.OrderDaoImpl;
-import com.taxi.service.service.ClientService;
-import com.taxi.service.service.OrderService;
 import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
 
@@ -17,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class InitController extends HttpServlet {
-    private ClientService clientService;
-    private OrderService orderService;
-    private ClientDao clientDao;
-    private OrderDao orderDao;
+    private ClientServiceImpl clientService;
+    private OrderServiceImpl orderService;
+    private ClientDaoImpl clientDao;
+    private OrderDaoImpl orderDao;
 
     @Override
     public void init(ServletConfig servletConfig) {
@@ -46,19 +42,19 @@ public class InitController extends HttpServlet {
         }
     }
 
-    public OrderDao getOrderDao() {
+    public OrderDaoImpl getOrderDao() {
         return orderDao;
     }
 
-    public ClientService getClientService() {
+    public ClientServiceImpl getClientService() {
         return clientService;
     }
 
-    public OrderService getOrderService() {
+    public OrderServiceImpl getOrderService() {
         return orderService;
     }
 
-    public ClientDao getClientDao() {
+    public ClientDaoImpl getClientDao() {
         return clientDao;
     }
 }

@@ -9,6 +9,24 @@
         <listener-class>com.taxi.service.utils.ApplicationContext</listener-class>
     </listener>
 
+    <filter>
+        <filter-name>ClientFilter</filter-name>
+        <filter-class>com.taxi.service.filter.ClientFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ClientFilter</filter-name>
+        <url-pattern>/someUrl1</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>OrderFilter</filter-name>
+        <filter-class>com.taxi.service.filter.OrderFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OrderFilter</filter-name>
+        <url-pattern>/someUrl2</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>InitController</servlet-name>
         <servlet-class>com.taxi.service.controller.InitController</servlet-class>
@@ -25,13 +43,18 @@
     </servlet>
 
     <servlet>
-        <servlet-name>PrivateAreaController</servlet-name>
-        <servlet-class>com.taxi.service.controller.PrivateAreaController</servlet-class>
+        <servlet-name>UserController</servlet-name>
+        <servlet-class>com.taxi.service.controller.UserController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>OrderController</servlet-name>
         <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PrivateAreaController</servlet-name>
+        <servlet-class>com.taxi.service.controller.PrivateAreaController</servlet-class>
     </servlet>
 
     <servlet>
@@ -55,13 +78,20 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>RegistrationController</servlet-name>
-        <url-pattern>/registration</url-pattern>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/savePersonData</url-pattern>
+        <url-pattern>/changePassword</url-pattern>
+        <url-pattern>/madeModerator</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
         <url-pattern>/orderCreation</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RegistrationController</servlet-name>
+        <url-pattern>/registration</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -15,9 +15,9 @@ public class LoginController extends InitController {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (request.getSession().getAttribute(Constants.USER) != null) {
-                request.getRequestDispatcher("WEB-INF/pages/privateArea.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA).forward(request, response);
             } else {
-                request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.LOGIN).forward(request, response);
             }
         } catch (ServletException e) {
             e.printStackTrace();
@@ -28,19 +28,24 @@ public class LoginController extends InitController {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * Валидация на пустоту и на корректность введённого E-mail
+         */
         if (!LoginValidator.validateLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
-                request.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
+        /**
+         * Проверка на существование пользователя в системе
+         */
         if (!getClientService().successLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
-                request.getRequestDispatcher("WEB-INF/pages/privateArea.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -50,11 +55,7 @@ public class LoginController extends InitController {
             User user = getClientService().getByEmail(request.getParameter("email"));
             request.getSession().setAttribute(Constants.USER, user);
             try {
-                if (user.isModerator()) {
-                    request.getRequestDispatcher("WEB-INF/pages/adminPanel.jsp").forward(request, response);
-                } else {
-                    request.getRequestDispatcher("WEB-INF/pages/privateArea.jsp").forward(request, response);
-                }
+                request.getRequestDispatcher(Constants.PRIVATE_AREA).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -65,5 +66,12 @@ public class LoginController extends InitController {
 
     private void logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().removeAttribute("user");
+        try {
+            request.getRequestDispatcher(Constants.INDEX).forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

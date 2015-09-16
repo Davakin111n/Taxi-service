@@ -1,7 +1,6 @@
 package com.taxi.service.dict;
 
 public class SqlQueryList {
-
     /**
      * Database basic metadata.
      */
@@ -27,7 +26,6 @@ public class SqlQueryList {
      * SELECT statements for order table
      */
     public static final String ORDERS_ID = "order_board.order WHERE id = ?;";
-    public static final String ORDER_REVERSE_BY_COLUMNS_VALUES = "SELECT * FROM order_board.order WHERE title = ? AND id_client = ? AND create_date = ?";
     public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM order_board.order WHERE id_client = ?;";
     public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM order_board.order WHERE active = FALSE;";
     public static final String SELECT_ALL_ORDERS_BY_CLIENT_ID = "SELECT * FROM order_board.order WHERE client_id = ?";
@@ -45,4 +43,10 @@ public class SqlQueryList {
      */
     public static final String UPDATE_CLIENT = "order_board.client SET email = ?, address = ?, phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?;";
     public static final String UPDATE_ORDER = "order_board.order SET title = ?, note = ?, price = ?, id_client = ?, location = ?, create_date = ? WHERE id = ?;";
+    public static final String MAKE_MODERATOR = "order_board.client SET moderator = ? WHERE id = ?";
+
+    /**
+     * DELETE statements for order table
+     */
+    public static final String DELETE_ORDER = "DELETE FROM order_board.order WHERE id = ?;";
 }

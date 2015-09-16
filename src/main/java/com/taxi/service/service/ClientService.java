@@ -7,11 +7,13 @@ import java.util.List;
 public interface ClientService {
     User addNew(User user);
 
+    void madeModerator(Long userId);
+
+    void changePassword(Long userId, String password);
+
     boolean successLogin(String login, String password);
 
     List<User> listAllModerators();
-
-    void madeModerator(Long userId);
 
     List<User> listSimpleUsers();
 
