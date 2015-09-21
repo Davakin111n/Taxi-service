@@ -6,12 +6,11 @@
 
 <head>
     <title>
-
-
+        Регистрация - Jean Taxi
     </title>
 </head>
 
-<form:form name='userForm' method='post'>
+<form name='userForm' method='post'>
 
     <table id='tableForRegistration'>
         <tr>
@@ -55,6 +54,6 @@
         </tr>
 
     </table>
-</form:form>
+</form>
 
 </html>

@@ -1,0 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"
+        %>
+
+<div id="footer">
+    Быстрый сервис такси - уже в твоём городе!
+    <hr style="width:75%"/>
+    Jean Taxi(с) 2015
+    <%--<br />
+    <a href="<c:url value='/instructions'/>" class="instructions">Инструкции пользователя</a>--%>
+</div>

@@ -1,0 +1,14 @@
+
+#loginBlock {
+    width: 300px;
+    margin: 0 auto;
+}
+
+#loginBlock h1 {
+    text-align: center;
+}
+
+label.error {
+    float: left;
+}
+

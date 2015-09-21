@@ -1,0 +1,44 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"
+        %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<div id="header">
+    <script type="text/javascript">
+        $(function () {
+            $("#home_icon").mouseover(function () {
+                var overSrc = "http://1sklad.com/app/resources/images/home_2.png";
+                $(this).attr("src", overSrc);
+            });
+
+            $("#home_icon").mouseout(function () {
+                var outSrc = "http://1sklad.com/app/resources/images/home.png";
+                $(this).attr("src", outSrc);
+            });
+        });
+    </script>
+
+    <a href="<c:url value='/' />"><img id="home_icon" title="На главную"
+                                       src="http://1sklad.com/app/resources/images/home.png"/></a>
+
+    <p id="siteName"><a href="<c:url value='/' />">Jean Taxi Service&nbsp;</a></p>
+    <%--<a class="instructions" href="<c:url value='/instructions'/>" >Инструкции пользователя</a>--%>
+
+    <div id="loginRegistration">
+        <c:choose>
+            <c:when test="${sessionScope.user != null}">
+
+                <a href="<c:url value='/privateArea'/>">Заказ такси</a> &nbsp;/&nbsp;
+
+                <c:if test="${sessionScope.user.admin}">
+                    <a href="<c:url value='/adminPanel'/>">Админ панель</a> &nbsp;/&nbsp;
+                </c:if>
+
+                <a href="<c:url value='/privateArea'/>">Личный кабинет</a> &nbsp;/ &nbsp;
+                <a href="<c:url value='/logout'/>">Выйти</a>
+            </c:when>
+            <c:otherwise>
+                <a href="<c:url value='/login'/>">Войти</a>&nbsp;/&nbsp;<a href="<c:url value='/registration'/>">Зарегистрироваться</a>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>

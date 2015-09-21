@@ -1,0 +1,89 @@
+#dateTime {
+    float: right;
+}
+
+#currentLocation {
+    float: left;
+}
+
+#locationIcon {
+    height: 16px;
+    float: left;
+    margin-right: 5px;
+}
+
+#contacts {
+    width: 900px;
+    padding-top: 10px;
+    border-top: 1px solid #dcdcdc;
+
+}
+
+#contacts .icon {
+    height: 16px;
+    float: left;
+    margin-right: 5px;
+}
+
+#advertInfo {
+    width: 900px;
+    text-align: center;
+}
+
+#socialNetwork, #moderatorAction {
+    margin-bottom: 7px;
+    border-bottom: 1px solid #dcdcdc;
+    margin-top: 7px;
+    border-top: 1px solid #dcdcdc;
+}
+
+td#note {
+    padding: 7px;
+    font-size: 20px;
+    vertical-align: top;
+    background-color: #F2F2F2; /*#f7f5f0; */
+    min-width: 260px;
+}
+
+div#map {
+    width: 900px;
+    height: 300px
+}
+
+#countView {
+    float: left;
+}
+
+#function {
+    float: right;
+}
+
+#withoutPhotoContainer {
+    background: #fff url('../images/withoutPhotoContainer.png') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    width: 640px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+#withoutPhoto {
+    width: 146px;
+    height: 97px;
+    background-image: url('../images/withoutPhoto.png');
+}
+
+#checkMessage {
+    color: red;
+}
+
+#geoLocation {
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid #dcdcdc;
+}

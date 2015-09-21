@@ -1,0 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"
+        %>
+
+<div id="filter">
+    <form:form method='POST' action='advertList' name="advertFilter" commandName="advertFilter">
+
+        <form:label path="category">Категория &nbsp;</form:label>
+        <form:select path='category'>
+            <form:option value="" label="Все"/>
+            <form:options items="${categories}" itemLabel="name" itemValue="id"/>
+        </form:select>
+
+        &nbsp;&nbsp;
+
+        <form:label path="condition">Состояние &nbsp;</form:label>
+        <form:select path="condition">
+            <form:option value="" label="Все"/>
+            <form:options items="${conditions}" itemLabel="title"/>
+        </form:select>
+
+        &nbsp;&nbsp;&nbsp;
+
+        <form:label path="condition">Регион &nbsp;</form:label>
+        <form:select path="location">
+            <form:option value="" label="Все"/>
+            <form:options items="${regions}" itemLabel="title"/>
+        </form:select>
+
+        &nbsp;&nbsp;&nbsp;
+
+        <form:input type="search" path='searchFieldValue'/>
+
+        &nbsp;&nbsp;
+
+        <input type="submit" value="Найти"/>
+    </form:form>
+</div>

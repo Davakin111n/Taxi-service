@@ -29,7 +29,7 @@ public class LoginController extends InitController {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         /**
-         * Валидация на пустоту и на корректность введённого E-mail
+         * Валидация на пустоту
          */
         if (!LoginValidator.validateLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
@@ -40,6 +40,7 @@ public class LoginController extends InitController {
                 e.printStackTrace();
             }
         }
+
         /**
          * Проверка на существование пользователя в системе
          */

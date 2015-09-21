@@ -1,0 +1,179 @@
+
+.category {
+    width: 420px;
+    margin: 15px;
+    float: left;
+    height: 310px;
+}
+
+.categories {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.categories table {
+    border-spacing: 5px;
+}
+
+.categories td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-size: 24px;
+    width: 440px;
+}
+
+.categories td img {
+    max-width: 405px;
+    max-height: 275px;
+    margin: auto auto;
+}
+
+td.tdLink {
+    border-bottom: 2px solid #dcdcdc;
+}
+
+/*SLIDER BEGIN*/
+
+#slides {
+    display: none
+}
+
+#slides .slidesjs-navigation {
+    margin-top: 3px;
+}
+
+#slides .slidesjs-previous {
+    margin-right: 5px;
+    float: left;
+}
+
+#slides .slidesjs-next {
+    margin-right: 5px;
+    float: left;
+}
+
+.slidesjs-pagination {
+    margin: 6px 0 0;
+    float: right;
+    list-style: none;
+}
+
+.slidesjs-pagination li {
+    float: left;
+    margin: 0 1px;
+}
+
+.slidesjs-pagination li a {
+    display: block;
+    width: 13px;
+    height: 0;
+    padding-top: 13px;
+    background-image: url(../images/pagination.png);
+    background-position: 0 0;
+    float: left;
+    overflow: hidden;
+}
+
+.slidesjs-pagination li a.active,
+.slidesjs-pagination li a:hover.active {
+    background-position: 0 -13px
+}
+
+.slidesjs-pagination li a:hover {
+    background-position: 0 -26px
+}
+
+#slides a:link,
+#slides a:visited {
+    color: #333
+}
+
+#slides a:hover,
+#slides a:active {
+    color: #9e2020
+}
+
+.navbar {
+    overflow: hidden
+}
+
+#slides {
+    display: none
+}
+
+.container {
+    margin: 0 auto
+}
+
+/* For tablets & smart phones */
+@media (max-width: 767px) {
+    body {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .container {
+        width: auto
+    }
+}
+
+/* For smartphones */
+@media (max-width: 480px) {
+    .container {
+        width: auto
+    }
+}
+
+/* For smaller displays like laptops */
+@media (min-width: 768px) and (max-width: 979px) {
+    .container {
+        width: 724px
+    }
+}
+
+/* For larger displays */
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px
+    }
+}
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('font/fontawesome-webfont.eot?v=3.0.1');
+    src: url('font/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
+    url('font/fontawesome-webfont.woff?v=3.0.1') format('woff'),
+    url('font/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
+    font-weight: normal;
+    font-style: normal
+}
+
+#slides {
+    font-family: FontAwesome;
+    padding: 5px 0;
+}
+
+.categoryLabel {
+    text-align: center;
+}
+
+.icon-chevron-left:before {
+    content: "\f053"
+}
+
+.icon-chevron-right:before {
+    content: "\f054"
+}
+
+.icon-large:before {
+    vertical-align: -10%;
+    font-size: 1.3333333333333333em
+}
+
+.slidesjs-navigation:hover {
+    text-decoration: none;
+}
+
+/*SLIDER END*/
+
