@@ -14,18 +14,20 @@ public class LoginController extends InitController {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            if (request.getRequestURI().contains("logout")) {
-                logout(request, response);
-            }
-
             if (request.getSession().getAttribute(Constants.USER) != null) {
-                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+                if (request.getRequestURI().contains("/logout")) {
+                    logout(request, response);
+                } else if (((User) request.getSession().getAttribute(Constants.USER)).isModerator()) {
+                    request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
+                } else {
+                    request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+                }
             } else {
                 request.getRequestDispatcher(Constants.LOGIN_PATH).forward(request, response);
             }
-        } catch (ServletException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
             e.printStackTrace();
         }
     }
@@ -61,19 +63,23 @@ public class LoginController extends InitController {
             request.getSession().setAttribute(Constants.USER, user);
             try {
                 request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
-            } catch (ServletException e) {
-                e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServletException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void logout(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().removeAttribute("user");
         try {
+            request.getSession().removeAttribute("user");
+            request.getSession().invalidate();
+            request.logout();
             response.sendRedirect(Constants.INDEX);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
             e.printStackTrace();
         }
     }

@@ -16,13 +16,12 @@ public class PrivateAreaController extends InitController {
             if (user == null) {
                 request.getRequestDispatcher(Constants.LOGIN_PATH).forward(request, response);
             }
-
-            if (user != null) {
-
-            } else {
+            if (user != null && user.isModerator()) {
                 request.setAttribute(Constants.ORDER_LIST_BY_CLIENT, getOrderService().orderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST_BY_CLIENT, getOrderService().notActiveOrderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
-                request.getRequestDispatcher(Constants.ADMIN_PANEL).forward(request, response);
+                request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
+            } else {
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             }
         } catch (ServletException e) {
             e.printStackTrace();

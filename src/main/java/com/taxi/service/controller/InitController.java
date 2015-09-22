@@ -2,6 +2,7 @@ package com.taxi.service.controller;
 
 import com.taxi.service.daoImpl.ClientDaoImpl;
 import com.taxi.service.daoImpl.OrderDaoImpl;
+import com.taxi.service.dict.Constants;
 import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
 
@@ -36,7 +37,7 @@ public class InitController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
+            request.getRequestDispatcher(Constants.INDEX_PATH).forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

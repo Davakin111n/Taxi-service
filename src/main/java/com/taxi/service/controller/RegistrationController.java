@@ -15,7 +15,7 @@ public class RegistrationController extends InitController {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (request.getSession().getAttribute(Constants.USER) != null) {
-                response.sendRedirect(Constants.PRIVATE_AREA);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } else {
                 request.getRequestDispatcher(Constants.REGISTRATION_PATH).forward(request, response);
             }
@@ -61,8 +61,10 @@ public class RegistrationController extends InitController {
             user = getClientService().addNew(user);
             request.getSession().setAttribute(Constants.USER, user);
             try {
-                response.sendRedirect(Constants.PRIVATE_AREA);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServletException e) {
                 e.printStackTrace();
             }
         }

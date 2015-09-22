@@ -76,6 +76,7 @@ public class UserController extends InitController {
         getClientService().madeModerator(user.getId());
         try {
             request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
