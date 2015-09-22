@@ -16,15 +16,25 @@ public class Constants {
     public static final String NOT_ACTIVE_ORDER_LIST = "notActiveOrderList";
 
     /**
-     * Jsp pages signatures & path
+     * Jsp pages mapping name
      */
-    public static final String INDEX = "WEB-INF/pages/index.jsp";
-    public static final String LOGIN = "WEB-INF/pages/login.jsp";
-    public static final String REGISTRATION = "WEB-INF/pages/registration.jsp";
-    public static final String PRIVATE_AREA = "WEB-INF/pages/privateArea.jsp";
-    public static final String REWIEWS_LIST = "WEB-INF/pages/rewiews.jsp";
-    public static final String ADMIN_PANEL = "WEB-INF/pages/adminPanel.jsp";
-    public static final String ERROR = "WEB-INF/pages/error.jsp";
+    public static final String INDEX = "index";
+    public static final String LOGIN = "login";
+    public static final String REGISTRATION = "registration";
+    public static final String PRIVATE_AREA = "privateArea";
+    public static final String ADMIN_PANEL = "adminPanel";
+    public static final String ERROR = "error";
+
+    /**
+     * Jsp pages path name
+     */
+    public static final String INDEX_PATH = "WEB-INF/pages/index.jsp";
+    public static final String LOGIN_PATH = "WEB-INF/pages/login.jsp";
+    public static final String REGISTRATION_PATH = "WEB-INF/pages/registration.jsp";
+    public static final String PRIVATE_AREA_PATH = "WEB-INF/pages/privateArea.jsp";
+    public static final String REWIEWS_LIST_PATH = "WEB-INF/pages/rewiews.jsp";
+    public static final String ADMIN_PANEL_PATH = "WEB-INF/pages/adminPanel.jsp";
+    public static final String ERROR_PATH = "WEB-INF/pages/error.jsp";
 
     /**
      * Exception UI messages

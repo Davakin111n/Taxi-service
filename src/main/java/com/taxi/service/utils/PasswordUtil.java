@@ -15,20 +15,20 @@ public class PasswordUtil {
      * Шифрование пароля
      */
     public static String encryptPassword(String password) {
-        byte[] keyArray = new byte[31];
+        byte[] keyArray = new byte[24];
         byte[] temporarySetKey;
-        byte[] encryptionArray = null;
+        byte[] encryptionArray;
 
-        String encodeKey = "fcjiopdifhasjkf1209eyaw";
+        String encodeKey = "ertyuiopdfghjklcvbxcviq";
         String encryptedPasswordValue = "";
         try {
             encryptionArray = password.getBytes("UTF-8");
             MessageDigest message = MessageDigest.getInstance("MD5");
             temporarySetKey = message.digest(encodeKey.getBytes("UTF-8"));
-
-            if (temporarySetKey.length < 31) {
+            if (temporarySetKey.length < 24) {
                 int index = 0;
-                for (int i = temporarySetKey.length; i < 31; i++) {
+
+                for (int i = temporarySetKey.length; i < 24; i++) {
                     keyArray[i] = temporarySetKey[index];
                 }
             }
@@ -38,10 +38,6 @@ public class PasswordUtil {
             encryptedPasswordValue = Base64.encodeBase64String(encryptionOutput);
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            keyArray = null;
-            temporarySetKey = null;
-            encryptionArray = null;
         }
         return encryptedPasswordValue;
     }
@@ -50,31 +46,30 @@ public class PasswordUtil {
      * Расшифровка пароля
      */
     public static String decryptPassword(String decodePassword) {
-        byte[] keyArray = new byte[31];
+
+        byte[] keyArray = new byte[24];
         byte[] temporarySetKey;
 
-        String key = "fcjiopdifhasjkf1209eyaw";
+        String key = "atadampresetnobvcohigh";
         String decryptedPasswordValue = "";
         try {
-            MessageDigest m = MessageDigest.getInstance("MD5");
-            temporarySetKey = m.digest(key.getBytes("UTF-8"));
-            if (temporarySetKey.length < 31) {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            temporarySetKey = messageDigest.digest(key.getBytes("UTF-8"));
+
+            if (temporarySetKey.length < 24) {
                 int index = 0;
-                for (int i = temporarySetKey.length; i < 31; i++) {
+                for (int i = temporarySetKey.length; i < 24; i++) {
                     keyArray[i] = temporarySetKey[index];
                 }
             }
-
             Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyArray, "DESede"), new IvParameterSpec(dataRegisterSet));
 
             byte[] decrypted = cipher.doFinal(Base64.decodeBase64(decodePassword));
+
             decryptedPasswordValue = new String(decrypted, "UTF-8");
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            keyArray = null;
-            temporarySetKey = null;
         }
         return decryptedPasswordValue;
     }

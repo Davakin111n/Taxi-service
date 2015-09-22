@@ -14,7 +14,7 @@ public class PrivateAreaController extends InitController {
         try {
             User user = (User) request.getSession().getAttribute(Constants.USER);
             if (user == null) {
-                request.getRequestDispatcher(Constants.LOGIN).forward(request, response);
+                request.getRequestDispatcher(Constants.LOGIN_PATH).forward(request, response);
             }
 
             if (user != null) {

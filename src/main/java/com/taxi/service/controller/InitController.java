@@ -29,6 +29,8 @@ public class InitController extends HttpServlet {
         this.orderDao = (OrderDaoImpl) servletConfig.getServletContext().getAttribute("orderDao");
         this.clientService = (ClientServiceImpl) servletConfig.getServletContext().getAttribute("clientService");
         this.orderService = (OrderServiceImpl) servletConfig.getServletContext().getAttribute("orderService");
+        this.clientService.setDao(this.clientDao);
+        this.orderService.setDao(this.orderDao);
     }
 
     @Override

@@ -80,7 +80,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     public User addNew(User user) {
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SqlQueryList.INSERT_NEW_USER)) {
             ConverterFromEntity.convertNewClientEntity(user, preparedStatement);
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             return parseSingleResultSet(resultSet);
         } catch (Exception e) {

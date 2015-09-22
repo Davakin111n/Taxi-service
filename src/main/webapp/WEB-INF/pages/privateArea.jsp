@@ -9,11 +9,13 @@
         JeanTaxi - Личный кабинет
     </title>
 </head>
-
+<%--header for each page--%>
+<%@include file="../jspf/header.jspf" %>
 <h5>Изменить личные данные:</h5>
-<form:form name='savePersonData' method='post' action="/savePersonData">
 
-    <table id='savePersonData'>
+<form name='savePersonData' method='post' action="/savePersonData">
+
+<table id='savePersonData'>
         <tr>
             <td>Имя -</td>
             <td><input type='email' name='тфьу'/></td>
@@ -41,12 +43,13 @@
         </tr>
 
     </table>
-</form:form>
+</form>
 
 <h5>Изменить пароль:</h5>
-<form:form name='changePassword' method='post' action="/changePassword">
 
-    <table id='changePassword'>
+<form name='changePassword' method='post' action="/changePassword">
+
+<table id='changePassword'>
 
         <tr>
             <td>Пароль* -</td>
@@ -70,6 +73,7 @@
         </tr>
 
     </table>
-</form:form>
+</form>
 
+<%@include file="../jspf/footer.jspf" %>
 </html>

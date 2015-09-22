@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'Conv_EuroStyle Normal';
-    src: url('fonts/EuroStyle Normal.eot');
-    src: local('☺'), url('fonts/EuroStyle Normal.woff') format('woff'), url('fonts/EuroStyle Normal.ttf') format('truetype'), url('fonts/EuroStyle Normal.svg') format('svg');
+    src: url('fonts/EuroStyle%20Normal.eot');
+    src: local('☺'), url('fonts/EuroStyle%20Normal.woff') format('woff'), url('fonts/EuroStyle%20Normal.ttf') format('truetype'), url('fonts/EuroStyle%20Normal.svg') format('svg');
     font-weight: normal;
     font-style: normal;
 }

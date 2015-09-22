@@ -2,7 +2,6 @@ package com.taxi.service.serviceImpl;
 
 import com.taxi.service.daoImpl.OrderDaoImpl;
 import com.taxi.service.entity.Order;
-import com.taxi.service.filter.OrderFilter;
 import com.taxi.service.service.OrderService;
 
 import java.util.List;
@@ -16,11 +15,6 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     @Override
     public void deleteOrder(Long orderId) {
         dao.deleteOrder(orderId);
-    }
-
-    @Override
-    public List<Order> listByFilter(OrderFilter orderFilter) {
-        return null;
     }
 
     @Override

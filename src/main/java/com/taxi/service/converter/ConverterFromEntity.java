@@ -39,12 +39,12 @@ public class ConverterFromEntity {
     public static void convertNewClientEntity(User user, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getAddress());
-            preparedStatement.setString(3, user.getPhone());
-            preparedStatement.setString(4, user.getClientName());
-            preparedStatement.setString(5, user.getClientLastName());
-            preparedStatement.setString(6, user.getSkype());
-            preparedStatement.setDate(7, (Date) user.getRegistrationDate());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getAddress());
+            preparedStatement.setString(4, user.getPhone());
+            preparedStatement.setString(5, user.getClientName());
+            preparedStatement.setString(6, user.getClientLastName());
+            preparedStatement.setString(7, user.getSkype());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

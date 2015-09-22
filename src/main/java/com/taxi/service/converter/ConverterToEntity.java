@@ -15,11 +15,13 @@ public class ConverterToEntity {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
                 user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
                 user.setAddress(resultSet.getString("address"));
                 user.setClientName(resultSet.getString("client_name"));
                 user.setClientLastName(resultSet.getString("client_last_name"));
                 user.setPhone(resultSet.getString("phone"));
                 user.setSkype(resultSet.getString("skype"));
+                user.setRegistrationDate(resultSet.getDate("create_date"));
                 return user;
             }
         } catch (Exception exception) {
@@ -35,11 +37,13 @@ public class ConverterToEntity {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
                 user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
                 user.setAddress(resultSet.getString("address"));
                 user.setClientName(resultSet.getString("client_name"));
                 user.setClientLastName(resultSet.getString("client_last_name"));
                 user.setPhone(resultSet.getString("phone"));
                 user.setSkype(resultSet.getString("skype"));
+                user.setRegistrationDate(resultSet.getDate("create_date"));
                 userList.add(user);
             }
             return userList;

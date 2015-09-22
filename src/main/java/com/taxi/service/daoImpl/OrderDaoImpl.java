@@ -5,7 +5,6 @@ import com.taxi.service.converter.ConverterToEntity;
 import com.taxi.service.dao.OrderDao;
 import com.taxi.service.dict.SqlQueryList;
 import com.taxi.service.entity.Order;
-import com.taxi.service.filter.OrderFilter;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -98,11 +97,6 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public List<Order> listByFilter(OrderFilter orderFilter) {
-        return null;
     }
 
     @Override

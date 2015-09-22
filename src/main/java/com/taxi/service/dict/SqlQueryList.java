@@ -20,7 +20,7 @@ public class SqlQueryList {
     public static final String SELECT_ALL_MODERATORS = "SELECT * FROM order_board.client WHERE moderator = true;";
     public static final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM order_board.client WHERE moderator = false AND admin = false;";
     public static final String SELECT_CLIENTS_BY_SEARCH_QUERY = "SELECT * FROM order_board.client WHERE email LIKE '%?%' OR address LIKE '%?%' OR phone LIKE '%?%' OR client_name LIKE '%?%' OR client_last_name LIKE '%?%' OR skype LIKE '%?%';";
-    public static final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM order_board.client WHERE email =?";
+    public static final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM order_board.client WHERE email =?;";
 
     /**
      * SELECT statements for order table
@@ -35,7 +35,7 @@ public class SqlQueryList {
     /**
      * INSERT statements for client table
      */
-    public static final String INSERT_NEW_USER = "order_board.client(email, address, phone, client_name, client_last_name, skype, create_date) VALUES(?, ?, ?, ?, ?, ?, ?);";
+    public static final String INSERT_NEW_USER = "INSERT INTO order_board.client(email, password, address, phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?);";
     public static final String INSERT_NEW_ORDER = "INSERT INTO order(title, note, price, id_client, location, create_date) VALUES (?, ?, ?, ?, ?, ?);";
 
     /**

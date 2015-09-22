@@ -14,10 +14,14 @@ public class LoginController extends InitController {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
+            if (request.getRequestURI().contains("logout")) {
+                logout(request, response);
+            }
+
             if (request.getSession().getAttribute(Constants.USER) != null) {
-                request.getRequestDispatcher(Constants.PRIVATE_AREA).forward(request, response);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } else {
-                request.getRequestDispatcher(Constants.LOGIN).forward(request, response);
+                request.getRequestDispatcher(Constants.LOGIN_PATH).forward(request, response);
             }
         } catch (ServletException e) {
             e.printStackTrace();
@@ -33,7 +37,7 @@ public class LoginController extends InitController {
          */
         if (!LoginValidator.validateLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
-                request.getRequestDispatcher(Constants.ERROR).forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -46,7 +50,7 @@ public class LoginController extends InitController {
          */
         if (!getClientService().successLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
-                request.getRequestDispatcher(Constants.ERROR).forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -56,7 +60,7 @@ public class LoginController extends InitController {
             User user = getClientService().getByEmail(request.getParameter("email"));
             request.getSession().setAttribute(Constants.USER, user);
             try {
-                request.getRequestDispatcher(Constants.PRIVATE_AREA).forward(request, response);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -68,9 +72,7 @@ public class LoginController extends InitController {
     private void logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().removeAttribute("user");
         try {
-            request.getRequestDispatcher(Constants.INDEX).forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
+            response.sendRedirect(Constants.INDEX);
         } catch (IOException e) {
             e.printStackTrace();
         }

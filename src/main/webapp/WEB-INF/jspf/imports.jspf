@@ -1,0 +1,30 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"
+        %>
+<style>
+    <%@include file="/resources/stylesheet/common.css" %>
+
+    <%@include file="/resources/stylesheet/index.css" %>
+    <%@include file="/resources/stylesheet/login.css" %>
+    <%@include file="/resources/stylesheet/privateArea.css" %>
+    <%@include file="/resources/stylesheet/registration.css" %>
+
+    <%@include file="/resources/stylesheet/slider/slippry.css" %>
+</style>
+
+<script>
+    <%@include file="/resources/js/lib/jquery.min.2.0.0.js" %>
+
+    <%@include file="/resources/js/validators/loginValidator.js" %>
+    <%@include file="/resources/js/validators/privateAreaValidator.js" %>
+    <%@include file="/resources/js/validators/registrationValidator.js" %>
+    <%@include file="/resources/js/validators/jquery.validate.min.js" %>
+
+    <%@include file="/resources/js/numeric/jquery.numeric.js" %>
+    <%@include file="/resources/js/numeric/jquery.numeric.min.js" %>
+    <%@include file="/resources/js/numeric/numericInitialize.js" %>
+
+    <%@include file="/resources/js/slider/fonts.js" %>
+    <%@include file="/resources/js/slider/slider.js" %>
+    <%@include file="/resources/js/slider/slippry.min.js" %>
+</script>

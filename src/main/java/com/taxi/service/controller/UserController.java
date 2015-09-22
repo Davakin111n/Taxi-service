@@ -2,6 +2,7 @@ package com.taxi.service.controller;
 
 import com.taxi.service.controller.form.PasswordForm;
 import com.taxi.service.controller.form.PrivateInfoForm;
+import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.User;
 import com.taxi.service.validator.PrivateAreaValidator;
 
@@ -34,7 +35,7 @@ public class UserController extends InitController {
         if (PrivateAreaValidator.validateNewPasswordChange(passwordForm, user)) {
             getClientService().changePassword(user.getId(), passwordForm.getNewPassword());
             try {
-                request.getRequestDispatcher("WEB-INF/pages/privateArea.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -59,7 +60,7 @@ public class UserController extends InitController {
             user.setSkype(privateInfoForm.getSkype());
             getClientService().update(user);
             try {
-                request.getRequestDispatcher("WEB-INF/pages/privateArea.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -74,7 +75,7 @@ public class UserController extends InitController {
         User user = (User) request.getSession().getAttribute("user");
         getClientService().madeModerator(user.getId());
         try {
-            request.getRequestDispatcher("WEB-INF/pages/adminPanel.jsp").forward(request, response);
+            request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

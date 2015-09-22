@@ -137,13 +137,15 @@ public class User extends Identifier {
 
     @Override
     public String toString() {
-        return "Client{" +
-                ", email='" + email + '\'' +
+        return "User{" +
+                "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", clientName='" + clientName + '\'' +
                 ", clientLastName='" + clientLastName + '\'' +
+                ", skype='" + skype + '\'' +
+                ", registrationDate=" + registrationDate +
                 ", admin=" + admin +
                 ", moderator=" + moderator +
                 ", active=" + active +
