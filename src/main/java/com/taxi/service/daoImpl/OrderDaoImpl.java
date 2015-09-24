@@ -48,6 +48,11 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
+    public Order parseGeneratedValues(Order obj, ResultSet resultSet) {
+        return null;
+    }
+
+    @Override
     public Order parseSingleResultSet(ResultSet resultSet) {
         try {
             if (!resultSet.next()) {

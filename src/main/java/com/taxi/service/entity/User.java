@@ -138,6 +138,7 @@ public class User extends Identifier {
     @Override
     public String toString() {
         return "User{" +
+                "id='" + getId() + '\'' +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +

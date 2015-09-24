@@ -18,7 +18,7 @@
 <table id='savePersonData'>
         <tr>
             <td>Имя -</td>
-            <td><input type='email' name='тфьу'/></td>
+            <td><input type='email' name='email'/></td>
         </tr>
 
         <tr>
@@ -47,7 +47,7 @@
 
 <h5>Изменить пароль:</h5>
 
-<form name='changePassword' method='post' action="/changePassword">
+<form name='changePassword' method='post' action="changePassword">
 
 <table id='changePassword'>
 

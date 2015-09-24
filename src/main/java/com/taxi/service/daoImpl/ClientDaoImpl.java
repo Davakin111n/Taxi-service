@@ -10,6 +10,8 @@ import com.taxi.service.entity.User;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
@@ -49,13 +51,25 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     }
 
     @Override
+    public User parseGeneratedValues(User user, ResultSet resultSet) {
+        try {
+            while (resultSet.next()) {
+                user.setId(resultSet.getLong(1));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public User parseSingleResultSet(ResultSet resultSet) {
         try {
-            if (!resultSet.next()) {
-                throw new Exception();
+            if (resultSet.next()) {
+                User user = ConverterToEntity.convertUserToEntity(resultSet);
+                return user;
             }
-            User user = ConverterToEntity.convertUserToEntity(resultSet);
-            return user;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,11 +92,11 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     }
 
     public User addNew(User user) {
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SqlQueryList.INSERT_NEW_USER)) {
+        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SqlQueryList.INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
             ConverterFromEntity.convertNewClientEntity(user, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            return parseSingleResultSet(resultSet);
+            return parseGeneratedValues(user, resultSet);
         } catch (Exception e) {
             e.printStackTrace();
         }

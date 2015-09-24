@@ -15,8 +15,8 @@ public class GenericServiceImpl<T extends Identifier, D extends GenericDao> impl
     }
 
     @Override
-    public Identifier get(Long id) {
-        return dao.get(id);
+    public T get(Long id) {
+        return (T) dao.get(id);
     }
 
     @Override

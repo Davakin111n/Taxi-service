@@ -50,21 +50,20 @@ public class RegistrationController extends InitController {
                 e.printStackTrace();
             }
         } else {
-            User user = new User();
-            user.setEmail(request.getParameter("email"));
-            user.setAddress(request.getParameter("address"));
-            user.setPassword(request.getParameter("password"));
-            user.setClientName(request.getParameter("clientName"));
-            user.setClientLastName(request.getParameter("clientLastName"));
-            user.setPhone(request.getParameter("phone"));
-            user.setSkype(request.getParameter("skype"));
-            user = getClientService().addNew(user);
-            request.getSession().setAttribute(Constants.USER, user);
             try {
-                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+                User user = new User();
+                user.setEmail(request.getParameter("email"));
+                user.setAddress(request.getParameter("address"));
+                user.setPassword(request.getParameter("password"));
+                user.setClientName(request.getParameter("clientName"));
+                user.setClientLastName(request.getParameter("clientLastName"));
+                user.setPhone(request.getParameter("phone"));
+                user.setSkype(request.getParameter("skype"));
+                user = getClientService().addNew(user);
+                request.getSession().setAttribute(Constants.USER, user);
+                response.sendRedirect(Constants.PRIVATE_AREA);
+
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ServletException e) {
                 e.printStackTrace();
             }
         }

@@ -7,9 +7,9 @@ import java.util.List;
 public interface ClientService {
     User addNew(User user);
 
-    void madeModerator(Long userId);
+    void madeModerator(Long userId) throws Exception;
 
-    void changePassword(Long userId, String password);
+    void changePassword(Long userId, String password) throws Exception;
 
     boolean successLogin(String login, String password);
 

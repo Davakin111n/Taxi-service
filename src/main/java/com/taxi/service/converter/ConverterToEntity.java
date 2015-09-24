@@ -22,6 +22,9 @@ public class ConverterToEntity {
                 user.setPhone(resultSet.getString("phone"));
                 user.setSkype(resultSet.getString("skype"));
                 user.setRegistrationDate(resultSet.getDate("create_date"));
+                user.setAdmin(resultSet.getBoolean("admin"));
+                user.setModerator(resultSet.getBoolean("moderator"));
+                user.setActive(resultSet.getBoolean("active"));
                 return user;
             }
         } catch (Exception exception) {
@@ -44,6 +47,9 @@ public class ConverterToEntity {
                 user.setPhone(resultSet.getString("phone"));
                 user.setSkype(resultSet.getString("skype"));
                 user.setRegistrationDate(resultSet.getDate("create_date"));
+                user.setAdmin(resultSet.getBoolean("admin"));
+                user.setModerator(resultSet.getBoolean("moderator"));
+                user.setActive(resultSet.getBoolean("active"));
                 userList.add(user);
             }
             return userList;

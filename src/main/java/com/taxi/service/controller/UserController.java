@@ -4,7 +4,9 @@ import com.taxi.service.controller.form.PasswordForm;
 import com.taxi.service.controller.form.PrivateInfoForm;
 import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.User;
+import com.taxi.service.utils.PasswordUtil;
 import com.taxi.service.validator.PrivateAreaValidator;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,21 +29,43 @@ public class UserController extends InitController {
     }
 
     private void changePassword(HttpServletRequest request, HttpServletResponse response) {
-        PasswordForm passwordForm = new PasswordForm();
-        passwordForm.setNewPassword(request.getParameter("newPassword"));
-        passwordForm.setPassword(request.getParameter("password"));
-        passwordForm.setSecondaryPassword(request.getParameter("secondaryPassword"));
-        User user = (User) request.getSession().getAttribute("user");
-        if (PrivateAreaValidator.validateNewPasswordChange(passwordForm, user)) {
-            getClientService().changePassword(user.getId(), passwordForm.getNewPassword());
+        if (!StringUtils.isNotEmpty(request.getParameter("newPassword"))
+                || !StringUtils.isNotEmpty(request.getParameter("password"))
+                || !StringUtils.isNotEmpty(request.getParameter("secondaryPassword"))) {
             try {
-                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+                request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                passwordForm = null;
+            }
+        } else if (!StringUtils.equals(((User) request.getSession().getAttribute("user")).getPassword()
+                , PasswordUtil.encryptPassword(request.getParameter("password")))) {
+            try {
+                request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Тест 3");
+            PasswordForm passwordForm = new PasswordForm();
+            passwordForm.setNewPassword(request.getParameter("newPassword"));
+            passwordForm.setPassword(request.getParameter("password"));
+            passwordForm.setSecondaryPassword(request.getParameter("secondaryPassword"));
+            User user = (User) request.getSession().getAttribute("user");
+            if (PrivateAreaValidator.validateNewPasswordChange(passwordForm, user)) {
+                try {
+                    getClientService().changePassword(user.getId(), passwordForm.getNewPassword());
+                    response.sendRedirect(Constants.PRIVATE_AREA);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    passwordForm = null;
+                }
             }
         }
     }
@@ -73,13 +97,14 @@ public class UserController extends InitController {
 
     private void madeModerator(HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getSession().getAttribute("user");
-        getClientService().madeModerator(user.getId());
         try {
+            getClientService().madeModerator(user.getId());
             request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
-
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

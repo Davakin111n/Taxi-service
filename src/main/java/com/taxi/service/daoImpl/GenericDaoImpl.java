@@ -34,21 +34,24 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
 
     public abstract void getStatementForInsertEntity(T obj, PreparedStatement preparedStatement);
 
+    public abstract T parseGeneratedValues(T obj, ResultSet resultSet);
+
     public abstract T parseSingleResultSet(ResultSet resultSet);
 
     public abstract List<T> parseListResultSet(ResultSet resultSet);
 
     public T get(Long id) {
-        Identifier identifier = null;
+        T identifier;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             identifier = parseSingleResultSet(resultSet);
+            return identifier;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (T) identifier;
+        return null;
     }
 
     public boolean isExists(Long id) {
@@ -66,11 +69,10 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
     }
 
     public void update(Identifier obj) {
-        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.INSERT_INTO
-                .concat(getInsertQuery()))) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.UPDATE
+                .concat(getUpdateQuery()))) {
             getStatementForUpdateEntity((T) obj, preparedStatement);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
