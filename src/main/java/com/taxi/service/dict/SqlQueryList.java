@@ -23,9 +23,14 @@ public class SqlQueryList {
     public static final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM order_board.client WHERE email =?;";
 
     /**
+     * DELETE statements for client table
+     */
+
+
+    /**
      * SELECT statements for order table
      */
-    public static final String ORDERS_ID = "order_board.order WHERE id = ?;";
+    public static final String ORDERS_ID = "order_board.order WHERE id =?;";
     public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM order_board.order WHERE id_client =?;";
     public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM order_board.order WHERE active = FALSE;";
     public static final String SELECT_ALL_ORDERS_BY_CLIENT_ID = "SELECT * FROM order_board.order WHERE client_id = ?";
@@ -49,5 +54,5 @@ public class SqlQueryList {
     /**
      * DELETE statements for order table
      */
-    public static final String DELETE_ORDER = "DELETE FROM order_board.order WHERE id = ?;";
+    public static final String DELETE_FROM = "DELETE FROM ";
 }

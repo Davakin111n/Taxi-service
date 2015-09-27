@@ -10,6 +10,8 @@ public interface GenericDao<T extends Identifier> {
 
     boolean isExists(Long id);
 
+    void remove(Long id);
+
     void update(T obj);
 
     List<T> listAll();

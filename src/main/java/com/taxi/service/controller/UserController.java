@@ -29,8 +29,8 @@ public class UserController extends InitController {
     }
 
     private void changePassword(HttpServletRequest request, HttpServletResponse response) {
-        if (!StringUtils.isNotEmpty(request.getParameter("newPassword"))
-                || !StringUtils.isNotEmpty(request.getParameter("password"))
+        if (!StringUtils.isNotEmpty(request.getParameter("password"))
+                || !StringUtils.isNotEmpty(request.getParameter("newPassword"))
                 || !StringUtils.isNotEmpty(request.getParameter("secondaryPassword"))) {
             try {
                 request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
@@ -49,15 +49,15 @@ public class UserController extends InitController {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Тест 3");
             PasswordForm passwordForm = new PasswordForm();
-            passwordForm.setNewPassword(request.getParameter("newPassword"));
             passwordForm.setPassword(request.getParameter("password"));
+            passwordForm.setNewPassword(request.getParameter("newPassword"));
             passwordForm.setSecondaryPassword(request.getParameter("secondaryPassword"));
             User user = (User) request.getSession().getAttribute("user");
             if (PrivateAreaValidator.validateNewPasswordChange(passwordForm, user)) {
                 try {
                     getClientService().changePassword(user.getId(), passwordForm.getNewPassword());
+                    request.getSession().setAttribute("user", user);
                     response.sendRedirect(Constants.PRIVATE_AREA);
                 } catch (IOException e) {
                     e.printStackTrace();

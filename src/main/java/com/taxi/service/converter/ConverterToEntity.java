@@ -67,8 +67,6 @@ public class ConverterToEntity {
                 order.setTitle(resultSet.getString("title"));
                 order.setNote(resultSet.getString("note"));
                 order.setPrice(resultSet.getString("price"));
-                order.setIdClient(resultSet.getLong("id_client"));
-                order.setLocation(resultSet.getString("location"));
                 order.setCreateDate(resultSet.getDate("create_date"));
                 return order;
             }
@@ -87,8 +85,6 @@ public class ConverterToEntity {
                 order.setTitle(resultSet.getString("title"));
                 order.setNote(resultSet.getString("note"));
                 order.setPrice(resultSet.getString("price"));
-                order.setIdClient(resultSet.getLong("id_client"));
-                order.setLocation(resultSet.getString("location"));
                 order.setCreateDate(resultSet.getDate("create_date"));
                 orderList.add(order);
             }

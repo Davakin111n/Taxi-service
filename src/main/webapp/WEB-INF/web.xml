@@ -6,7 +6,7 @@
     <display-name>Jean taxi-service</display-name>
 
     <listener>
-        <listener-class>com.taxi.service.utils.ApplicationContext</listener-class>
+        <listener-class>com.taxi.service.listener.ApplicationContext</listener-class>
     </listener>
 
     <servlet>

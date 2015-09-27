@@ -1,9 +1,10 @@
-package com.taxi.service.utils;
+package com.taxi.service.listener;
 
 import com.taxi.service.daoImpl.ClientDaoImpl;
 import com.taxi.service.daoImpl.OrderDaoImpl;
 import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
+import com.taxi.service.utils.DataBaseUtil;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

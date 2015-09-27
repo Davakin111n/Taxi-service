@@ -9,9 +9,12 @@ public interface OrderService {
 
     void deleteOrder(Long orderId);
 
+    void activateOrder(Long orderId);
+
     List<Order> orderListByClient(Long clientId);
 
     List<Order> notActiveOrderListByClient(Long clientId);
 
     List<Order> notActiveOrderList();
+
 }

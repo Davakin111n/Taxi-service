@@ -12,7 +12,7 @@ public class PrivateAreaValidator {
                 && StringUtils.isNotEmpty(passwordForm.getPassword())
                 && StringUtils.isNotEmpty(passwordForm.getSecondaryPassword())
                 && StringUtils.equals(PasswordUtil.encryptPassword(passwordForm.getPassword()), user.getPassword())
-                && StringUtils.equals(passwordForm.getPassword(), passwordForm.getSecondaryPassword());
+                && StringUtils.equals(passwordForm.getNewPassword(), passwordForm.getSecondaryPassword());
     }
 
     public static boolean validateSaveData(PrivateInfoForm privateInfoForm) {

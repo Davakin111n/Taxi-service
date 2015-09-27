@@ -7,6 +7,7 @@ import com.taxi.service.entity.Identifier;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao {
@@ -27,6 +28,8 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
     public abstract String getInsertQuery();
 
     public abstract String getUpdateQuery();
+
+    public abstract String getDeleteQuery();
 
     public abstract String getAllFromTableQuery();
 
@@ -52,6 +55,16 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void remove(Long id) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SqlQueryList.DELETE_FROM
+                .concat(getDeleteQuery()))) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isExists(Long id) {

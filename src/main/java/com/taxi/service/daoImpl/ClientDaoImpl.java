@@ -36,6 +36,11 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     }
 
     @Override
+    public String getDeleteQuery() {
+        return SqlQueryList.CLIENTS_ID;
+    }
+
+    @Override
     public String getAllFromTableQuery() {
         return SqlQueryList.CLIENT_TABLE;
     }
@@ -65,15 +70,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     @Override
     public User parseSingleResultSet(ResultSet resultSet) {
-        try {
-            if (resultSet.next()) {
-                User user = ConverterToEntity.convertUserToEntity(resultSet);
-                return user;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return ConverterToEntity.convertUserToEntity(resultSet);
     }
 
     @Override

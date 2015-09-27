@@ -14,8 +14,6 @@ public class ConverterFromEntity {
             preparedStatement.setString(1, order.getTitle());
             preparedStatement.setString(2, order.getNote());
             preparedStatement.setString(3, order.getPrice());
-            preparedStatement.setLong(4, order.getIdClient());
-            preparedStatement.setString(5, order.getLocation());
             preparedStatement.setDate(6, (Date) order.getCreateDate());
             preparedStatement.setLong(7, order.getId());
         } catch (SQLException e) {
@@ -28,8 +26,6 @@ public class ConverterFromEntity {
             preparedStatement.setString(1, order.getTitle());
             preparedStatement.setString(2, order.getNote());
             preparedStatement.setString(3, order.getPrice());
-            preparedStatement.setLong(4, order.getIdClient());
-            preparedStatement.setString(5, order.getLocation());
             preparedStatement.setLong(6, order.getId());
         } catch (SQLException e) {
             e.printStackTrace();

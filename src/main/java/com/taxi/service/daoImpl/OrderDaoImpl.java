@@ -33,6 +33,11 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
+    public String getDeleteQuery() {
+        return SqlQueryList.ORDERS_ID;
+    }
+
+    @Override
     public String getAllFromTableQuery() {
         return SqlQueryList.ORDER_TABLE;
     }
@@ -96,7 +101,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public void deleteOrder(Long orderId) {
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SqlQueryList.DELETE_ORDER)) {
+        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SqlQueryList.DELETE_FROM
+                .concat(SqlQueryList.ORDERS_ID))) {
             preparedStatement.setLong(1, orderId);
             preparedStatement.executeQuery();
         } catch (Exception e) {
