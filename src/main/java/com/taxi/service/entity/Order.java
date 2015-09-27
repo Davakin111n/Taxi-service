@@ -1,32 +1,41 @@
 package com.taxi.service.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Order extends Identifier {
 
+    private Long clientId;
     private String title;
     private String note;
     private String price;
     private Date createDate = new Date();
 
-    private String clientAddress;
-    private String clientHouseNumber;
+    private String beginAddress;
+    private String houseNumber;
     private String porchNumber;
 
-    private String destinationAddress;
-    private String destinationHouseNumber;
-    private String destinationPorchNumber;
-    private String destinationDate;
+    private List<OrderAddress> addressList = new ArrayList<OrderAddress>();
 
     private boolean active = false;
     private boolean onPerfomance = false;
+    private boolean accomplished = false;
 
-    public boolean isOnPerfomance() {
-        return onPerfomance;
+    public boolean isAccomplished() {
+        return accomplished;
     }
 
-    public void setOnPerfomance(boolean onPerfomance) {
-        this.onPerfomance = onPerfomance;
+    public void setAccomplished(boolean accomplished) {
+        this.accomplished = accomplished;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 
     public String getTitle() {
@@ -61,20 +70,20 @@ public class Order extends Identifier {
         this.createDate = createDate;
     }
 
-    public String getClientAddress() {
-        return clientAddress;
+    public String getBeginAddress() {
+        return beginAddress;
     }
 
-    public void setClientAddress(String clientAddress) {
-        this.clientAddress = clientAddress;
+    public void setBeginAddress(String beginAddress) {
+        this.beginAddress = beginAddress;
     }
 
-    public String getClientHouseNumber() {
-        return clientHouseNumber;
+    public String getHouseNumber() {
+        return houseNumber;
     }
 
-    public void setClientHouseNumber(String clientHouseNumber) {
-        this.clientHouseNumber = clientHouseNumber;
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
     public String getPorchNumber() {
@@ -85,36 +94,12 @@ public class Order extends Identifier {
         this.porchNumber = porchNumber;
     }
 
-    public String getDestinationAddress() {
-        return destinationAddress;
+    public List<OrderAddress> getAddressList() {
+        return addressList;
     }
 
-    public void setDestinationAddress(String destinationAddress) {
-        this.destinationAddress = destinationAddress;
-    }
-
-    public String getDestinationHouseNumber() {
-        return destinationHouseNumber;
-    }
-
-    public void setDestinationHouseNumber(String destinationHouseNumber) {
-        this.destinationHouseNumber = destinationHouseNumber;
-    }
-
-    public String getDestinationPorchNumber() {
-        return destinationPorchNumber;
-    }
-
-    public void setDestinationPorchNumber(String destinationPorchNumber) {
-        this.destinationPorchNumber = destinationPorchNumber;
-    }
-
-    public String getDestinationDate() {
-        return destinationDate;
-    }
-
-    public void setDestinationDate(String destinationDate) {
-        this.destinationDate = destinationDate;
+    public void setAddressList(List<OrderAddress> addressList) {
+        this.addressList = addressList;
     }
 
     public boolean isActive() {
@@ -125,22 +110,11 @@ public class Order extends Identifier {
         this.active = active;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "title='" + title + '\'' +
-                ", note='" + note + '\'' +
-                ", price='" + price + '\'' +
-                ", createDate=" + createDate +
-                ", clientAddress='" + clientAddress + '\'' +
-                ", clientHouseNumber='" + clientHouseNumber + '\'' +
-                ", porchNumber='" + porchNumber + '\'' +
-                ", destinationAddress='" + destinationAddress + '\'' +
-                ", destinationHouseNumber='" + destinationHouseNumber + '\'' +
-                ", destinationPorchNumber='" + destinationPorchNumber + '\'' +
-                ", destinationDate='" + destinationDate + '\'' +
-                ", active=" + active +
-                ", onPerfomance=" + onPerfomance +
-                '}';
+    public boolean isOnPerfomance() {
+        return onPerfomance;
+    }
+
+    public void setOnPerfomance(boolean onPerfomance) {
+        this.onPerfomance = onPerfomance;
     }
 }

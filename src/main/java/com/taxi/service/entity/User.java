@@ -4,48 +4,29 @@ import java.util.Date;
 
 public class User extends Identifier {
 
+    private ClientGrant clientGrant;
+    private String email;
+    private String address;
+    private String password;
+    private String phone;
+    private String secondPhone;
+    private String thirdPhone;
+    private String clientName;
+    private String clientLastName;
+    private String skype;
+    private Date registrationDate = new Date();
+
     public User() {
 
     }
 
-    public User(String email,
-                String password,
-                String phone,
-                String address,
-                String clientName,
-                String clientLastName,
-                String skype, boolean admin,
-                Date registrationDate,
-                boolean moderator,
-                boolean active) {
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.address = address;
-        this.clientName = clientName;
-        this.clientLastName = clientLastName;
-        this.skype = skype;
-        this.admin = admin;
-        this.registrationDate = registrationDate;
-        this.moderator = moderator;
-        this.active = active;
+    public ClientGrant getClientGrant() {
+        return clientGrant;
     }
 
-    private String email;
-    private String password;
-    private String phone;
-    private String address;
-    private String clientName;
-    private String clientLastName;
-    private String skype;
-
-    private Date registrationDate = new Date();
-
-    private boolean admin = false;
-
-    private boolean moderator = false;
-
-    private boolean active = false;
+    public void setClientGrant(ClientGrant clientGrant) {
+        this.clientGrant = clientGrant;
+    }
 
     public String getEmail() {
         return email;
@@ -53,6 +34,14 @@ public class User extends Identifier {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPassword() {
@@ -71,12 +60,20 @@ public class User extends Identifier {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getSecondPhone() {
+        return secondPhone;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setSecondPhone(String secondPhone) {
+        this.secondPhone = secondPhone;
+    }
+
+    public String getThirdPhone() {
+        return thirdPhone;
+    }
+
+    public void setThirdPhone(String thirdPhone) {
+        this.thirdPhone = thirdPhone;
     }
 
     public String getClientName() {
@@ -109,47 +106,5 @@ public class User extends Identifier {
 
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
-    public boolean isModerator() {
-        return moderator;
-    }
-
-    public void setModerator(boolean moderator) {
-        this.moderator = moderator;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + getId() + '\'' +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", clientName='" + clientName + '\'' +
-                ", clientLastName='" + clientLastName + '\'' +
-                ", skype='" + skype + '\'' +
-                ", registrationDate=" + registrationDate +
-                ", admin=" + admin +
-                ", moderator=" + moderator +
-                ", active=" + active +
-                '}';
     }
 }

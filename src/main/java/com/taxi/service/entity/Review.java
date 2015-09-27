@@ -2,7 +2,7 @@ package com.taxi.service.entity;
 
 import java.util.Date;
 
-public class Reviews extends Identifier {
+public class Review extends Identifier {
     private String clientId;
     private String clientName;
     private String note;
