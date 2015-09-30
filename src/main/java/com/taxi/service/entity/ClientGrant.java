@@ -4,7 +4,7 @@ public class ClientGrant extends Identifier {
     private Long clientId;
     private boolean admin = false;
     private boolean active = false;
-    private boolean moderator;
+    private boolean moderator = false;
 
     public boolean isModerator() {
         return moderator;

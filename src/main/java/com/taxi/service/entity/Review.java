@@ -3,7 +3,7 @@ package com.taxi.service.entity;
 import java.util.Date;
 
 public class Review extends Identifier {
-    private String clientId;
+
     private String clientName;
     private String note;
     private Date createDate;
@@ -14,14 +14,6 @@ public class Review extends Identifier {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
     }
 
     public String getClientName() {
@@ -43,7 +35,6 @@ public class Review extends Identifier {
     @Override
     public String toString() {
         return "Reviews{" +
-                "clientId='" + clientId + '\'' +
                 ", clientName='" + clientName + '\'' +
                 ", note='" + note + '\'' +
                 ", createDate=" + createDate +

@@ -30,13 +30,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
 
     @Override
     public void madeModerator(Long userId) throws Exception {
-        User user = dao.get(userId);
-        if (user != null) {
-            user.setModerator(true);
-            dao.update(user);
-        } else {
-            throw new Exception();
-        }
+
     }
 
     @Override
@@ -58,10 +52,5 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     @Override
     public User getByEmail(String clientEmail) {
         return dao.getByEmail(clientEmail);
-    }
-
-    @Override
-    public List<User> findBySearchRequest(String clientSearchQuery) {
-        return dao.findBySearchRequest(clientSearchQuery);
     }
 }

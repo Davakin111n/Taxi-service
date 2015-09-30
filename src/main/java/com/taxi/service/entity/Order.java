@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Order extends Identifier {
 
-    private Long clientId;
+    private User client;
     private String title;
     private String note;
     private String price;
@@ -30,12 +30,12 @@ public class Order extends Identifier {
         this.accomplished = accomplished;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public User getClientId() {
+        return client;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setClientId(User client) {
+        this.client = client;
     }
 
     public String getTitle() {

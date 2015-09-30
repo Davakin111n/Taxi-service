@@ -18,6 +18,4 @@ public interface ClientService {
     List<User> listSimpleUsers();
 
     User getByEmail(String userEmail);
-
-    List<User> findBySearchRequest(String clientSearchQuery);
 }

@@ -6,7 +6,7 @@ import com.taxi.service.service.GenericService;
 
 import java.util.List;
 
-public class GenericServiceImpl<T extends Identifier, D extends GenericDao> implements GenericService {
+public class GenericServiceImpl<T extends Identifier, D extends GenericDao> extends TransactionHandlerImpl implements GenericService {
 
     protected D dao;
 

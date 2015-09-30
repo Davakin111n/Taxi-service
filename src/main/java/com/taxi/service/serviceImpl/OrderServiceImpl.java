@@ -7,6 +7,7 @@ import com.taxi.service.service.OrderService;
 import java.util.List;
 
 public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> implements OrderService {
+
     @Override
     public Order addNew(Order order) {
         return dao.addNew(order);
@@ -15,6 +16,11 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     @Override
     public void deleteOrder(Long orderId) {
         dao.deleteOrder(orderId);
+    }
+
+    @Override
+    public void activateOrder(Long orderId) {
+
     }
 
     @Override

@@ -12,6 +12,4 @@ public interface ClientDao {
     List<User> listSimpleUsers();
 
     User getByEmail(String clientEmail);
-
-    List<User> findBySearchRequest(String clientSearchQuery);
 }
