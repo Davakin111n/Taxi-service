@@ -9,7 +9,7 @@ import java.util.List;
 public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> implements OrderService {
 
     @Override
-    public Order addNew(Order order) {
+    public Long addNew(Order order) {
         return dao.addNew(order);
     }
 

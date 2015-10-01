@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao {
+public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntityConverter<T> implements GenericDao {
 
     public static final String SELECT_FROM = "SELECT * FROM ";
     public static final String UPDATE = "UPDATE ";
@@ -46,7 +46,7 @@ public abstract class GenericDaoImpl<T extends Identifier> implements GenericDao
 
     public abstract List<T> parseListResultSet(ResultSet resultSet);
 
-    public abstract T addNew(T identifier);
+    public abstract Long addNew(T obj);
 
     public T get(Long id) {
         T identifier;

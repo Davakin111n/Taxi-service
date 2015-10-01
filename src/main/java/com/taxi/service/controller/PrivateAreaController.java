@@ -16,7 +16,7 @@ public class PrivateAreaController extends InitController {
             if (user == null) {
                 request.getRequestDispatcher(Constants.LOGIN_PATH).forward(request, response);
             }
-            if (user != null && user.isModerator()) {
+            if (user != null && user.getClientGrant().isModerator()) {
                 request.setAttribute(Constants.ORDER_LIST_BY_CLIENT, getOrderService().orderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST_BY_CLIENT, getOrderService().notActiveOrderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
                 request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);

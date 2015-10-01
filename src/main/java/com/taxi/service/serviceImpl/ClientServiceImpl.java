@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> implements ClientService {
     @Override
-    public User addNew(User user) {
+    public Long addNew(User user) {
         user.setPassword(PasswordUtil.encryptPassword(user.getPassword()));
         return dao.addNew(user);
     }

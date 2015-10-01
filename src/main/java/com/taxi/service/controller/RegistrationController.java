@@ -58,11 +58,12 @@ public class RegistrationController extends InitController {
                 user.setClientName(request.getParameter("clientName"));
                 user.setClientLastName(request.getParameter("clientLastName"));
                 user.setPhone(request.getParameter("phone"));
+                user.setSecondPhone(request.getParameter("secondPhone"));
+                user.setThirdPhone(request.getParameter("thirdPhone"));
                 user.setSkype(request.getParameter("skype"));
-                user = getClientService().addNew(user);
+                user.setId(getClientService().addNew(user));
                 request.getSession().setAttribute(Constants.USER, user);
                 response.sendRedirect(Constants.PRIVATE_AREA);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

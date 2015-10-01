@@ -13,7 +13,7 @@ public class AdminController extends InitController {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (request.getSession().getAttribute(Constants.USER) != null
-                    && ((User) request.getSession().getAttribute(Constants.USER)).isAdmin()) {
+                    && ((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isAdmin()) {
                 request.setAttribute(Constants.USERS, getClientService().listSimpleUsers());
                 request.setAttribute(Constants.MODERATORS, getClientService().listAllModerators());
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST, getOrderService().notActiveOrderList());

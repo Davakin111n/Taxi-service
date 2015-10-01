@@ -1,4 +1,7 @@
 package com.taxi.service.serviceImpl;
 
-public class ReviewServiceImpl {
+import com.taxi.service.daoImpl.ReviewDaoImpl;
+import com.taxi.service.entity.Review;
+
+public class ReviewServiceImpl extends GenericServiceImpl<Review, ReviewDaoImpl> {
 }

@@ -17,7 +17,7 @@ public class LoginController extends InitController {
             if (request.getSession().getAttribute(Constants.USER) != null) {
                 if (request.getRequestURI().contains("/logout")) {
                     logout(request, response);
-                } else if (((User) request.getSession().getAttribute(Constants.USER)).isModerator()) {
+                } else if (((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isModerator()) {
                     request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
                 } else {
                     request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);

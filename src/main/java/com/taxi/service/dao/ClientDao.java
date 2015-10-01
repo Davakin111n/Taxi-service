@@ -5,7 +5,6 @@ import com.taxi.service.entity.User;
 import java.util.List;
 
 public interface ClientDao {
-    User addNew(User user);
 
     List<User> listAllModerators();
 

@@ -5,7 +5,7 @@ import com.taxi.service.entity.User;
 import java.util.List;
 
 public interface ClientService {
-    User addNew(User user);
+    Long addNew(User user);
 
     void madeModerator(Long userId) throws Exception;
 

@@ -14,7 +14,7 @@ import java.util.List;
 public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     private final String CLIENT_TABLE = "jean_taxi_service.client;";
-    private final String CLIENTS_ID = "jean_taxi_service.client JOIN jean_taxi_service.client_grant WHERE id=?;";
+    private final String CLIENTS_ID = "jean_taxi_service.client JOIN jean_taxi_service.client_grant WHERE jean_taxi_service.client.id = jean_taxi_service.client_grant.id_client;";
     private final String INSERT_NEW_USER = "INSERT INTO jean_taxi_service.client(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private final String UPDATE_CLIENT = "jean_taxi_service.client SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?;";
     private final String SELECT_ALL_MODERATORS = "SELECT * FROM jean_taxi_service.client JOIN jean_taxi_service.client_grant WHERE moderator=?;";
@@ -52,17 +52,17 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     @Override
     public void getStatementForUpdateEntity(User user, PreparedStatement preparedStatement) {
-        convertUpdateClientEntity(user, preparedStatement);
+        convertUpdateEntity(user, preparedStatement);
     }
 
     @Override
     public void getStatementForInsertEntity(User user, PreparedStatement preparedStatement) {
-        convertNewClientEntity(user, preparedStatement);
+        convertNewEntity(user, preparedStatement);
     }
 
     @Override
     public User parseSingleResultSet(ResultSet resultSet) {
-        return convertUserToEntity(resultSet);
+        return convertToEntity(resultSet);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             if (!resultSet.next()) {
                 throw new Exception();
             }
-            User user = convertUserToEntity(resultSet);
+            User user = convertToEntity(resultSet);
             return userList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,14 +80,14 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         return null;
     }
 
-    public User addNew(User user) {
+    public Long addNew(User user) {
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
-            convertNewClientEntity(user, preparedStatement);
+            convertNewEntity(user, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             while (resultSet.next()) {
                 user.setId(resultSet.getLong(1));
-                return user;
+                return user.getId();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         List moderatorList;
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            moderatorList = convertListUserToEntity(resultSet);
+            moderatorList = convertListToEntity(resultSet);
             return moderatorList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,7 +113,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         List simpleUserList;
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            simpleUserList = convertListUserToEntity(resultSet);
+            simpleUserList = convertListToEntity(resultSet);
             return simpleUserList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,7 +127,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
-            user = convertUserToEntity(resultSet);
+            user = convertToEntity(resultSet);
             return user;
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +135,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         return null;
     }
 
-    private void convertNewClientEntity(User user, PreparedStatement preparedStatement) {
+    @Override
+    public void convertNewEntity(User user, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(3, user.getAddress());
@@ -151,7 +152,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         }
     }
 
-    public void convertUpdateClientEntity(User user, PreparedStatement preparedStatement) {
+    @Override
+    public void convertUpdateEntity(User user, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(3, user.getAddress());
@@ -168,7 +170,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         }
     }
 
-    public User convertUserToEntity(ResultSet resultSet) {
+    @Override
+    public User convertToEntity(ResultSet resultSet) {
         try {
             while (resultSet.next()) {
                 User user = new User();
@@ -189,7 +192,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         return null;
     }
 
-    public List<User> convertListUserToEntity(ResultSet resultSet) {
+    @Override
+    public List<User> convertListToEntity(ResultSet resultSet) {
         ArrayList userList = new ArrayList();
         try {
             while (resultSet.next()) {

@@ -53,12 +53,12 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public void getStatementForUpdateEntity(Order order, PreparedStatement preparedStatement) {
-        convertUpdateOrderEntity(order, preparedStatement);
+        convertUpdateEntity(order, preparedStatement);
     }
 
     @Override
     public void getStatementForInsertEntity(Order order, PreparedStatement preparedStatement) {
-        convertNewOrderEntity(order, preparedStatement);
+        convertNewEntity(order, preparedStatement);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             if (!resultSet.next()) {
                 throw new Exception();
             }
-            Order order = convertOrderToEntity(resultSet);
+            Order order = convertToEntity(resultSet);
             return order;
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,7 +82,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             if (!resultSet.next()) {
                 throw new Exception();
             }
-            Order order = convertOrderToEntity(resultSet);
+            Order order = convertToEntity(resultSet);
             return orderList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,13 +91,15 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
-    public Order addNew(Order order) {
+    public Long addNew(Order order) {
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(INSERT_NEW_ORDER)) {
-            convertNewOrderEntity(order, preparedStatement);
+            convertNewEntity(order, preparedStatement);
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            order = parseSingleResultSet(resultSet);
-            return order;
+            while (resultSet.next()) {
+                order.setId(resultSet.getLong(1));
+                return order.getId();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,7 +122,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         List orderList;
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            orderList = convertListOrderToEntity(resultSet);
+            orderList = convertListToEntity(resultSet);
             return orderList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +135,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         List orderList;
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            orderList = convertListOrderToEntity(resultSet);
+            orderList = convertListToEntity(resultSet);
             return orderList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,7 +148,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         List orderList;
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            orderList = convertListOrderToEntity(resultSet);
+            orderList = convertListToEntity(resultSet);
             return orderList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,7 +161,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         List orderList;
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_ALL_NOT_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            orderList = convertListOrderToEntity(resultSet);
+            orderList = convertListToEntity(resultSet);
             return orderList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,19 +169,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         return null;
     }
 
-    public void convertNewOrderEntity(Order order, PreparedStatement preparedStatement) {
-        try {
-            preparedStatement.setString(1, order.getTitle());
-            preparedStatement.setString(2, order.getNote());
-            preparedStatement.setString(3, order.getPrice());
-            preparedStatement.setDate(6, (Date) order.getCreateDate());
-            preparedStatement.setLong(7, order.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void convertUpdateOrderEntity(Order order, PreparedStatement preparedStatement) {
+    @Override
+    public void convertNewEntity(Order order, PreparedStatement preparedStatement) {
         try {
             int statementValueCount = 1;
             preparedStatement.setString(statementValueCount++, order.getTitle());
@@ -198,7 +189,28 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         }
     }
 
-    private Order convertOrderToEntity(ResultSet resultSet) {
+    @Override
+    public void convertUpdateEntity(Order order, PreparedStatement preparedStatement) {
+        try {
+            int statementValueCount = 1;
+            preparedStatement.setString(statementValueCount++, order.getTitle());
+            preparedStatement.setString(statementValueCount++, order.getNote());
+            preparedStatement.setString(statementValueCount++, order.getPrice());
+            preparedStatement.setDate(statementValueCount++, (Date) order.getCreateDate());
+            preparedStatement.setBoolean(statementValueCount++, order.isActive());
+            preparedStatement.setString(statementValueCount++, order.getBeginAddress());
+            preparedStatement.setString(statementValueCount++, order.getHouseNumber());
+            preparedStatement.setString(statementValueCount++, order.getPorchNumber());
+            preparedStatement.setBoolean(statementValueCount++, order.isOnPerfomance());
+            preparedStatement.setBoolean(statementValueCount++, order.isAccomplished());
+            preparedStatement.setLong(statementValueCount++, order.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Order convertToEntity(ResultSet resultSet) {
         try {
             while (resultSet.next()) {
                 Order order = new Order();
@@ -221,7 +233,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         return null;
     }
 
-    public List<Order> convertListOrderToEntity(ResultSet resultSet) {
+    @Override
+    public List<Order> convertListToEntity(ResultSet resultSet) {
         ArrayList orderList = new ArrayList();
         try {
             while (resultSet.next()) {

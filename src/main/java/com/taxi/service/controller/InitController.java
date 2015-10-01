@@ -2,6 +2,7 @@ package com.taxi.service.controller;
 
 import com.taxi.service.daoImpl.ClientDaoImpl;
 import com.taxi.service.daoImpl.OrderDaoImpl;
+import com.taxi.service.daoImpl.ReviewDaoImpl;
 import com.taxi.service.dict.Constants;
 import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
@@ -18,6 +19,7 @@ public class InitController extends HttpServlet {
     private OrderServiceImpl orderService;
     private ClientDaoImpl clientDao;
     private OrderDaoImpl orderDao;
+    private ReviewDaoImpl reviewDao;
 
     @Override
     public void init(ServletConfig servletConfig) {
@@ -28,6 +30,7 @@ public class InitController extends HttpServlet {
         }
         this.clientDao = (ClientDaoImpl) servletConfig.getServletContext().getAttribute("clientDao");
         this.orderDao = (OrderDaoImpl) servletConfig.getServletContext().getAttribute("orderDao");
+
         this.clientService = (ClientServiceImpl) servletConfig.getServletContext().getAttribute("clientService");
         this.orderService = (OrderServiceImpl) servletConfig.getServletContext().getAttribute("orderService");
         this.clientService.setDao(this.clientDao);

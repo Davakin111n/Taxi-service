@@ -48,33 +48,33 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
 
     @Override
     public void getStatementForUpdateEntity(Review review, PreparedStatement preparedStatement) {
-        convertUpdateReviewEntity(review, preparedStatement);
+        convertUpdateEntity(review, preparedStatement);
     }
 
     @Override
     public void getStatementForInsertEntity(Review review, PreparedStatement preparedStatement) {
-        convertNewReviewEntity(review, preparedStatement);
+        convertNewEntity(review, preparedStatement);
     }
 
     @Override
     public Review parseSingleResultSet(ResultSet resultSet) {
-        return convertReviewToEntity(resultSet);
+        return convertToEntity(resultSet);
     }
 
     @Override
     public List<Review> parseListResultSet(ResultSet resultSet) {
-        return convertListReviewToEntity(resultSet);
+        return convertListToEntity(resultSet);
     }
 
     @Override
-    public Review addNew(Review review) {
+    public Long addNew(Review review) {
         try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(INSERT_REVIEW, Statement.RETURN_GENERATED_KEYS)) {
-            convertNewReviewEntity(review, preparedStatement);
+            convertNewEntity(review, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             while (resultSet.next()) {
                 review.setId(resultSet.getLong(1));
-                return review;
+                return review.getId();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,7 +82,8 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
         return null;
     }
 
-    private void convertNewReviewEntity(Review review, PreparedStatement preparedStatement) {
+    @Override
+    public void convertNewEntity(Review review, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setLong(1, review.getId());
             preparedStatement.setString(2, review.getClientName());
@@ -92,7 +93,8 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
         }
     }
 
-    public void convertUpdateReviewEntity(Review review, PreparedStatement preparedStatement) {
+    @Override
+    public void convertUpdateEntity(Review review, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, review.getNote());
             preparedStatement.setLong(2, review.getId());
@@ -101,7 +103,8 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
         }
     }
 
-    public Review convertReviewToEntity(ResultSet resultSet) {
+    @Override
+    public Review convertToEntity(ResultSet resultSet) {
         try {
             while (resultSet.next()) {
                 Review review = new Review();
@@ -117,7 +120,8 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
         return null;
     }
 
-    public List<Review> convertListReviewToEntity(ResultSet resultSet) {
+    @Override
+    public List<Review> convertListToEntity(ResultSet resultSet) {
         ArrayList reviewList = new ArrayList();
         try {
             while (resultSet.next()) {
