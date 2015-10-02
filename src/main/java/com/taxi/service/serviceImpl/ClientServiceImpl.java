@@ -1,9 +1,9 @@
 package com.taxi.service.serviceImpl;
 
-import com.taxi.service.dao.ClientDao;
 import com.taxi.service.daoImpl.ClientDaoImpl;
 import com.taxi.service.daoImpl.ClientGrantDaoImpl;
 import com.taxi.service.daoImpl.DaoFactoryImpl;
+import com.taxi.service.entity.ClientGrant;
 import com.taxi.service.entity.User;
 import com.taxi.service.service.ClientService;
 import com.taxi.service.utils.PasswordUtil;
@@ -12,17 +12,35 @@ import java.util.List;
 
 public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> implements ClientService {
 
-    private ClientDao clientDao = DaoFactoryImpl.getInstance().getClientDao();
+    private ClientDaoImpl clientDao = (ClientDaoImpl) DaoFactoryImpl.getInstance().getClientDao();
     private ClientGrantDaoImpl clientGrantDao = DaoFactoryImpl.getInstance().getClientGrantDao();
 
-    ClientServiceImpl() {
-        setDao((ClientDaoImpl) clientDao);
+    public ClientServiceImpl() {
+        setDao(clientDao);
+    }
+
+    public void update(final User user) {
+        TransactionHandlerImpl.execute(new Transaction<Long>() {
+            @Override
+            public void doTransaction() {
+                clientDao.update(user);
+                clientGrantDao.update(user.getClientGrant());
+            }
+        });
     }
 
     @Override
-    public Long addNew(User user) {
-        user.setPassword(PasswordUtil.encryptPassword(user.getPassword()));
-        return dao.addNew(user);
+    public void addNew(final User user) {
+        TransactionHandlerImpl.execute(new Transaction<Long>() {
+            @Override
+            public void doTransaction() {
+                user.setPassword(PasswordUtil.encryptPassword(user.getPassword()));
+                user.setId(clientDao.addNew(user));
+                ClientGrant clientGrant = user.getClientGrant();
+                clientGrant.setClientId(clientGrantDao.addNew(clientGrant));
+                clientGrantDao.addNew(clientGrant);
+            }
+        });
     }
 
     @Override
@@ -41,7 +59,10 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
 
     @Override
     public void madeModerator(Long userId) throws Exception {
-
+        User user = dao.get(userId);
+        ClientGrant clientGrant = user.getClientGrant();
+        clientGrant.setModerator(true);
+        dao.update(user);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.taxi.service.daoImpl;
 
 import com.taxi.service.dao.ClientDao;
 import com.taxi.service.dao.DaoFactory;
-import com.taxi.service.dao.OrderDao;
 
 public class DaoFactoryImpl extends DaoFactory {
 
@@ -17,7 +16,7 @@ public class DaoFactoryImpl extends DaoFactory {
     }
 
     @Override
-    public OrderDao getOrderDao() {
+    public OrderDaoImpl getOrderDao() {
         return new OrderDaoImpl();
     }
 

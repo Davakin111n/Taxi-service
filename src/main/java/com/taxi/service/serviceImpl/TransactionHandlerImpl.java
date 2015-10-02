@@ -7,9 +7,9 @@ import com.taxi.service.utils.DataBaseUtil;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class TransactionHandlerImpl<T> {
+public class TransactionHandlerImpl {
 
-    public T execute(Transaction transaction) {
+    public static <T> T execute(Transaction transaction) {
         T result = null;
         try (Connection connection = getConnection()) {
             try {
@@ -28,7 +28,7 @@ public class TransactionHandlerImpl<T> {
         return result;
     }
 
-    private void rollBack(Connection connection) {
+    private static void rollBack(Connection connection) {
         if (connection != null) {
             try {
                 connection.rollback();
@@ -38,7 +38,7 @@ public class TransactionHandlerImpl<T> {
         }
     }
 
-    private void commit(Connection connection) {
+    private static void commit(Connection connection) {
         if (connection != null) {
             try {
                 connection.commit();
@@ -48,7 +48,7 @@ public class TransactionHandlerImpl<T> {
         }
     }
 
-    private Connection getConnection() {
+    private static Connection getConnection() {
         try {
             return DataBaseUtil.connectionPool.getConnection();
         } catch (SQLException e) {

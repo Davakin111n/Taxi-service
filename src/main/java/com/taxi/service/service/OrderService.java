@@ -5,7 +5,7 @@ import com.taxi.service.entity.Order;
 import java.util.List;
 
 public interface OrderService {
-    Long addNew(Order order);
+    void addNew(Order order);
 
     void deleteOrder(Long orderId);
 
