@@ -34,8 +34,8 @@ public class Review extends Identifier {
 
     @Override
     public String toString() {
-        return "Reviews{" +
-                ", clientName='" + clientName + '\'' +
+        return "Review{" +
+                "clientName='" + clientName + '\'' +
                 ", note='" + note + '\'' +
                 ", createDate=" + createDate +
                 '}';
