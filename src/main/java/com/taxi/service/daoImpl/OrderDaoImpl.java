@@ -16,6 +16,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     public static final String ORDER_TABLE = "jean_taxi_service.order";
     public static final String ORDERS_ID = "jean_taxi_service.order NATURAL JOIN order_address WHERE id=?";
+    public static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
     public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, create_date = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_perfomance = ?, accomplished = ? WHERE id =?;";
     public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON id_client =?;";
@@ -40,7 +41,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public String getDeleteQuery() {
-        return ORDERS_ID;
+        return DELETE_QUERY;
     }
 
     @Override

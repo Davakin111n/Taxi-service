@@ -9,7 +9,7 @@ public interface GenericService<T extends Identifier> {
 
     boolean isExists(Long id);
 
-    void update(T obj);
+    void update(final T obj);
 
     List<T> listAll();
 

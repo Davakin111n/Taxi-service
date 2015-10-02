@@ -25,7 +25,7 @@ public class GenericServiceImpl<T extends Identifier, D extends GenericDao> exte
     }
 
     @Override
-    public void update(Identifier obj) {
+    public void update(final Identifier obj) {
         dao.update(obj);
     }
 

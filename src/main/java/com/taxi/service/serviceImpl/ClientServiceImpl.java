@@ -4,6 +4,7 @@ import com.taxi.service.daoImpl.ClientDaoImpl;
 import com.taxi.service.daoImpl.ClientGrantDaoImpl;
 import com.taxi.service.daoImpl.DaoFactoryImpl;
 import com.taxi.service.entity.ClientGrant;
+import com.taxi.service.entity.Identifier;
 import com.taxi.service.entity.User;
 import com.taxi.service.service.ClientService;
 import com.taxi.service.utils.PasswordUtil;
@@ -16,17 +17,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     private ClientGrantDaoImpl clientGrantDao = DaoFactoryImpl.getInstance().getClientGrantDao();
 
     public ClientServiceImpl() {
-        setDao(clientDao);
-    }
-
-    public void update(final User user) {
-        TransactionHandlerImpl.execute(new Transaction<Long>() {
-            @Override
-            public void doTransaction() {
-                clientDao.update(user);
-                clientGrantDao.update(user.getClientGrant());
-            }
-        });
+        super.setDao(clientDao);
     }
 
     @Override
@@ -39,6 +30,18 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
                 ClientGrant clientGrant = user.getClientGrant();
                 clientGrant.setClientId(clientGrantDao.addNew(clientGrant));
                 clientGrantDao.addNew(clientGrant);
+            }
+        });
+    }
+
+    @Override
+    public void update(final Identifier obj) {
+        final User user = (User) obj;
+        TransactionHandlerImpl.execute(new Transaction<Long>() {
+            @Override
+            public void doTransaction() {
+                clientDao.update(user);
+                clientGrantDao.update(user.getClientGrant());
             }
         });
     }

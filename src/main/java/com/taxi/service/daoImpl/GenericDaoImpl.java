@@ -15,7 +15,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     public static final String UPDATE = "UPDATE ";
     public static final String DELETE_FROM = "DELETE FROM ";
 
-    private static final byte genericSetValue = 1;
+    private static final byte columnNumber = 1;
 
     private List<T> list;
 
@@ -43,7 +43,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
         T identifier;
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
-            preparedStatement.setLong(genericSetValue, id);
+            preparedStatement.setLong(columnNumber, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             identifier = parseSingleResultSet(resultSet);
             return identifier;
@@ -56,7 +56,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     public void remove(Long id) {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(getDeleteQuery()))) {
-            preparedStatement.setLong(genericSetValue, id);
+            preparedStatement.setLong(columnNumber, id);
             preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,7 +66,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     public boolean isExists(Long id) {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
-            preparedStatement.setLong(genericSetValue, id);
+            preparedStatement.setLong(columnNumber, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!list.isEmpty()) {
                 return true;

@@ -9,12 +9,11 @@ import java.sql.SQLException;
 
 public class TransactionHandlerImpl {
 
-    public static <T> T execute(Transaction transaction) {
-        T result = null;
+    public static void execute(Transaction transaction) {
         try (Connection connection = getConnection()) {
             try {
                 ConnectionHolder.setLocalConnection(connection);
-                result = (T) transaction.doTransaction();
+                transaction.doTransaction();
             } catch (Exception e) {
                 e.printStackTrace();
                 rollBack(connection);
@@ -25,7 +24,6 @@ public class TransactionHandlerImpl {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
     }
 
     private static void rollBack(Connection connection) {

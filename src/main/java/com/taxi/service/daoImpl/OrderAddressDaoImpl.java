@@ -10,6 +10,7 @@ import java.util.List;
 public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
     private final String ORDER_ADDRESS_TABLE = "jean_taxi_service.order_address;";
     private final String ORDER_ADDRESS_ID = "jean_taxi_service.order_address WHERE id=?;";
+    private final String DELETE_ADDRESS = "jean_taxi_service.order_address WHERE id_order=?;";
     private final String INSERT_ORDER_ADDRESS = "INSERT INTO jean_taxi_service.order_address(id_order, destination_address, destination_date, destination_house_number, destination_porch_number) VALUES(?,?,?,?,?);";
     private final String UPDATE_ORDER_ADDRESS = "jean_taxi_service.order_address SET destination_address=?, destination_date=?, destination_house_number=?, destination_porch_number=? WHERE id=?;";
 
@@ -30,7 +31,7 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
 
     @Override
     public String getDeleteQuery() {
-        return ORDER_ADDRESS_ID;
+        return DELETE_ADDRESS;
     }
 
     @Override

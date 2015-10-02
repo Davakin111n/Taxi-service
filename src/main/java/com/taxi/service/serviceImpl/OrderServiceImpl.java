@@ -3,6 +3,7 @@ package com.taxi.service.serviceImpl;
 import com.taxi.service.daoImpl.DaoFactoryImpl;
 import com.taxi.service.daoImpl.OrderAddressDaoImpl;
 import com.taxi.service.daoImpl.OrderDaoImpl;
+import com.taxi.service.entity.Identifier;
 import com.taxi.service.entity.Order;
 import com.taxi.service.entity.OrderAddress;
 import com.taxi.service.service.OrderService;
@@ -34,13 +35,35 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     }
 
     @Override
-    public void deleteOrder(Long orderId) {
-        dao.deleteOrder(orderId);
+    public void update(final Identifier obj) {
+        final Order order = (Order) obj;
+        TransactionHandlerImpl.execute(new Transaction<Long>() {
+            @Override
+            public void doTransaction() {
+                orderDao.update(order);
+                for (OrderAddress address : order.getAddressList()) {
+                    orderAddressDao.update(address);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void deleteOrder(final Long orderId) {
+        TransactionHandlerImpl.execute(new Transaction<Long>() {
+            @Override
+            public void doTransaction() {
+                orderAddressDao.remove(orderId);
+                orderDao.remove(orderId);
+            }
+        });
     }
 
     @Override
     public void activateOrder(Long orderId) {
-
+        Order order = dao.get(orderId);
+        order.setActive(true);
+        dao.update(order);
     }
 
     @Override
