@@ -1,6 +1,9 @@
 package com.taxi.service.serviceImpl;
 
+import com.taxi.service.dao.ClientDao;
 import com.taxi.service.daoImpl.ClientDaoImpl;
+import com.taxi.service.daoImpl.ClientGrantDaoImpl;
+import com.taxi.service.daoImpl.DaoFactoryImpl;
 import com.taxi.service.entity.User;
 import com.taxi.service.service.ClientService;
 import com.taxi.service.utils.PasswordUtil;
@@ -8,6 +11,14 @@ import com.taxi.service.utils.PasswordUtil;
 import java.util.List;
 
 public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> implements ClientService {
+
+    private ClientDao clientDao = DaoFactoryImpl.getInstance().getClientDao();
+    private ClientGrantDaoImpl clientGrantDao = DaoFactoryImpl.getInstance().getClientGrantDao();
+
+    ClientServiceImpl() {
+        setDao((ClientDaoImpl) clientDao);
+    }
+
     @Override
     public Long addNew(User user) {
         user.setPassword(PasswordUtil.encryptPassword(user.getPassword()));

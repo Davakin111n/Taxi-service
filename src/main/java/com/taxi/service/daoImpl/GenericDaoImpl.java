@@ -2,8 +2,8 @@ package com.taxi.service.daoImpl;
 
 import com.taxi.service.dao.GenericDao;
 import com.taxi.service.entity.Identifier;
+import com.taxi.service.utils.ConnectionHolder;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,16 +17,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
 
     private static final byte genericSetValue = 1;
 
-    private DataSource dataSource;
     private List<T> list;
-
-    public GenericDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
 
     public abstract String getSelectQuery();
 
@@ -50,7 +41,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
 
     public T get(Long id) {
         T identifier;
-        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(genericSetValue, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -63,7 +54,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public void remove(Long id) {
-        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(DELETE_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(getDeleteQuery()))) {
             preparedStatement.setLong(genericSetValue, id);
             preparedStatement.executeQuery();
@@ -73,7 +64,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public boolean isExists(Long id) {
-        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(genericSetValue, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -87,7 +78,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public void update(Identifier obj) {
-        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(UPDATE
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(UPDATE
                 .concat(getUpdateQuery()))) {
             getStatementForUpdateEntity((T) obj, preparedStatement);
             preparedStatement.executeUpdate();
@@ -97,7 +88,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public List listAll() {
-        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
                 .concat(getAllFromTableQuery()))) {
             ResultSet resultSet = preparedStatement.executeQuery();
             list = parseListResultSet(resultSet);

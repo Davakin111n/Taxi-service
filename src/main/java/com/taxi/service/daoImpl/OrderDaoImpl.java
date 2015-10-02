@@ -2,8 +2,9 @@ package com.taxi.service.daoImpl;
 
 import com.taxi.service.dao.OrderDao;
 import com.taxi.service.entity.Order;
+import com.taxi.service.entity.OrderAddress;
+import com.taxi.service.utils.ConnectionHolder;
 
-import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,14 +18,10 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public static final String ORDERS_ID = "jean_taxi_service.order NATURAL JOIN order_address WHERE id=?";
     public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, create_date = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_perfomance = ?, accomplished = ? WHERE id =?;";
-    public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "jean_taxi_service.order NATURAL JOIN order_address WHERE id_client =?;";
-    public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order NATURAL JOIN order_address WHERE active = false;";
+    public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON id_client =?;";
+    public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON active = false;";
 
     private static final byte GENERIC_FIRST_COLUMN = 1;
-
-    public OrderDaoImpl(DataSource dataSource) {
-        super(dataSource);
-    }
 
     @Override
     public String getSelectQuery() {
@@ -92,7 +89,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public Long addNew(Order order) {
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(INSERT_NEW_ORDER)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_ORDER)) {
             convertNewEntity(order, preparedStatement);
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -108,7 +105,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public void deleteOrder(Long orderId) {
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(DELETE_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(ORDERS_ID))) {
             preparedStatement.setLong(GENERIC_FIRST_COLUMN, orderId);
             preparedStatement.executeQuery();
@@ -120,7 +117,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> orderListByClient(Long clientId) {
         List orderList;
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -133,7 +130,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> notActiveOrderListByClient(Long clientId) {
         List orderList;
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -146,7 +143,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> returnsOrderListByClient(Long clientId) {
         List orderList;
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -159,7 +156,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> notActiveOrderList() {
         List orderList;
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(SELECT_ALL_NOT_ACTIVE_ORDERS)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_ALL_NOT_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -225,6 +222,18 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setAccomplished(resultSet.getBoolean("accomplished"));
+                ArrayList orderAddressList = new ArrayList();
+                do {
+                    OrderAddress orderAddress = new OrderAddress();
+                    orderAddress.setId(resultSet.getLong("id"));
+                    orderAddress.setId(resultSet.getLong("id_order"));
+                    orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
+                    orderAddress.setDestinationDate(resultSet.getDate("destination_date"));
+                    orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
+                    orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
+                    orderAddressList.add(orderAddress);
+                } while (resultSet.next());
+                order.setAddressList(orderAddressList);
                 return order;
             }
         } catch (Exception exception) {
@@ -250,6 +259,17 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setAccomplished(resultSet.getBoolean("accomplished"));
+                ArrayList orderAddressList = new ArrayList();
+                do {
+                    OrderAddress orderAddress = new OrderAddress();
+                    orderAddress.setId(resultSet.getLong("id"));
+                    orderAddress.setId(resultSet.getLong("id_order"));
+                    orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
+                    orderAddress.setDestinationDate(resultSet.getDate("destination_date"));
+                    orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
+                    orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
+                    orderAddressList.add(orderAddress);
+                } while (resultSet.next());
                 orderList.add(order);
             }
             return orderList;

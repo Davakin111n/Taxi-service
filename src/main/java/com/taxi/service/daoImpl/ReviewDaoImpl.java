@@ -1,8 +1,8 @@
 package com.taxi.service.daoImpl;
 
 import com.taxi.service.entity.Review;
+import com.taxi.service.utils.ConnectionHolder;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,10 +16,6 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
     private final String REVIEWS_ID = "jean_taxi_service.review WHERE id=?;";
     private final String INSERT_REVIEW = "INSERT INTO jean_taxi_service.review(id_client, client_name, note) VALUES(?,?,?);";
     private final String UPDATE_REVIEW = "jean_taxi_service.review SET note=? WHERE id=?;";
-
-    public ReviewDaoImpl(DataSource dataSource) {
-        super(dataSource);
-    }
 
     @Override
     public String getSelectQuery() {
@@ -68,7 +64,7 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> {
 
     @Override
     public Long addNew(Review review) {
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(INSERT_REVIEW, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_REVIEW, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(review, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();

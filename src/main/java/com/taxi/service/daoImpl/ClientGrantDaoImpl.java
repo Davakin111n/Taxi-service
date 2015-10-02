@@ -2,8 +2,8 @@ package com.taxi.service.daoImpl;
 
 
 import com.taxi.service.entity.ClientGrant;
+import com.taxi.service.utils.ConnectionHolder;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,10 +17,6 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
     private final String CLIENT_GRANT_ID = "jean_taxi_service.client_grant WHERE id=?;";
     private final String INSERT_NEW_CLIENT_GRANT = "INSERT INTO jean_taxi_service.client_grant(`id_client`,`admin`,`moderator`,`active`) VALUES(?,?,?,?);";
     private final String UPDATE_CLIENT_GRANT = "jean_taxi_service.client_grant SET admin=?, moderator=?, active=? WHERE id_client=?;";
-
-    public ClientGrantDaoImpl(DataSource dataSource) {
-        super(dataSource);
-    }
 
     @Override
     public String getSelectQuery() {
@@ -50,7 +46,6 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
     @Override
     public void getStatementForUpdateEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) {
         convertUpdateEntity(clientGrant, preparedStatement);
-
     }
 
     @Override
@@ -70,7 +65,7 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
 
     @Override
     public Long addNew(ClientGrant clientGrant) {
-        try (PreparedStatement preparedStatement = getDataSource().getConnection().prepareStatement(INSERT_NEW_CLIENT_GRANT, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_CLIENT_GRANT, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(clientGrant, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
