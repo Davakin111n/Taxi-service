@@ -6,8 +6,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class DataBaseUtil {
@@ -27,10 +27,11 @@ public class DataBaseUtil {
 
     public static DataSource getMySQLDataSource() {
         Properties properties = new Properties();
-        FileInputStream fileInputStream = null;
+        InputStream fileInputStream = null;
         MysqlDataSource mySqlDataSource = null;
         try {
-            fileInputStream = new FileInputStream("database.properties");
+            fileInputStream = Thread.currentThread()
+                    .getContextClassLoader().getResourceAsStream(("database.properties"));
             properties.load(fileInputStream);
             mySqlDataSource = new MysqlDataSource();
             mySqlDataSource.setURL(properties.getProperty("url"));
