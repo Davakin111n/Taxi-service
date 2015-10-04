@@ -4,6 +4,7 @@ import com.taxi.service.dao.ClientDao;
 import com.taxi.service.entity.ClientGrant;
 import com.taxi.service.entity.User;
 import com.taxi.service.utils.ConnectionHolder;
+import com.taxi.service.utils.DataBaseUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -99,7 +100,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public List<User> listAllModerators() {
         List moderatorList;
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             moderatorList = convertListToEntity(resultSet);
             return moderatorList;
@@ -112,7 +113,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public List<User> listSimpleUsers() {
         List simpleUserList;
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             simpleUserList = convertListToEntity(resultSet);
             return simpleUserList;
@@ -125,7 +126,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public User getByEmail(String email) {
         User user;
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             user = convertToEntity(resultSet);

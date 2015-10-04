@@ -56,6 +56,7 @@ public class UserController extends InitController {
             User user = (User) request.getSession().getAttribute("user");
             if (PrivateAreaValidator.validateNewPasswordChange(passwordForm, user)) {
                 try {
+                    System.out.println(user.getId());
                     getClientService().changePassword(user.getId(), passwordForm.getNewPassword());
                     request.getSession().setAttribute("user", user);
                     response.sendRedirect(Constants.PRIVATE_AREA);
