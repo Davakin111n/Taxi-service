@@ -1,18 +1,13 @@
 package com.taxi.service.utils;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 public class DataBaseUtil {
 
-    public static final DataSource connectionPool = getMySQLDataSource();
+    public static final DataSource connectionPool = getConnectionPoolInstance();
 
     public static DataSource getConnectionPoolInstance() {
         try {
@@ -23,23 +18,5 @@ public class DataBaseUtil {
             e.printStackTrace();
         }
         return connectionPool;
-    }
-
-    public static DataSource getMySQLDataSource() {
-        Properties properties = new Properties();
-        InputStream fileInputStream = null;
-        MysqlDataSource mySqlDataSource = null;
-        try {
-            fileInputStream = Thread.currentThread()
-                    .getContextClassLoader().getResourceAsStream(("database.properties"));
-            properties.load(fileInputStream);
-            mySqlDataSource = new MysqlDataSource();
-            mySqlDataSource.setURL(properties.getProperty("url"));
-            mySqlDataSource.setUser(properties.getProperty("username"));
-            mySqlDataSource.setPassword(properties.getProperty("password"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return mySqlDataSource;
     }
 }

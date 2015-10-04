@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class User extends Identifier {
 
-    private ClientGrant clientGrant;
+    private ClientGrant clientGrant = new ClientGrant();
     private String email;
     private String address;
     private String password;

@@ -28,7 +28,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
                 user.setPassword(PasswordUtil.encryptPassword(user.getPassword()));
                 user.setId(clientDao.addNew(user));
                 ClientGrant clientGrant = user.getClientGrant();
-                clientGrant.setClientId(clientGrantDao.addNew(clientGrant));
+                clientGrant.setClientId(user.getId());
                 clientGrantDao.addNew(clientGrant);
             }
         });

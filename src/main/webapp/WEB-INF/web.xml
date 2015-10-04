@@ -102,8 +102,8 @@
     </session-config>
 
     <resource-ref>
-        <description>Data Base connection pool</description>
-        <res-ref-name>jdbc/order_board</res-ref-name>
+        <description>DataSource</description>
+        <res-ref-name>jdbc/jean_taxi_service</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>

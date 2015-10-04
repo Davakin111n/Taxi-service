@@ -48,7 +48,11 @@ public class TransactionHandlerImpl {
 
     private static Connection getConnection() {
         try {
-            return DataBaseUtil.connectionPool.getConnection();
+            Connection connection = DataBaseUtil.connectionPool.getConnection();
+            if (connection.getAutoCommit()) {
+                connection.setAutoCommit(false);
+            }
+            return connection;
         } catch (SQLException e) {
             e.printStackTrace();
         }

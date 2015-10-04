@@ -30,7 +30,7 @@
 
                 <a href="<c:url value='/privateArea'/>">Заказ такси</a> &nbsp;/&nbsp;
 
-                <c:if test="${sessionScope.user.admin}">
+                <c:if test="${sessionScope.user.clientGrant.admin}">
                     <a href="<c:url value='/adminPanel'/>">Админ панель</a> &nbsp;/&nbsp;
                 </c:if>
 
