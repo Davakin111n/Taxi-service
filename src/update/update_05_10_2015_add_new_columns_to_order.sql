@@ -1,0 +1,11 @@
+ALTER TABLE `order`
+ADD COLUMN phone TEXT NOT NULL,
+ADD COLUMN contact_name TEXT NOT NULL,
+ADD COLUMN car_option TEXT DEFAULT NULL,
+MODIFY COLUMN `note` TEXT DEFAULT NULL;
+
+
+ALTER TABLE `order_address`
+DROP COLUMN destination_date;
+
+

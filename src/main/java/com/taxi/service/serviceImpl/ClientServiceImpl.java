@@ -48,6 +48,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
 
     @Override
     public boolean successLogin(String email, String password) {
+        System.out.println("Логин тест");
         User user = dao.getByEmail(email);
         System.out.println(user.toString());
         if (user != null) {

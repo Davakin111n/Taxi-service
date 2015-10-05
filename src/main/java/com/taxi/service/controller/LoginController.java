@@ -38,11 +38,14 @@ public class LoginController extends InitController {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("в Post зашел");
+
         /**
          * Валидация на пустоту
          */
         if (!LoginValidator.validateLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
+                System.out.println("1 валидация");
                 request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
@@ -56,6 +59,7 @@ public class LoginController extends InitController {
          */
         if (!clientService.successLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
+                System.out.println("2 валидация");
                 request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();

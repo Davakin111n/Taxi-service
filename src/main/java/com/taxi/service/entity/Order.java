@@ -7,6 +7,9 @@ import java.util.List;
 public class Order extends Identifier {
 
     private User client;
+    private String contactName;
+
+    private String phone;
     private String title;
     private String note;
     private String price;
@@ -15,6 +18,8 @@ public class Order extends Identifier {
     private String beginAddress;
     private String houseNumber;
     private String porchNumber;
+
+    private String carOption;
 
     private List<OrderAddress> addressList = new ArrayList<OrderAddress>();
 
@@ -117,4 +122,37 @@ public class Order extends Identifier {
     public void setOnPerfomance(boolean onPerfomance) {
         this.onPerfomance = onPerfomance;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public User getClient() {
+        return client;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getCarOption() {
+        return carOption;
+    }
+
+    public void setCarOption(String carOption) {
+        this.carOption = carOption;
+    }
+
 }

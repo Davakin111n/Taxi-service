@@ -18,8 +18,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public static final String ORDER_TABLE = "jean_taxi_service.order";
     public static final String ORDERS_ID = "jean_taxi_service.order NATURAL JOIN order_address WHERE id=?";
     public static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
-    public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, create_date = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_perfomance = ?, accomplished = ? WHERE id =?;";
+    public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, create_date = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_perfomance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?;";
     public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON id_client =?;";
     public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON active = false;";
 
@@ -182,6 +182,9 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             preparedStatement.setString(statementValueCount++, order.getPorchNumber());
             preparedStatement.setBoolean(statementValueCount++, order.isOnPerfomance());
             preparedStatement.setBoolean(statementValueCount++, order.isAccomplished());
+            preparedStatement.setString(statementValueCount++, order.getPhone());
+            preparedStatement.setString(statementValueCount++, order.getContactName());
+            preparedStatement.setString(statementValueCount++, order.getCarOption());
             preparedStatement.setLong(statementValueCount++, order.getId());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -202,6 +205,9 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             preparedStatement.setString(statementValueCount++, order.getPorchNumber());
             preparedStatement.setBoolean(statementValueCount++, order.isOnPerfomance());
             preparedStatement.setBoolean(statementValueCount++, order.isAccomplished());
+            preparedStatement.setString(statementValueCount++, order.getPhone());
+            preparedStatement.setString(statementValueCount++, order.getContactName());
+            preparedStatement.setString(statementValueCount++, order.getCarOption());
             preparedStatement.setLong(statementValueCount++, order.getId());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -224,13 +230,15 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setAccomplished(resultSet.getBoolean("accomplished"));
+                order.setPhone(resultSet.getString("phone"));
+                order.setContactName(resultSet.getString("contact_name"));
+                order.setCarOption(resultSet.getString("car_option"));
                 ArrayList orderAddressList = new ArrayList();
                 do {
                     OrderAddress orderAddress = new OrderAddress();
                     orderAddress.setId(resultSet.getLong("id"));
                     orderAddress.setId(resultSet.getLong("id_order"));
                     orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
-                    orderAddress.setDestinationDate(resultSet.getDate("destination_date"));
                     orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
                     orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
                     orderAddressList.add(orderAddress);
@@ -261,13 +269,15 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setOnPerfomance(resultSet.getBoolean("on_performance"));
                 order.setAccomplished(resultSet.getBoolean("accomplished"));
+                order.setPhone(resultSet.getString("phone"));
+                order.setContactName(resultSet.getString("contact_name"));
+                order.setCarOption(resultSet.getString("car_option"));
                 ArrayList orderAddressList = new ArrayList();
                 do {
                     OrderAddress orderAddress = new OrderAddress();
                     orderAddress.setId(resultSet.getLong("id"));
                     orderAddress.setId(resultSet.getLong("id_order"));
                     orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
-                    orderAddress.setDestinationDate(resultSet.getDate("destination_date"));
                     orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
                     orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
                     orderAddressList.add(orderAddress);

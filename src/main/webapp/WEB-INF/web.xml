@@ -69,7 +69,7 @@
 
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
-        <url-pattern>/orderCreation</url-pattern>
+        <url-pattern>/createNewOrder</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

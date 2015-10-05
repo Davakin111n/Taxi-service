@@ -80,33 +80,63 @@
     </table>
 </form>
 
-<form name="madeOrder" method="post" action="changePassword">
+<form name="madeOrder" method="post" action="createNewOrder">
 
     <table id="madeOrder">
 
         <tr>
-            <td>Адрес -</td>
-            <td><input type="text" name="address"/></td>
+            <td>Адрес *-</td>
+            <td><input type="text" name="beginAddress"/></td>
         </tr>
 
         <tr>
-            <td>Дата и время -</td>
-            <td><input type="datetime" name="orderTime"/></td>
+            <td>Номер дома -</td>
+            <td><input type="text" name="houseNumber"/></td>
         </tr>
 
         <tr>
-            <td>Контактное имя -</td>
+            <td>Номер подъезда -</td>
+            <td><input type="text" name="porchNumber"/></td>
+        </tr>
+
+        <tr>
+            <td>Телефон *-</td>
+            <td><input type="text" name="phone"/></td>
+        </tr>
+
+        <tr>
+            <td>Контактное имя *-</td>
             <td><input type="text" name="contactName"/></td>
         </tr>
 
         <tr>
+            <td>Дата и время *-</td>
+            <td><input type="datetime" name="orderTime"/></td>
+        </tr>
+
+        <tr>
+            <td>Пункт назначения *-</td>
+            <td><input type="text" name="destinationAddress"/></td>
+        </tr>
+
+        <tr>
+            <td>Номер дома -</td>
+            <td><input type="text" name="destinationHouseNumber"/></td>
+        </tr>
+
+        <tr>
+            <td>Номер поъезда -</td>
+            <td><input type="text" name="destinationPorchNumber"/></td>
+        </tr>
+
+        <tr>
             <td>Требования к автомобилю -</td>
-            <td><input type="text" name="specialCarOption"/></td>
+            <td><input type="text" name="carOption"/></td>
         </tr>
 
         <tr>
             <td>Пожелания -</td>
-            <td><input type="text" name="secondaryPassword"/></td>
+            <td><input type="text" name="note"/></td>
         </tr>
 
         <tr>

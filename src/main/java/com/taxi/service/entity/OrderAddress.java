@@ -1,12 +1,9 @@
 package com.taxi.service.entity;
 
-import java.util.Date;
-
 public class OrderAddress extends Identifier {
 
     private Long orderId;
     private String destinationAddress;
-    private Date destinationDate;
     private String destinationHouseNumber;
     private String destinationPorchNumber;
 
@@ -24,14 +21,6 @@ public class OrderAddress extends Identifier {
 
     public void setDestinationAddress(String destinationAddress) {
         this.destinationAddress = destinationAddress;
-    }
-
-    public Date getDestinationDate() {
-        return destinationDate;
-    }
-
-    public void setDestinationDate(Date destinationDate) {
-        this.destinationDate = destinationDate;
     }
 
     public String getDestinationHouseNumber() {
