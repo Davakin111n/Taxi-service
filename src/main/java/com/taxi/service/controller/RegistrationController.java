@@ -2,6 +2,8 @@ package com.taxi.service.controller;
 
 import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.User;
+import com.taxi.service.service.ClientService;
+import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.validator.RegistrationValidator;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RegistrationController extends InitController {
+
+    ClientService clientService = (ClientServiceImpl) getClientService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -61,7 +65,7 @@ public class RegistrationController extends InitController {
                 user.setSecondPhone(request.getParameter("secondPhone"));
                 user.setThirdPhone(request.getParameter("thirdPhone"));
                 user.setSkype(request.getParameter("skype"));
-                getClientService().addNew(user);
+                clientService.addNew(user);
                 request.getSession().setAttribute(Constants.USER, user);
                 response.sendRedirect(Constants.PRIVATE_AREA);
             } catch (IOException e) {

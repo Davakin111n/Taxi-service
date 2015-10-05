@@ -49,6 +49,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     @Override
     public boolean successLogin(String email, String password) {
         User user = dao.getByEmail(email);
+        System.out.println(user.toString());
         if (user != null) {
             return PasswordUtil.encryptPassword(password).equals(user.getPassword());
         }
@@ -69,14 +70,20 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
-    public void changePassword(Long userId, String password) throws Exception {
-        User user = dao.get(userId);
-        if (user != null) {
-            user.setPassword(PasswordUtil.encryptPassword(password));
-            dao.update(user);
-        } else {
-            throw new Exception();
-        }
+    public void changePassword(Long userId, final String password) throws Exception {
+        final User user = dao.get(userId);
+        TransactionHandlerImpl.execute(new Transaction<Long>() {
+            @Override
+            public void doTransaction() throws Exception {
+                System.out.println(user.toString());
+                if (user != null) {
+                    user.setPassword(PasswordUtil.encryptPassword(password));
+                    clientDao.update(user);
+                } else {
+                    throw new Exception();
+                }
+            }
+        });
     }
 
     @Override

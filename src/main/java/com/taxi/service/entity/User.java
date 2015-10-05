@@ -107,4 +107,21 @@ public class User extends Identifier {
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "clientGrant=" + clientGrant +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", secondPhone='" + secondPhone + '\'' +
+                ", thirdPhone='" + thirdPhone + '\'' +
+                ", clientName='" + clientName + '\'' +
+                ", clientLastName='" + clientLastName + '\'' +
+                ", skype='" + skype + '\'' +
+                ", registrationDate=" + registrationDate +
+                '}';
+    }
 }

@@ -13,7 +13,7 @@
 <%@include file="../jspf/header.jspf" %>
 <h5>Изменить личные данные:</h5>
 
-<form name='savePersonData' method='post' action="/savePersonData">
+<form name='savePersonData' method='post' action="savePersonData">
 
     <table id='savePersonData'>
         <tr>
@@ -24,6 +24,11 @@
         <tr>
             <td>Фамилия -</td>
             <td><input type="text" name="clientLastName" value="${user.clientLastName}"/></td>
+        </tr>
+
+        <tr>
+            <td>Адрес -</td>
+            <td><input type="text" name="address" value="${user.address}"/></td>
         </tr>
 
         <tr>

@@ -16,7 +16,7 @@ import java.util.List;
 public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     private final String CLIENT_TABLE = "jean_taxi_service.client;";
-    private final String CLIENTS_ID = "jean_taxi_service.client JOIN jean_taxi_service.client_grant WHERE jean_taxi_service.client.id = jean_taxi_service.client_grant.id_client;";
+    private final String CLIENTS_ID = "jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr WHERE cl.id = gr.id_client AND cl.id = ?;";
     private final String INSERT_NEW_USER = "INSERT INTO jean_taxi_service.client(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private final String UPDATE_CLIENT = "jean_taxi_service.client SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?;";
     private final String SELECT_ALL_MODERATORS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON moderator=?;";
@@ -141,8 +141,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     public void convertNewEntity(User user, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(3, user.getAddress());
-            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(2, user.getAddress());
+            preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getPhone());
             preparedStatement.setString(5, user.getSecondPhone());
             preparedStatement.setString(6, user.getThirdPhone());
@@ -158,8 +158,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     public void convertUpdateEntity(User user, PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(3, user.getAddress());
-            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(2, user.getAddress());
+            preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getPhone());
             preparedStatement.setString(5, user.getSecondPhone());
             preparedStatement.setString(6, user.getThirdPhone());

@@ -4,6 +4,7 @@ import com.taxi.service.controller.form.PasswordForm;
 import com.taxi.service.controller.form.PrivateInfoForm;
 import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.User;
+import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.utils.PasswordUtil;
 import com.taxi.service.validator.PrivateAreaValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UserController extends InitController {
+
+    ClientServiceImpl clientService = getClientService();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -56,8 +59,8 @@ public class UserController extends InitController {
             User user = (User) request.getSession().getAttribute("user");
             if (PrivateAreaValidator.validateNewPasswordChange(passwordForm, user)) {
                 try {
-                    System.out.println(user.getId());
-                    getClientService().changePassword(user.getId(), passwordForm.getNewPassword());
+                    clientService.changePassword(user.getId(), passwordForm.getNewPassword());
+                    user.setPassword(PasswordUtil.encryptPassword(passwordForm.getNewPassword()));
                     request.getSession().setAttribute("user", user);
                     response.sendRedirect(Constants.PRIVATE_AREA);
                 } catch (IOException e) {
@@ -73,8 +76,9 @@ public class UserController extends InitController {
 
     private void savePersonData(HttpServletRequest request, HttpServletResponse response) {
         PrivateInfoForm privateInfoForm = new PrivateInfoForm();
-        privateInfoForm.setName(request.getParameter("name"));
-        privateInfoForm.setLastName(request.getParameter("lastName"));
+        privateInfoForm.setName(request.getParameter("clientName"));
+        privateInfoForm.setLastName(request.getParameter("clientLastName"));
+        privateInfoForm.setAddress(request.getParameter("address"));
         privateInfoForm.setPhone(request.getParameter("phone"));
         privateInfoForm.setSkype(request.getParameter("skype"));
         User user = (User) request.getSession().getAttribute("user");
@@ -83,15 +87,21 @@ public class UserController extends InitController {
             user.setClientLastName(privateInfoForm.getLastName());
             user.setPhone(privateInfoForm.getPhone());
             user.setSkype(privateInfoForm.getSkype());
-            getClientService().update(user);
+            clientService.update(user);
+            try {
+                response.sendRedirect(Constants.PRIVATE_AREA);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                privateInfoForm = null;
+            }
+        } else {
             try {
                 request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                privateInfoForm = null;
             }
         }
     }
@@ -99,7 +109,7 @@ public class UserController extends InitController {
     private void madeModerator(HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getSession().getAttribute("user");
         try {
-            getClientService().madeModerator(user.getId());
+            clientService.madeModerator(user.getId());
             request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();

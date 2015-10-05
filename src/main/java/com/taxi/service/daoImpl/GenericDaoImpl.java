@@ -3,6 +3,7 @@ package com.taxi.service.daoImpl;
 import com.taxi.service.dao.GenericDao;
 import com.taxi.service.entity.Identifier;
 import com.taxi.service.utils.ConnectionHolder;
+import com.taxi.service.utils.DataBaseUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +42,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
 
     public T get(Long id) {
         T identifier;
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(columnNumber, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -64,7 +65,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public boolean isExists(Long id) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(columnNumber, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -88,7 +89,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public List listAll() {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(SELECT_FROM
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM
                 .concat(getAllFromTableQuery()))) {
             ResultSet resultSet = preparedStatement.executeQuery();
             list = parseListResultSet(resultSet);
