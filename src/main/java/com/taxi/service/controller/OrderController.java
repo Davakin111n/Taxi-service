@@ -3,6 +3,7 @@ package com.taxi.service.controller;
 import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.Order;
 import com.taxi.service.entity.OrderAddress;
+import com.taxi.service.entity.User;
 import com.taxi.service.service.OrderService;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
 import com.taxi.service.validator.OrderValidator;
@@ -47,6 +48,7 @@ public class OrderController extends InitController {
             }
         } else {
             Order order = new Order();
+            order.setClientId(((User) request.getSession().getAttribute("user")).getId());
             order.setBeginAddress(request.getParameter("beginAddress"));
             order.setHouseNumber(request.getParameter("houseNumber"));
             order.setPorchNumber(request.getParameter("porchNumber"));

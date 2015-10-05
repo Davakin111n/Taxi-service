@@ -5,8 +5,8 @@
 
 <html>
 <head>
-    <title>Вход в личный кабинет</title>
-    <jsp:include page="../../cssLoader.jsp"></jsp:include>
+
+<title>Вход в личный кабинет</title>
 
 </head>
 

@@ -110,11 +110,6 @@
         </tr>
 
         <tr>
-            <td>Дата и время *-</td>
-            <td><input type="datetime" name="orderTime"/></td>
-        </tr>
-
-        <tr>
             <td>Пункт назначения *-</td>
             <td><input type="text" name="destinationAddress"/></td>
         </tr>

@@ -8,7 +8,7 @@
 
 <head>
 
-    <title>В помощь</title>
+    <title>Jean taxi service</title>
 
     <link rel="stylesheet" href="<c:url value='/resources/stylesheet/common.css' />"/>
     <link rel="stylesheet" href="<c:url value='/resources/stylesheet/index.css' />"/>

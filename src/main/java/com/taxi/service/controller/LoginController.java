@@ -3,7 +3,6 @@ package com.taxi.service.controller;
 import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.User;
 import com.taxi.service.service.ClientService;
-import com.taxi.service.serviceImpl.ClientServiceImpl;
 import com.taxi.service.validator.LoginValidator;
 
 import javax.servlet.ServletException;
@@ -13,7 +12,7 @@ import java.io.IOException;
 
 public class LoginController extends InitController {
 
-    ClientService clientService = (ClientServiceImpl) getClientService();
+    ClientService clientService = getClientService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -38,14 +37,11 @@ public class LoginController extends InitController {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("в Post зашел");
-
         /**
          * Валидация на пустоту
          */
         if (!LoginValidator.validateLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
-                System.out.println("1 валидация");
                 request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
@@ -59,7 +55,6 @@ public class LoginController extends InitController {
          */
         if (!clientService.successLogin(request.getParameter("email"), request.getParameter("password"))) {
             try {
-                System.out.println("2 валидация");
                 request.getRequestDispatcher(Constants.ERROR_PATH).forward(request, response);
             } catch (ServletException e) {
                 e.printStackTrace();
@@ -67,7 +62,7 @@ public class LoginController extends InitController {
                 e.printStackTrace();
             }
         } else {
-            User user = clientService.getByEmail(request.getParameter("email"));
+            User user = this.clientService.getByEmail(request.getParameter("email"));
             request.getSession().setAttribute(Constants.USER, user);
             try {
                 request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);

@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class InitController extends HttpServlet {
-    private ClientServiceImpl clientService;
-    private OrderServiceImpl orderService;
+
+    private static ClientServiceImpl clientService;
+    private static OrderServiceImpl orderService;
 
     @Override
     public void init(ServletConfig servletConfig) {
@@ -22,8 +23,8 @@ public class InitController extends HttpServlet {
         } catch (ServletException e) {
             e.printStackTrace();
         }
-        this.clientService = (ClientServiceImpl) servletConfig.getServletContext().getAttribute("clientService");
-        this.orderService = (OrderServiceImpl) servletConfig.getServletContext().getAttribute("orderService");
+        clientService = (ClientServiceImpl) servletConfig.getServletContext().getAttribute("clientService");
+        orderService = (OrderServiceImpl) servletConfig.getServletContext().getAttribute("orderService");
     }
 
     @Override
@@ -37,11 +38,11 @@ public class InitController extends HttpServlet {
         }
     }
 
-    public ClientServiceImpl getClientService() {
+    public static ClientServiceImpl getClientService() {
         return clientService;
     }
 
-    public OrderServiceImpl getOrderService() {
+    public static OrderServiceImpl getOrderService() {
         return orderService;
     }
 }

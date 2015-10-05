@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Order extends Identifier {
 
-    private User client;
+    private Long clientId;
     private String contactName;
 
     private String phone;
@@ -27,20 +27,24 @@ public class Order extends Identifier {
     private boolean onPerfomance = false;
     private boolean accomplished = false;
 
+    public Order() {
+
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
     public boolean isAccomplished() {
         return accomplished;
     }
 
     public void setAccomplished(boolean accomplished) {
         this.accomplished = accomplished;
-    }
-
-    public User getClientId() {
-        return client;
-    }
-
-    public void setClientId(User client) {
-        this.client = client;
     }
 
     public String getTitle() {
@@ -131,14 +135,6 @@ public class Order extends Identifier {
         this.phone = phone;
     }
 
-    public User getClient() {
-        return client;
-    }
-
-    public void setClient(User client) {
-        this.client = client;
-    }
-
     public String getContactName() {
         return contactName;
     }
@@ -154,5 +150,4 @@ public class Order extends Identifier {
     public void setCarOption(String carOption) {
         this.carOption = carOption;
     }
-
 }
