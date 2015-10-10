@@ -120,6 +120,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public List<Order> orderListByClient(Long clientId) {
         List orderList;
         try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+            preparedStatement.setLong(1, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -133,19 +134,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public List<Order> notActiveOrderListByClient(Long clientId) {
         List orderList;
         try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public List<Order> returnsOrderListByClient(Long clientId) {
-        List orderList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+            preparedStatement.setLong(1, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;

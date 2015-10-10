@@ -23,7 +23,7 @@ public class LoginController extends InitController {
                 } else if (((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isModerator()) {
                     request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
                 } else {
-                    request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+                    response.sendRedirect(Constants.PRIVATE_AREA);
                 }
             } else {
                 request.getRequestDispatcher(Constants.LOGIN_PATH).forward(request, response);
@@ -65,10 +65,8 @@ public class LoginController extends InitController {
             User user = this.clientService.getByEmail(request.getParameter("email"));
             request.getSession().setAttribute(Constants.USER, user);
             try {
-                request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+                response.sendRedirect(Constants.PRIVATE_AREA);
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ServletException e) {
                 e.printStackTrace();
             }
         }

@@ -2,7 +2,7 @@
          pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<html>
+<body>
 
 <head>
     <title>
@@ -143,5 +143,46 @@
     </table>
 </form>
 
+<table id="orderTable" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <td>Время/Дата</td>
+        <td>Контактное имя</td>
+        <td>Номер телефона</td>
+        <td>Статус</td>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <c:forEach var="order" items="${clientOrders}">
+        <tr>
+            <td>${order.createDate}</td>
+            <td>${order.contactName}</td>
+            <td>${order.phone}</td>
+            <td>
+                <c:if test="${order != null}">
+                    <c:choose>
+                        <c:when test="${order.accomplished == true}">
+                            Выполнен
+                        </c:when>
+                        <c:when test="${order.active == true}">
+                            Активирован
+                        </c:when>
+                        <c:otherwise>
+                            Ожидает активации
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+            </td>
+        </tr>
+    </c:forEach>
+
+    </tbody>
+</table>
+
+</body>
+
 <%@include file="../jspf/footer.jspf" %>
+
 </html>
