@@ -23,24 +23,45 @@
     <%@include file="../jspf/header.jspf" %>
 
     <div id="content">
-        <div id="loginBlock">
+        <table id="unactiveOrderTable" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <td>Время/Дата</td>
+                <td>Контактное имя</td>
+                <td>Номер телефона</td>
+                <td>Статус</td>
+            </tr>
+            </thead>
 
-            <h1> ВХОД </h1>
+            <tbody>
 
-            <form name='loginForm' action="login" method='post' id='loginForm'>
+            <c:forEach var="order" items="${notActiveOrderList}">
+                <tr>
+                    <td>${order.createDate}</td>
+                    <td>${order.contactName}</td>
+                    <td>${order.phone}</td>
+                    <td>
+                        <c:if test="${order != null}">
+                            <c:choose>
+                                <c:when test="${order.accomplished == true}">
+                                    Выполнен
+                                </c:when>
+                                <c:when test="${order.active == true}">
+                                    Активирован
+                                </c:when>
+                                <c:otherwise>
+                                    Ожидает активации
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                    </td>
+                    <td><a href="<c:url value='/editOrderFromAdmin/${order.id}' />">Редактировать</a></td>
+                    <td><a href="<c:url value='/deleteOrderFromAdmin/${order.id}' />">Удалить</a></td>
+                </tr>
+            </c:forEach>
 
-                <fieldset>
-                    <legend> E-mail</legend>
-                    <input type='text' name='email' id="email"/><br/>
-                </fieldset>
-                <br/>
-                <fieldset>
-                    <legend> Пароль</legend>
-                    <input type='password' name='password' id="password"/>
-                </fieldset>
-                <br/> <input type='submit' value='Войти'>
-            </form>
-        </div>
+            </tbody>
+        </table>
     </div>
 
     <%@include file="../jspf/footer.jspf" %>

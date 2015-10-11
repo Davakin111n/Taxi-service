@@ -143,6 +143,8 @@
     </table>
 </form>
 
+<h3>Ваши заказы:</h3>
+
 <table id="orderTable" class="display" cellspacing="0" width="100%">
     <thead>
     <tr>

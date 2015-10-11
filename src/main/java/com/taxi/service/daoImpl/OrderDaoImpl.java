@@ -20,8 +20,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
     public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, create_date = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_perfomance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?;";
-    public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON id_client =?;";
-    public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON active = false;";
+    public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id;";
+    public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active = false;";
 
     private static final byte GENERIC_FIRST_COLUMN = 1;
 
@@ -206,31 +206,32 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         try {
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getLong("id"));
-                order.setClientId(resultSet.getLong("id_client"));
-                order.setTitle(resultSet.getString("title"));
-                order.setNote(resultSet.getString("note"));
-                order.setPrice(resultSet.getString("price"));
-                order.setCreateDate(resultSet.getDate("create_date"));
-                order.setActive(resultSet.getBoolean("active"));
-                order.setBeginAddress(resultSet.getString("begin_address"));
-                order.setHouseNumber(resultSet.getString("porch_number"));
-                order.setOnPerfomance(resultSet.getBoolean("on_performance"));
-                order.setOnPerfomance(resultSet.getBoolean("on_performance"));
-                order.setAccomplished(resultSet.getBoolean("accomplished"));
-                order.setPhone(resultSet.getString("phone"));
-                order.setContactName(resultSet.getString("contact_name"));
-                order.setCarOption(resultSet.getString("car_option"));
+                order.setId(resultSet.getLong("ord.id"));
+                order.setClientId(resultSet.getLong("ord.id_client"));
+                order.setTitle(resultSet.getString("ord.title"));
+                order.setNote(resultSet.getString("ord.note"));
+                order.setPrice(resultSet.getString("ord.price"));
+                order.setCreateDate(resultSet.getDate("ord.create_date"));
+                order.setActive(resultSet.getBoolean("ord.active"));
+                order.setBeginAddress(resultSet.getString("ord.begin_address"));
+                order.setHouseNumber(resultSet.getString("ord.porch_number"));
+                order.setOnPerfomance(resultSet.getBoolean("ord.on_performance"));
+                order.setOnPerfomance(resultSet.getBoolean("ord.on_performance"));
+                order.setAccomplished(resultSet.getBoolean("ord.accomplished"));
+                order.setPhone(resultSet.getString("ord.phone"));
+                order.setContactName(resultSet.getString("ord.contact_name"));
+                order.setCarOption(resultSet.getString("ord.car_option"));
                 ArrayList orderAddressList = new ArrayList();
                 do {
                     OrderAddress orderAddress = new OrderAddress();
-                    orderAddress.setId(resultSet.getLong("id"));
-                    orderAddress.setId(resultSet.getLong("id_order"));
-                    orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
-                    orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
-                    orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
+                    orderAddress.setId(resultSet.getLong("ord_ad.id"));
+                    orderAddress.setId(resultSet.getLong("ord_ad.id_order"));
+                    orderAddress.setDestinationAddress(resultSet.getString("ord_ad.destination_address"));
+                    orderAddress.setDestinationHouseNumber(resultSet.getString("ord_ad.destination_house_number"));
+                    orderAddress.setDestinationPorchNumber(resultSet.getString("ord_ad.destination_porch_number"));
                     orderAddressList.add(orderAddress);
-                } while (resultSet.next());
+                } while (resultSet.next() && resultSet.getLong("ord.id") == order.getId());
+                resultSet.previous();
                 order.setAddressList(orderAddressList);
                 return order;
             }
@@ -246,31 +247,33 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         try {
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getLong("id"));
-                order.setClientId(resultSet.getLong("id_client"));
-                order.setTitle(resultSet.getString("title"));
-                order.setNote(resultSet.getString("note"));
-                order.setPrice(resultSet.getString("price"));
-                order.setCreateDate(resultSet.getDate("create_date"));
-                order.setActive(resultSet.getBoolean("active"));
-                order.setBeginAddress(resultSet.getString("begin_address"));
-                order.setHouseNumber(resultSet.getString("porch_number"));
-                order.setOnPerfomance(resultSet.getBoolean("on_performance"));
-                order.setOnPerfomance(resultSet.getBoolean("on_performance"));
-                order.setAccomplished(resultSet.getBoolean("accomplished"));
-                order.setPhone(resultSet.getString("phone"));
-                order.setContactName(resultSet.getString("contact_name"));
-                order.setCarOption(resultSet.getString("car_option"));
-                ArrayList orderAddressList = new ArrayList();
+                order.setId(resultSet.getLong("ord.id"));
+                order.setClientId(resultSet.getLong("ord.id_client"));
+                order.setTitle(resultSet.getString("ord.title"));
+                order.setNote(resultSet.getString("ord.note"));
+                order.setPrice(resultSet.getString("ord.price"));
+                order.setCreateDate(resultSet.getDate("ord.create_date"));
+                order.setActive(resultSet.getBoolean("ord.active"));
+                order.setBeginAddress(resultSet.getString("ord.begin_address"));
+                order.setHouseNumber(resultSet.getString("ord.porch_number"));
+                order.setOnPerfomance(resultSet.getBoolean("ord.on_performance"));
+                order.setOnPerfomance(resultSet.getBoolean("ord.on_performance"));
+                order.setAccomplished(resultSet.getBoolean("ord.accomplished"));
+                order.setPhone(resultSet.getString("ord.phone"));
+                order.setContactName(resultSet.getString("ord.contact_name"));
+                order.setCarOption(resultSet.getString("ord.car_option"));
+                List orderAddressList = order.getAddressList();
                 do {
                     OrderAddress orderAddress = new OrderAddress();
-                    orderAddress.setId(resultSet.getLong("id"));
-                    orderAddress.setId(resultSet.getLong("id_order"));
-                    orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
-                    orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
-                    orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
+                    orderAddress.setId(resultSet.getLong("ord_ad.id"));
+                    orderAddress.setId(resultSet.getLong("ord_ad.id_order"));
+                    orderAddress.setDestinationAddress(resultSet.getString("ord_ad.destination_address"));
+                    orderAddress.setDestinationHouseNumber(resultSet.getString("ord_ad.destination_house_number"));
+                    orderAddress.setDestinationPorchNumber(resultSet.getString("ord_ad.destination_porch_number"));
                     orderAddressList.add(orderAddress);
-                } while (resultSet.next());
+                } while (resultSet.next() && resultSet.getLong("ord.id") == order.getId());
+                resultSet.previous();
+                order.setAddressList(orderAddressList);
                 orderList.add(order);
             }
             return orderList;

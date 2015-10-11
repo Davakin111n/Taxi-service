@@ -1,6 +1,7 @@
 package com.taxi.service.controller;
 
 import com.taxi.service.dict.Constants;
+import com.taxi.service.entity.Order;
 import com.taxi.service.entity.User;
 import com.taxi.service.service.OrderService;
 
@@ -24,10 +25,7 @@ public class PrivateAreaController extends InitController {
             if (user != null && user.getClientGrant().isModerator()) {
                 request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
             } else {
-                System.out.println();
                 request.setAttribute(Constants.ORDER_LIST_BY_CLIENT, orderService.orderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId()));
-                List orderList = orderService.orderListByClient(((User) request.getSession().getAttribute(Constants.USER)).getId());
-                orderList.toString();
                 request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
             }
         } catch (ServletException e) {

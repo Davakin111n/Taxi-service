@@ -150,4 +150,25 @@ public class Order extends Identifier {
     public void setCarOption(String carOption) {
         this.carOption = carOption;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "clientId=" + clientId +
+                ", contactName='" + contactName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", title='" + title + '\'' +
+                ", note='" + note + '\'' +
+                ", price='" + price + '\'' +
+                ", createDate=" + createDate +
+                ", beginAddress='" + beginAddress + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", porchNumber='" + porchNumber + '\'' +
+                ", carOption='" + carOption + '\'' +
+                ", addressList=" + addressList +
+                ", active=" + active +
+                ", onPerfomance=" + onPerfomance +
+                ", accomplished=" + accomplished +
+                '}';
+    }
 }

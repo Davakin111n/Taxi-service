@@ -38,4 +38,14 @@ public class OrderAddress extends Identifier {
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
+
+    @Override
+    public String toString() {
+        return "OrderAddress{" +
+                "orderId=" + orderId +
+                ", destinationAddress='" + destinationAddress + '\'' +
+                ", destinationHouseNumber='" + destinationHouseNumber + '\'' +
+                ", destinationPorchNumber='" + destinationPorchNumber + '\'' +
+                '}';
+    }
 }
