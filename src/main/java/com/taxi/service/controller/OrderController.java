@@ -23,8 +23,8 @@ public class OrderController extends InitController {
         if (request.getSession().getAttribute("user") != null) {
             if (request.getRequestURI().contains("/createNewOrder")) {
                 createOrder(request, response);
-            } else if (request.getRequestURI().contains("/deleteOrder")) {
-                deleteOrder(request, response);
+            } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
+                deleteOrderFromAdmin(request, response);
             } else if (request.getRequestURI().contains("/editOrder")) {
                 editAdvert(request, response);
             }
@@ -72,7 +72,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void deleteOrder(HttpServletRequest request, HttpServletResponse response) {
+    private void deleteOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) {
 
     }
 
