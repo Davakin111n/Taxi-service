@@ -12,6 +12,7 @@
     <servlet>
         <servlet-name>InitController</servlet-name>
         <servlet-class>com.taxi.service.controller.InitController</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet>
@@ -70,6 +71,8 @@
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
         <url-pattern>/createNewOrder</url-pattern>
+        <url-pattern>/deleteOrderFromAdmin</url-pattern>
+        <url-pattern>/editOrderFromAdmin</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -90,8 +93,6 @@
     <servlet-mapping>
         <servlet-name>AdminController</servlet-name>
         <url-pattern>/adminPanel</url-pattern>
-        <url-pattern>/editOrderFromAdmin</url-pattern>
-        <url-pattern>/deleteOrderFromAdmin</url-pattern>
     </servlet-mapping>
 
     <!-- <error-page>

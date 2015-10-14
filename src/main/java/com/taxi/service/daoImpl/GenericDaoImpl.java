@@ -58,7 +58,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(getDeleteQuery()))) {
             preparedStatement.setLong(columnNumber, id);
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

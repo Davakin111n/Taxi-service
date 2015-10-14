@@ -19,13 +19,13 @@ public class OrderController extends InitController {
     OrderService orderService = (OrderServiceImpl) getOrderService();
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
             if (request.getRequestURI().contains("/createNewOrder")) {
                 createOrder(request, response);
             } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
                 deleteOrderFromAdmin(request, response);
-            } else if (request.getRequestURI().contains("/editOrder")) {
+            } else if (request.getRequestURI().contains("/editOrderFromAdmin")) {
                 editAdvert(request, response);
             }
         } else if (request.getRequestURI().contains("/createNonClientOrder")) {
@@ -73,7 +73,14 @@ public class OrderController extends InitController {
     }
 
     private void deleteOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) {
-
+        if (request.getParameter("id") != null) {
+            orderService.deleteOrder(Long.parseLong(request.getParameter("id")));
+        }
+        try {
+            response.sendRedirect(Constants.ADMIN_PANEL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void editAdvert(HttpServletRequest request, HttpServletResponse response) {

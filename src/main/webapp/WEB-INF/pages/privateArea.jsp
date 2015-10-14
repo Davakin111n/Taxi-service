@@ -80,7 +80,7 @@
     </table>
 </form>
 
-<form name="madeOrder" method="post" action="createNewOrder">
+<form name="madeOrder" method="get" action="createNewOrder">
 
     <table id="madeOrder">
 

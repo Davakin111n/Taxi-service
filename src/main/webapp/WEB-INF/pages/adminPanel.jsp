@@ -23,6 +23,32 @@
     <%@include file="../jspf/header.jspf" %>
 
     <div id="content">
+
+        <h3>Список обычных клиентов:</h3>
+        <table id="allClientsTable" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <td>Email</td>
+                <td>Время/Дата регистрации</td>
+                <td>Контактное имя</td>
+                <td>Номер телефона</td>
+            </tr>
+            </thead>
+
+            <tbody>
+            <c:forEach var="user" items="${users}">
+                <tr>
+                    <td>${user.email}</td>
+                    <td>${user.registrationDate}</td>
+                    <td>${user.clientName}</td>
+                    <td>${user.phone}</td>
+                </tr>
+            </c:forEach>
+
+            </tbody>
+        </table>
+        <form method="post">
+            <h3>Неактивированные заказы:</h3>
         <table id="unactiveOrderTable" class="display" cellspacing="0" width="100%">
             <thead>
             <tr>
@@ -55,13 +81,14 @@
                             </c:choose>
                         </c:if>
                     </td>
-                    <td><a href="<c:url value='/editOrderFromAdmin/${order.id}' />">Редактировать</a></td>
-                    <td><a href="<c:url value='/deleteOrderFromAdmin/${order.id}' />">Удалить</a></td>
+                    <td><a href="<c:url value='/editOrderFromAdmin?id=${order.id}' />">Редактировать</a></td>
+                    <td><a href="<c:url value='/deleteOrderFromAdmin?id=${order.id}' />">Удалить</a></td>
                 </tr>
             </c:forEach>
 
             </tbody>
         </table>
+        </form>
     </div>
 
     <%@include file="../jspf/footer.jspf" %>

@@ -35,9 +35,4 @@ public class AdminController extends InitController {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
-    }
 }
