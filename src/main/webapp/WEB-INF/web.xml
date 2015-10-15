@@ -70,6 +70,7 @@
 
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
+        <url-pattern>/order</url-pattern>
         <url-pattern>/createNewOrder</url-pattern>
         <url-pattern>/deleteOrderFromAdmin</url-pattern>
         <url-pattern>/editOrderFromAdmin</url-pattern>

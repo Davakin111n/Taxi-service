@@ -4,7 +4,6 @@ import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.Order;
 import com.taxi.service.entity.OrderAddress;
 import com.taxi.service.entity.User;
-import com.taxi.service.service.OrderService;
 import com.taxi.service.serviceImpl.OrderServiceImpl;
 import com.taxi.service.validator.OrderValidator;
 
@@ -16,12 +15,14 @@ import java.util.List;
 
 public class OrderController extends InitController {
 
-    OrderService orderService = (OrderServiceImpl) getOrderService();
+    OrderServiceImpl orderService = (OrderServiceImpl) getOrderService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
-            if (request.getRequestURI().contains("/createNewOrder")) {
+            if (request.getRequestURI().contains("/order")) {
+                viewOrder(request, response);
+            } else if (request.getRequestURI().contains("/createNewOrder")) {
                 createOrder(request, response);
             } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
                 deleteOrderFromAdmin(request, response);
@@ -32,6 +33,24 @@ public class OrderController extends InitController {
 
         } else {
 
+        }
+    }
+
+    private void viewOrder(HttpServletRequest request, HttpServletResponse response) {
+        Order order = null;
+        if (request.getParameter("id") != null) {
+            order = orderService.get(Long.parseLong(request.getParameter("id")));
+        }
+        if (order != null) {
+            request.setAttribute("order", order);
+        }
+        System.out.println(order.toString());
+        try {
+            request.getRequestDispatcher(Constants.ORDER_PATH).forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

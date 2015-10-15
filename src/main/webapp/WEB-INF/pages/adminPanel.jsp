@@ -10,6 +10,7 @@
 
     <%--Jquery lib --%>
     <script type="text/javascript" src="<c:url value='/resources/js/lib/jquery.min.2.0.0.js' />"></script>
+
     <%--Jquery lib --%>
     <script type="text/javascript" src="<c:url value='/resources/js/validators/jquery.validate.min.js' />"></script>
 
@@ -81,8 +82,10 @@
                             </c:choose>
                         </c:if>
                     </td>
+                    <td><a href="<c:url value='/order?id=${order.id}' />">Просмотр</a></td>
                     <td><a href="<c:url value='/editOrderFromAdmin?id=${order.id}' />">Редактировать</a></td>
                     <td><a href="<c:url value='/deleteOrderFromAdmin?id=${order.id}' />">Удалить</a></td>
+
                 </tr>
             </c:forEach>
 
