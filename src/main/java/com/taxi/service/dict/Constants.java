@@ -30,6 +30,7 @@ public class Constants {
      */
     public static final String INDEX_PATH = "WEB-INF/pages/index.jsp";
     public static final String ORDER_PATH = "WEB-INF/pages/order.jsp";
+    public static final String ORDER_EDIT_PATH = "WEB-INF/pages/editOrder.jsp";
     public static final String LOGIN_PATH = "WEB-INF/pages/login.jsp";
     public static final String REGISTRATION_PATH = "WEB-INF/pages/registration.jsp";
     public static final String PRIVATE_AREA_PATH = "WEB-INF/pages/privateArea.jsp";

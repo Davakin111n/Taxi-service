@@ -1,5 +1,6 @@
 package com.taxi.service.controller;
 
+import com.taxi.service.controller.form.OrderForm;
 import com.taxi.service.dict.Constants;
 import com.taxi.service.entity.Order;
 import com.taxi.service.entity.OrderAddress;
@@ -27,7 +28,9 @@ public class OrderController extends InitController {
             } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
                 deleteOrderFromAdmin(request, response);
             } else if (request.getRequestURI().contains("/editOrderFromAdmin")) {
-                editAdvert(request, response);
+                editOrderFromAdmin(request, response);
+            } else if (request.getRequestURI().contains("/updateOrder")) {
+                updateOrder(request, response);
             }
         } else if (request.getRequestURI().contains("/createNonClientOrder")) {
 
@@ -38,13 +41,14 @@ public class OrderController extends InitController {
 
     private void viewOrder(HttpServletRequest request, HttpServletResponse response) {
         Order order = null;
-        if (request.getParameter("id") != null) {
+        if (request.getParameter("orderId") != null) {
             order = orderService.get(Long.parseLong(request.getParameter("id")));
         }
         if (order != null) {
             request.setAttribute("order", order);
+        } else {
+
         }
-        System.out.println(order.toString());
         try {
             request.getRequestDispatcher(Constants.ORDER_PATH).forward(request, response);
         } catch (ServletException e) {
@@ -102,7 +106,63 @@ public class OrderController extends InitController {
         }
     }
 
-    private void editAdvert(HttpServletRequest request, HttpServletResponse response) {
+    private void editOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) {
+        Order order = null;
+        if (request.getParameter("id") != null) {
+            order = orderService.get(Long.parseLong(request.getParameter("id")));
+        }
+        System.out.println(order.toString());
+        request.setAttribute("order", order);
+        try {
+            request.getRequestDispatcher(Constants.ORDER_EDIT_PATH).forward(request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void updateOrder(HttpServletRequest request, HttpServletResponse response) {
+        OrderForm orderForm = new OrderForm();
+        orderForm.setTitle(request.getParameter("title"));
+        orderForm.setPhone(request.getParameter("phone"));
+        orderForm.setContactName(request.getParameter("contactName"));
+        orderForm.setBeginAddress(request.getParameter("beginAddress"));
+        orderForm.setHouseNumber(request.getParameter("houseNumber"));
+        orderForm.setPorchNumber(request.getParameter("porchNumber"));
+        orderForm.setPrice(request.getParameter("price"));
+        OrderAddress orderAddress = new OrderAddress();
+        orderAddress.setDestinationAddress(request.getParameter("destinationAddress"));
+        orderAddress.setDestinationHouseNumber(request.getParameter("destinationHouseNumber"));
+        orderAddress.setDestinationPorchNumber(request.getParameter("destinationPorchNumber"));
+        List addressList = orderForm.getAddressList();
+        addressList.add(orderAddress);
+        orderForm.setAddressList(addressList);
+        if (!OrderValidator.validateOrderEdit(orderForm)) {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Order order = orderService.get(Long.parseLong(request.getParameter("orderId")));
+        System.out.println(orderForm.toString());
+        order.setTitle(orderForm.getTitle());
+        order.setPhone(orderForm.getPhone());
+        order.setContactName(orderForm.getContactName());
+        order.setPrice(orderForm.getPrice());
+        order.setBeginAddress(orderForm.getBeginAddress());
+        order.setHouseNumber(orderForm.getHouseNumber());
+        order.setPorchNumber(orderForm.getPorchNumber());
+        order.setAddressList(orderForm.getAddressList());
+        orderService.update(order);
+        request.setAttribute("order", order);
+        try {
+            request.getRequestDispatcher(Constants.ORDER_PATH).forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

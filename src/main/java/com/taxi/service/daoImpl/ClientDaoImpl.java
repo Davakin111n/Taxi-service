@@ -73,7 +73,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             if (!resultSet.next()) {
                 throw new Exception();
             }
-            User user = convertToEntity(resultSet);
+            resultSet.previous();
+            userList = convertListToEntity(resultSet);
             return userList;
         } catch (Exception e) {
             e.printStackTrace();
