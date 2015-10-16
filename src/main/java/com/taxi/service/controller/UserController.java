@@ -19,14 +19,22 @@ public class UserController extends InitController {
     ClientServiceImpl clientService = getClientService();
 
     @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getSession().getAttribute("user") != null
+                && ((User) request.getSession().getAttribute("user")).getClientGrant().isAdmin()) {
+            if (request.getRequestURI().contains("/madeModerator")) {
+                madeModerator(request, response);
+            }
+        }
+    }
+
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
             if (request.getRequestURI().contains("/savePersonData")) {
                 savePersonData(request, response);
             } else if (request.getRequestURI().contains("/changePassword")) {
                 changePassword(request, response);
-            } else if (request.getRequestURI().contains("/madeModerator")) {
-                madeModerator(request, response);
             }
         }
     }
@@ -107,10 +115,9 @@ public class UserController extends InitController {
     }
 
     private void madeModerator(HttpServletRequest request, HttpServletResponse response) {
-        User user = (User) request.getSession().getAttribute("user");
         try {
-            clientService.madeModerator(user.getId());
-            request.getRequestDispatcher(Constants.PRIVATE_AREA_PATH).forward(request, response);
+            clientService.madeModerator(Long.parseLong(request.getParameter("id")));
+            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -12,5 +12,7 @@ public interface OrderDao {
 
     List<Order> notActiveOrderListByClient(Long clientId);
 
+    List<Order> activeOrderList();
+
     List<Order> notActiveOrderList();
 }

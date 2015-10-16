@@ -63,7 +63,12 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     public void activateOrder(Long orderId) {
         Order order = dao.get(orderId);
         order.setActive(true);
-        dao.update(order);
+        update(order);
+    }
+
+    @Override
+    public List<Order> activeOrderList() {
+        return dao.activeOrderList();
     }
 
     @Override

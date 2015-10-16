@@ -21,6 +21,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?;";
     public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id;";
+    public static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active= true AND ord.id = ord_ad.id_order";
     public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active = false AND ord.id = ord_ad.id_order";
 
     private static final byte GENERIC_FIRST_COLUMN = 1;
@@ -137,6 +138,19 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         List orderList;
         try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             preparedStatement.setLong(1, clientId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            orderList = convertListToEntity(resultSet);
+            return orderList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Order> activeOrderList() {
+        List orderList;
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;

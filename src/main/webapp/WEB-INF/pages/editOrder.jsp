@@ -13,7 +13,7 @@
 <%@include file="../jspf/header.jspf" %>
 <h5>Редактировать заказ:</h5>
 
-<form name="editOrder" method="get" action="updateOrder">
+<form name="editOrder" method="post" action="updateOrder">
     <input type="hidden" name="orderId" value="${requestScope.order.id}"/>
 
     <table id='updateOrder'>

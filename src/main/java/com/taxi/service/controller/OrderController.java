@@ -23,12 +23,21 @@ public class OrderController extends InitController {
         if (request.getSession().getAttribute("user") != null) {
             if (request.getRequestURI().contains("/order")) {
                 viewOrder(request, response);
-            } else if (request.getRequestURI().contains("/createNewOrder")) {
-                createOrder(request, response);
             } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
                 deleteOrderFromAdmin(request, response);
             } else if (request.getRequestURI().contains("/editOrderFromAdmin")) {
                 editOrderFromAdmin(request, response);
+            } else if (request.getRequestURI().contains("/activateOrder")) {
+                activateOrder(request, response);
+            }
+        }
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getSession().getAttribute("user") != null) {
+            if (request.getRequestURI().contains("/createNewOrder")) {
+                createOrder(request, response);
             } else if (request.getRequestURI().contains("/updateOrder")) {
                 updateOrder(request, response);
             }
@@ -95,6 +104,17 @@ public class OrderController extends InitController {
         }
     }
 
+    private void activateOrder(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getParameter("id") != null) {
+            orderService.activateOrder(Long.parseLong(request.getParameter("id")));
+        }
+        try {
+            response.sendRedirect(Constants.ADMIN_PANEL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void deleteOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) {
         if (request.getParameter("id") != null) {
             orderService.deleteOrder(Long.parseLong(request.getParameter("id")));
@@ -111,7 +131,6 @@ public class OrderController extends InitController {
         if (request.getParameter("id") != null) {
             order = orderService.get(Long.parseLong(request.getParameter("id")));
         }
-        System.out.println(order.toString());
         request.setAttribute("order", order);
         try {
             request.getRequestDispatcher(Constants.ORDER_EDIT_PATH).forward(request, response);
