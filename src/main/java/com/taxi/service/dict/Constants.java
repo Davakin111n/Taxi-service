@@ -13,6 +13,7 @@ public class Constants {
 
     public static final String ORDER_LIST_BY_CLIENT = "clientOrders";
     public static final String ACTIVE_ORDER_LIST = "activeOrderList";
+    public static final String ACCOMPLISHED_ORDER_LIST = "accomplishedOrderList";
     public static final String NOT_ACTIVE_ORDER_LIST_BY_CLIENT = "notActiveOrderListByClient";
     public static final String NOT_ACTIVE_ORDER_LIST = "notActiveOrderList";
 

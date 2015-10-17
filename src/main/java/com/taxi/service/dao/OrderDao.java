@@ -15,4 +15,6 @@ public interface OrderDao {
     List<Order> activeOrderList();
 
     List<Order> notActiveOrderList();
+
+    List<Order> accomplishedOrderList();
 }

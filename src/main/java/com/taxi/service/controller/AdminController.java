@@ -26,6 +26,7 @@ public class AdminController extends InitController {
                 request.setAttribute(Constants.MODERATORS, clientService.listAllModerators());
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST, orderService.notActiveOrderList());
                 request.setAttribute(Constants.ACTIVE_ORDER_LIST, orderService.activeOrderList());
+                request.setAttribute(Constants.ACCOMPLISHED_ORDER_LIST, orderService.accomplishedOrderList());
                 request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
             } else {
                 request.getRequestDispatcher(Constants.INDEX).forward(request, response);

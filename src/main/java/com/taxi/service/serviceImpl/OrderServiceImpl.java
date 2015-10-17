@@ -85,4 +85,9 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     public List<Order> notActiveOrderList() {
         return dao.notActiveOrderList();
     }
+
+    @Override
+    public List<Order> accomplishedOrderList() {
+        return dao.accomplishedOrderList();
+    }
 }

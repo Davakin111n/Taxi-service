@@ -19,4 +19,5 @@ public interface OrderService {
 
     List<Order> notActiveOrderList();
 
+    List<Order> accomplishedOrderList();
 }
