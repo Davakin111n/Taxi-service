@@ -6,48 +6,48 @@
     <display-name>Jean taxi-service</display-name>
 
     <listener>
-        <listener-class>com.taxi.service.listener.ApplicationContext</listener-class>
+        <listener-class>com.jean.taxi.listener.ApplicationContext</listener-class>
     </listener>
 
     <servlet>
         <servlet-name>InitController</servlet-name>
-        <servlet-class>com.taxi.service.controller.InitController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.InitController</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet>
         <servlet-name>LoginController</servlet-name>
-        <servlet-class>com.taxi.service.controller.LoginController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.LoginController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>RegistrationController</servlet-name>
-        <servlet-class>com.taxi.service.controller.RegistrationController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.RegistrationController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>UserController</servlet-name>
-        <servlet-class>com.taxi.service.controller.UserController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.UserController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>OrderController</servlet-name>
-        <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.OrderController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>PrivateAreaController</servlet-name>
-        <servlet-class>com.taxi.service.controller.PrivateAreaController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.PrivateAreaController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ReviewController</servlet-name>
-        <servlet-class>com.taxi.service.controller.OrderController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.OrderController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>AdminController</servlet-name>
-        <servlet-class>com.taxi.service.controller.AdminController</servlet-class>
+        <servlet-class>com.jean.taxi.controller.AdminController</servlet-class>
     </servlet>
 
     <servlet-mapping>
