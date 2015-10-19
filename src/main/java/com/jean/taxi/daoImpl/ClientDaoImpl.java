@@ -19,8 +19,9 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     private final String CLIENTS_ID = "jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr WHERE cl.id = gr.id_client AND cl.id = ?;";
     private final String INSERT_NEW_USER = "INSERT INTO jean_taxi_service.client(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private final String UPDATE_CLIENT = "jean_taxi_service.client SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?;";
-    private final String SELECT_ALL_MODERATORS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON moderator=true;";
+    private final String SELECT_ALL_MODERATORS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND moderator=true AND gr.admin = false;";
     private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.moderator = false AND gr.admin = false;";
+    private final String SELECT_BAN_LIST_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.active = false AND gr.admin = false;";
     private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON email =?;";
 
     private final String CLIENT_ALIAS = "cl";
@@ -118,6 +119,19 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             simpleUserList = convertListToEntity(resultSet);
             return simpleUserList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<User> banList() {
+        List banList;
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_BAN_LIST_USERS)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            banList = convertListToEntity(resultSet);
+            return banList;
         } catch (Exception e) {
             e.printStackTrace();
         }

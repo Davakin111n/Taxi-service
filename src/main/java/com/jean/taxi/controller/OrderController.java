@@ -50,7 +50,7 @@ public class OrderController extends InitController {
 
     private void viewOrder(HttpServletRequest request, HttpServletResponse response) {
         Order order = null;
-        if (request.getParameter("orderId") != null) {
+        if (request.getParameter("id") != null) {
             order = orderService.get(Long.parseLong(request.getParameter("id")));
         }
         if (order != null) {

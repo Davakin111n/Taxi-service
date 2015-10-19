@@ -29,6 +29,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
                 user.setId(clientDao.addNew(user));
                 ClientGrant clientGrant = user.getClientGrant();
                 clientGrant.setClientId(user.getId());
+                clientGrant.setActive(true);
                 clientGrantDao.addNew(clientGrant);
             }
         });
@@ -70,6 +71,33 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
+    public void madeSimpleUser(Long moderatorId) {
+        User user = dao.get(moderatorId);
+        ClientGrant clientGrant = user.getClientGrant();
+        clientGrant.setModerator(false);
+        user.setClientGrant(clientGrant);
+        update(user);
+    }
+
+    @Override
+    public void banUser(Long userId) {
+        User user = dao.get(userId);
+        ClientGrant clientGrant = user.getClientGrant();
+        clientGrant.setActive(false);
+        user.setClientGrant(clientGrant);
+        update(user);
+    }
+
+    @Override
+    public void deleteBanUser(Long userId) {
+        User user = dao.get(userId);
+        ClientGrant clientGrant = user.getClientGrant();
+        clientGrant.setActive(true);
+        user.setClientGrant(clientGrant);
+        update(user);
+    }
+
+    @Override
     public void changePassword(Long userId, final String password) throws Exception {
         final User user = dao.get(userId);
         execute(new Transaction<Long>() {
@@ -88,6 +116,11 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     @Override
     public List<User> listSimpleUsers() {
         return dao.listSimpleUsers();
+    }
+
+    @Override
+    public List<User> banList() {
+        return dao.banList();
     }
 
     @Override

@@ -24,6 +24,7 @@ public class AdminController extends InitController {
                     && ((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isAdmin()) {
                 request.setAttribute(Constants.USERS, clientService.listSimpleUsers());
                 request.setAttribute(Constants.MODERATORS, clientService.listAllModerators());
+                request.setAttribute(Constants.BAN_LIST, clientService.banList());
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST, orderService.notActiveOrderList());
                 request.setAttribute(Constants.ACTIVE_ORDER_LIST, orderService.activeOrderList());
                 request.setAttribute(Constants.ACCOMPLISHED_ORDER_LIST, orderService.accomplishedOrderList());

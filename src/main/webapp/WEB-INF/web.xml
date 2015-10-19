@@ -66,6 +66,9 @@
         <url-pattern>/savePersonData</url-pattern>
         <url-pattern>/changePassword</url-pattern>
         <url-pattern>/madeModerator</url-pattern>
+        <url-pattern>/madeSimpleUser</url-pattern>
+        <url-pattern>/banUser</url-pattern>
+        <url-pattern>/undoBanUser</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

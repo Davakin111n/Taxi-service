@@ -10,5 +10,7 @@ public interface ClientDao {
 
     List<User> listSimpleUsers();
 
+    List<User> banList();
+
     User getByEmail(String clientEmail);
 }

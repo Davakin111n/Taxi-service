@@ -44,11 +44,86 @@
                     <td>${user.clientName}</td>
                     <td>${user.phone}</td>
                     <td><a href="<c:url value='/madeModerator?id=${user.id}' />">Сделать модератором</a></td>
+                    <td><a href="<c:url value='/banUser?id=${user.id}' />">Забанить</a></td>
                 </tr>
             </c:forEach>
 
             </tbody>
         </table>
+
+        <h3>Список модераторов :</h3>
+        <table id="moderatorsTable" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <td>Email</td>
+                <td>Время/Дата регистрации</td>
+                <td>Контактное имя</td>
+                <td>Номер телефона</td>
+                <td>Статус</td>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="user" items="${moderators}">
+                <tr>
+                    <td>${user.email}</td>
+                    <td>${user.registrationDate}</td>
+                    <td>${user.clientName}</td>
+                    <td>${user.phone}</td>
+                    <td>
+                        <c:if test="${user != null}">
+                            <c:choose>
+                                <c:when test="${user.clientGrant.moderator == true}">
+                                    Модератор
+                                </c:when>
+                                <c:otherwise>
+                                    Пользователь
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                    </td>
+                    <td><a href="<c:url value='/madeSimleUser?id=${user.id}' />">Понизить</a></td>
+                    <td><a href="<c:url value='/banUser?id=${user.id}' />">Забанить</a></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+        <h3>Список забаненных пользователей:</h3>
+        <table id="banListTable" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <td>Email</td>
+                <td>Время/Дата регистрации</td>
+                <td>Контактное имя</td>
+                <td>Номер телефона</td>
+                <td>Статус</td>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="user" items="${banList}">
+                <tr>
+                    <td>${user.email}</td>
+                    <td>${user.registrationDate}</td>
+                    <td>${user.clientName}</td>
+                    <td>${user.phone}</td>
+                    <td>
+                        <c:if test="${user != null}">
+                            <c:choose>
+                                <c:when test="${user.clientGrant.moderator == true}">
+                                    Модератор
+                                </c:when>
+                                <c:otherwise>
+                                    Пользователь
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                    </td>
+                    <td><a href="<c:url value='/undoBanUser?id=${user.id}' />">Разбанить</a></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
         <form method="post">
             <h3>Неактивные заказы:</h3>
             <table id="unactiveOrderTable" class="display" cellspacing="0" width="100%">
