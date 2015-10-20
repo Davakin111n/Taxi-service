@@ -81,7 +81,7 @@
                             </c:choose>
                         </c:if>
                     </td>
-                    <td><a href="<c:url value='/madeSimleUser?id=${user.id}' />">Понизить</a></td>
+                    <td><a href="<c:url value='/setLikeSimpleUser?id=${user.id}' />">Понизить</a></td>
                     <td><a href="<c:url value='/banUser?id=${user.id}' />">Забанить</a></td>
                 </tr>
             </c:forEach>

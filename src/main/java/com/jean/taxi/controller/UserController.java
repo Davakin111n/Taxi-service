@@ -24,12 +24,11 @@ public class UserController extends InitController {
                 && ((User) request.getSession().getAttribute("user")).getClientGrant().isAdmin()) {
             if (request.getRequestURI().contains("/madeModerator")) {
                 madeModerator(request, response);
-            } else if (request.getRequestURI().contains("/madeSimpleUser")) {
+            } else if (request.getRequestURI().contains("/setLikeSimpleUser")) {
                 madeSimpleUser(request, response);
             } else if (request.getRequestURI().contains("/banUser")) {
                 banUser(request, response);
             } else if (request.getRequestURI().contains("/undoBanUser")) {
-                System.out.println("Зашел в гет");
                 undoBanUser(request, response);
             }
         }
@@ -125,12 +124,12 @@ public class UserController extends InitController {
     private void madeModerator(HttpServletRequest request, HttpServletResponse response) {
         try {
             clientService.madeModerator(Long.parseLong(request.getParameter("id")));
-            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            response.sendRedirect(Constants.ADMIN_PANEL);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -138,12 +137,8 @@ public class UserController extends InitController {
     private void madeSimpleUser(HttpServletRequest request, HttpServletResponse response) {
         try {
             clientService.madeSimpleUser(Long.parseLong(request.getParameter("id")));
-            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
+            response.sendRedirect(Constants.ADMIN_PANEL);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -151,27 +146,17 @@ public class UserController extends InitController {
     private void banUser(HttpServletRequest request, HttpServletResponse response) {
         try {
             clientService.banUser(Long.parseLong(request.getParameter("id")));
-            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
+            response.sendRedirect(Constants.ADMIN_PANEL);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void undoBanUser(HttpServletRequest request, HttpServletResponse response) {
         try {
-            System.out.println("Зашел в метод");
             clientService.deleteBanUser(Long.parseLong(request.getParameter("id")));
-            System.out.println("Выполнил");
-            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
+            response.sendRedirect(Constants.ADMIN_PANEL);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
