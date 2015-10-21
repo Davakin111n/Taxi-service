@@ -1,6 +1,8 @@
 package com.jean.taxi.controller;
 
 import com.jean.taxi.dict.Constants;
+import com.jean.taxi.dict.DateOption;
+import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.User;
 import com.jean.taxi.service.ClientService;
 import com.jean.taxi.service.OrderService;
@@ -28,6 +30,8 @@ public class AdminController extends InitController {
                 request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST, orderService.notActiveOrderList());
                 request.setAttribute(Constants.ACTIVE_ORDER_LIST, orderService.activeOrderList());
                 request.setAttribute(Constants.ACCOMPLISHED_ORDER_LIST, orderService.accomplishedOrderList());
+                request.setAttribute(Constants.ORDER_TYPES, OrderType.values());
+                request.setAttribute(Constants.DATE_OPTIONS, DateOption.values());
                 request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
             } else {
                 request.getRequestDispatcher(Constants.INDEX).forward(request, response);

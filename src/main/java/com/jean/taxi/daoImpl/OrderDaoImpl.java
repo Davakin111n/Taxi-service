@@ -1,7 +1,8 @@
 package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.dao.OrderDao;
-import com.jean.taxi.dict.Constants;
+import com.jean.taxi.dict.DateOption;
+import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
 import com.jean.taxi.filter.OrderFilter;
@@ -199,22 +200,22 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         LocalDate localDate = new LocalDate();
         List orderList = null;
         if (orderFilter.getOrderType() != null) {
-            if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_UNACTIVE)) {
+            if (StringUtils.equals(orderFilter.getOrderType(), OrderType.NOT_ACTIVE.getTitle())) {
                 genericStringBuilder.append(SELECT_ALL_NOT_ACTIVE_ORDERS);
-            } else if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_ACTIVE)) {
+            } else if (StringUtils.equals(orderFilter.getOrderType(), OrderType.ACTIVE.getTitle())) {
                 genericStringBuilder.append(SELECT_ALL_ACTIVE_ORDERS);
-            } else if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_ACCOMPLISHED)) {
+            } else if (StringUtils.equals(orderFilter.getOrderType(), OrderType.ACCOMPLISHED.getTitle())) {
                 genericStringBuilder.append(SELECT_ALL_ACCOMPLISHED_ORDERS);
-            } else if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_ALL)) {
+            } else if (StringUtils.equals(orderFilter.getOrderType(), OrderType.ALL.getTitle())) {
                 genericStringBuilder.append(SELECT_FROM)
                         .append(ORDER_TABLE);
             }
         }
 
         if (orderFilter.getDateValue() != null) {
-            if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_NO_LIMITS)) {
+            if (StringUtils.equals(orderFilter.getDateValue(), DateOption.NO_LIMITS.getTitle())) {
                 genericStringBuilder.append(";");
-            } else if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_TODAY)) {
+            } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_TODAY.getTitle())) {
                 genericStringBuilder
                         .append("AND ord.create_date LIKE '")
                         .append(dateTime.getYear())
@@ -223,7 +224,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                         .append("-")
                         .append(dateTime.getDayOfMonth())
                         .append("%';");
-            } else if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_WEEK)) {
+            } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_WEEK.getTitle())) {
                 genericStringBuilder
                         .append(" AND ord.create_date BETWEEN CAST('")
                         .append(dateTime.getYear())
@@ -232,7 +233,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                         .append("-")
                         .append(localDate.withDayOfWeek(DateTimeConstants.MONDAY))
                         .append("' AS DATE) AND current_timestamp();");
-            } else if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_MONTH)) {
+            } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_MONTH.getTitle())) {
                 genericStringBuilder
                         .append(" AND ord.create_date BETWEEN CAST('")
                         .append(dateTime.getYear())
