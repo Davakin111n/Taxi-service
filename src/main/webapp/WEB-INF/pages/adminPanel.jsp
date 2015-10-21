@@ -24,22 +24,19 @@
     <%@include file="../jspf/header.jspf" %>
 
     <div id="content">
-        <select name="orderType" aria-label="Тип заказа">
-            <form aria-label="Тип заказа">
+        <form>
+            <select name="orderType" aria-label="Тип заказа">
                 <c:forEach items="${orderTypes}" var="orderType">
                     <option value="${orderType.title}">${orderType.title}</option>
                 </c:forEach>
-            </form>
-        </select>
+            </select>
 
-        <select name="orderType" aria-label="Ограничение времени">
-            <form aria-label="Ограничение времени">
+            <select name="orderType" aria-label="Ограничение времени">
                 <c:forEach items="${dateOptions}" var="option">
                     <option value="${option.title}">${option.title}</option>
                 </c:forEach>
-            </form>
-
-
+            </select>
+        </form>
         <h3>Список обычных клиентов:</h3>
         <table id="allClientsTable" class="display" cellspacing="0" width="100%">
             <thead>
