@@ -25,6 +25,13 @@
 
     <div id="content">
 
+        <form:label path="category">Тип заказа &nbsp;</form:label>
+        <form:select path='category'>
+            <form:option value="" label="Все"/>
+            <form:options items="${categories}" itemLabel="name" itemValue="id"/>
+        </form:select>
+
+
         <h3>Список обычных клиентов:</h3>
         <table id="allClientsTable" class="display" cellspacing="0" width="100%">
             <thead>

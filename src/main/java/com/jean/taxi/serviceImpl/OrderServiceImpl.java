@@ -6,6 +6,7 @@ import com.jean.taxi.daoImpl.OrderDaoImpl;
 import com.jean.taxi.entity.Identifier;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.service.OrderService;
 
 import java.util.List;
@@ -89,5 +90,10 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
     @Override
     public List<Order> accomplishedOrderList() {
         return dao.accomplishedOrderList();
+    }
+
+    @Override
+    public List<Order> orderListByFilter(OrderFilter orderFilter) {
+        return dao.orderListByFilter(orderFilter);
     }
 }

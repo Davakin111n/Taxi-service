@@ -12,6 +12,8 @@ import java.util.List;
 
 public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntityConverter<T> implements GenericDao {
 
+    public static StringBuilder genericStringBuilder = new StringBuilder();
+
     public static final String SELECT_FROM = "SELECT * FROM ";
     public static final String UPDATE = "UPDATE ";
     public static final String DELETE_FROM = "DELETE FROM ";

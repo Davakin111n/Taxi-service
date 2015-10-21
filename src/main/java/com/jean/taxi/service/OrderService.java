@@ -1,6 +1,7 @@
 package com.jean.taxi.service;
 
 import com.jean.taxi.entity.Order;
+import com.jean.taxi.filter.OrderFilter;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface OrderService {
     List<Order> notActiveOrderList();
 
     List<Order> accomplishedOrderList();
+
+    List<Order> orderListByFilter(OrderFilter orderFilter);
 }

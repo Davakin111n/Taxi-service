@@ -1,10 +1,16 @@
 package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.dao.OrderDao;
+import com.jean.taxi.dict.Constants;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.utils.ConnectionHolder;
 import com.jean.taxi.utils.DataBaseUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,15 +21,16 @@ import java.util.List;
 
 public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
-    public static final String ORDER_TABLE = "jean_taxi_service.order";
-    public static final String ORDERS_ID = "jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id=? AND ord_ad.id_order = ord.id;";
-    public static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
-    public static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    public static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?;";
-    public static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id;";
-    public static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active= true AND ord.id = ord_ad.id_order;";
-    public static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active = false AND ord.id = ord_ad.id_order;";
-    public static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.accomplished = true AND ord.id = ord_ad.id_order;";
+    private static final String ORDER_TABLE = "jean_taxi_service.order";
+    private static final String ORDERS_ID = "jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id=? AND ord_ad.id_order = ord.id";
+    private static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
+    private static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?";
+    private static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id";
+    private static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active= true AND ord.id = ord_ad.id_order";
+    private static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active = false AND ord.id = ord_ad.id_order";
+    private static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.accomplished = true AND ord.id = ord_ad.id_order";
+
     private static final byte GENERIC_FIRST_COLUMN = 1;
 
     @Override
@@ -84,7 +91,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 throw new Exception();
             }
             resultSet.previous();
-            Order order = convertToEntity(resultSet);
+            orderList = convertListToEntity(resultSet);
             return orderList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,6 +191,67 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<Order> orderListByFilter(OrderFilter orderFilter) {
+        DateTime dateTime = new DateTime();
+        LocalDate localDate = new LocalDate();
+        List orderList = null;
+        if (orderFilter.getOrderType() != null) {
+            if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_UNACTIVE)) {
+                genericStringBuilder.append(SELECT_ALL_NOT_ACTIVE_ORDERS);
+            } else if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_ACTIVE)) {
+                genericStringBuilder.append(SELECT_ALL_ACTIVE_ORDERS);
+            } else if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_ACCOMPLISHED)) {
+                genericStringBuilder.append(SELECT_ALL_ACCOMPLISHED_ORDERS);
+            } else if (StringUtils.equals(orderFilter.getOrderType(), Constants.ORDER_TYPE_ALL)) {
+                genericStringBuilder.append(SELECT_FROM)
+                        .append(ORDER_TABLE);
+            }
+        }
+
+        if (orderFilter.getDateValue() != null) {
+            if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_NO_LIMITS)) {
+                genericStringBuilder.append(";");
+            } else if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_TODAY)) {
+                genericStringBuilder
+                        .append("AND ord.create_date LIKE '")
+                        .append(dateTime.getYear())
+                        .append("-")
+                        .append(dateTime.getMonthOfYear())
+                        .append("-")
+                        .append(dateTime.getDayOfMonth())
+                        .append("%';");
+            } else if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_WEEK)) {
+                genericStringBuilder
+                        .append(" AND ord.create_date BETWEEN CAST('")
+                        .append(dateTime.getYear())
+                        .append("-")
+                        .append(dateTime.getMonthOfYear())
+                        .append("-")
+                        .append(localDate.withDayOfWeek(DateTimeConstants.MONDAY))
+                        .append("' AS DATE) AND current_timestamp();");
+            } else if (StringUtils.equals(orderFilter.getDateValue(), Constants.ORDER_DATE_MONTH)) {
+                genericStringBuilder
+                        .append(" AND ord.create_date BETWEEN CAST('")
+                        .append(dateTime.getYear())
+                        .append("-")
+                        .append(dateTime.getMonthOfYear())
+                        .append("-01' AS DATE) AND current_timestamp();");
+            }
+        }
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(genericStringBuilder.toString())) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            orderList = convertListToEntity(resultSet);
+            return orderList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            dateTime = null;
+            localDate = null;
+        }
+        return orderList;
     }
 
     @Override

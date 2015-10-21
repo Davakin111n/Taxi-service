@@ -46,4 +46,17 @@ public class Constants {
      */
     public static final String USER_NOT_FOUND = "Пользователь с таким id не найден!";
     public static final String ORDER_NOT_FOUND = "Заказ с таким id не найден!";
+
+    /**
+     * Order types
+     */
+    public static final String ORDER_TYPE_UNACTIVE = "Неактивные";
+    public static final String ORDER_TYPE_ACTIVE = "Активные";
+    public static final String ORDER_TYPE_ACCOMPLISHED = "Неактивные";
+    public static final String ORDER_TYPE_ALL = "Все";
+
+    public static final String ORDER_DATE_NO_LIMITS = "Без ограничений";
+    public static final String ORDER_DATE_TODAY = "За сегодня";
+    public static final String ORDER_DATE_WEEK = "За неделю";
+    public static final String ORDER_DATE_MONTH = "За месяц";
 }

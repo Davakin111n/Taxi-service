@@ -1,6 +1,7 @@
 package com.jean.taxi.dao;
 
 import com.jean.taxi.entity.Order;
+import com.jean.taxi.filter.OrderFilter;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface OrderDao {
     List<Order> notActiveOrderList();
 
     List<Order> accomplishedOrderList();
+
+    List<Order> orderListByFilter(OrderFilter orderFilter);
 }
