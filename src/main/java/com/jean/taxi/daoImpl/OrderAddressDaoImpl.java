@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
-    private final String ORDER_ADDRESS_TABLE = "jean_taxi_service.order_address;";
+    private final String ORDER_ADDRESS_TABLE = "jean_taxi_service.order_address add";
     private final String ORDER_ADDRESS_ID = "jean_taxi_service.order_address WHERE id=?;";
     private final String DELETE_ADDRESS = "jean_taxi_service.order_address WHERE id_order=?;";
     private final String INSERT_ORDER_ADDRESS = "INSERT INTO jean_taxi_service.order_address(id_order, destination_address, destination_house_number, destination_porch_number) VALUES(?,?,?,?);";

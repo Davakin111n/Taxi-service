@@ -22,7 +22,7 @@ import java.util.List;
 
 public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
-    private static final String ORDER_TABLE = "jean_taxi_service.order";
+    private static final String ORDER_TABLE = "jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id = ord_ad.id_order";
     private static final String ORDERS_ID = "jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id=? AND ord_ad.id_order = ord.id";
     private static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
     private static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -217,7 +217,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 genericStringBuilder.append(";");
             } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_TODAY.getTitle())) {
                 genericStringBuilder
-                        .append("AND ord.create_date LIKE '")
+                        .append(" AND ord.create_date LIKE '")
                         .append(dateTime.getYear())
                         .append("-")
                         .append(dateTime.getMonthOfYear())
@@ -227,12 +227,9 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_WEEK.getTitle())) {
                 genericStringBuilder
                         .append(" AND ord.create_date BETWEEN CAST('")
-                        .append(dateTime.getYear())
-                        .append("-")
-                        .append(dateTime.getMonthOfYear())
-                        .append("-")
                         .append(localDate.withDayOfWeek(DateTimeConstants.MONDAY))
                         .append("' AS DATE) AND current_timestamp();");
+                System.out.println(genericStringBuilder.toString());
             } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_MONTH.getTitle())) {
                 genericStringBuilder
                         .append(" AND ord.create_date BETWEEN CAST('")
@@ -251,6 +248,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         } finally {
             dateTime = null;
             localDate = null;
+            genericStringBuilder.setLength(0);
         }
         return orderList;
     }

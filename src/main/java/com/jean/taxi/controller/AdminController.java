@@ -1,11 +1,12 @@
 package com.jean.taxi.controller;
 
+import com.jean.taxi.dict.ClientType;
 import com.jean.taxi.dict.Constants;
 import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.User;
-import com.jean.taxi.service.ClientService;
-import com.jean.taxi.service.OrderService;
+import com.jean.taxi.filter.ClientFilter;
+import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.serviceImpl.ClientServiceImpl;
 import com.jean.taxi.serviceImpl.OrderServiceImpl;
 
@@ -16,26 +17,86 @@ import java.io.IOException;
 
 public class AdminController extends InitController {
 
-    ClientService clientService = (ClientServiceImpl) getClientService();
-    OrderService orderService = (OrderServiceImpl) getOrderService();
+    ClientServiceImpl clientService = getClientService();
+    OrderServiceImpl orderService = getOrderService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (request.getSession().getAttribute(Constants.USER) != null
                     && ((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isAdmin()) {
-                request.setAttribute(Constants.USERS, clientService.listSimpleUsers());
-                request.setAttribute(Constants.MODERATORS, clientService.listAllModerators());
-                request.setAttribute(Constants.BAN_LIST, clientService.banList());
-                request.setAttribute(Constants.NOT_ACTIVE_ORDER_LIST, orderService.notActiveOrderList());
-                request.setAttribute(Constants.ACTIVE_ORDER_LIST, orderService.activeOrderList());
-                request.setAttribute(Constants.ACCOMPLISHED_ORDER_LIST, orderService.accomplishedOrderList());
-                request.setAttribute(Constants.ORDER_TYPES, OrderType.values());
-                request.setAttribute(Constants.DATE_OPTIONS, DateOption.values());
-                request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
+                if (request.getRequestURI().contains(Constants.ADMIN_PANEL)) {
+                    request.setAttribute(Constants.USERS, clientService.listAll());
+                    request.setAttribute(Constants.ORDERS, orderService.listAll());
+                    request.setAttribute(Constants.ORDER_TYPES, OrderType.values());
+                    request.setAttribute(Constants.CLIENT_TYPES, ClientType.values());
+                    request.setAttribute(Constants.DATE_OPTIONS, DateOption.values());
+                    request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
+                }
             } else {
                 request.getRequestDispatcher(Constants.INDEX).forward(request, response);
             }
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            if (request.getSession().getAttribute(Constants.USER) != null
+                    && ((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isAdmin()) {
+                if (request.getRequestURI().contains("/orderListByFilter")) {
+                    if (request.getParameter("orderType") != null
+                            && request.getParameter("orderDateOption") != null) {
+                        viewOrdersByFilter(request, response);
+                    }
+                } else if (request.getRequestURI().contains("/clientListByFilter")) {
+                    if (request.getParameter("clientType") != null
+                            && request.getParameter("clientDateOption") != null) {
+                        viewClientsByFilter(request, response);
+                    }
+                }
+            } else {
+                request.getRequestDispatcher(Constants.INDEX).forward(request, response);
+            }
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void viewOrdersByFilter(HttpServletRequest request, HttpServletResponse response) {
+        OrderFilter orderFilter = new OrderFilter(request.getParameter("orderType"), request.getParameter("orderDateOption"));
+        System.out.println(request.getParameter("orderType"));
+        System.out.println(request.getParameter("orderDateOption"));
+        request.setAttribute(Constants.ORDERS, orderService.orderListByFilter(orderFilter));
+        request.setAttribute(Constants.USERS, clientService.listAll());
+        request.setAttribute(Constants.ORDER_TYPES, OrderType.values());
+        request.setAttribute(Constants.CLIENT_TYPES, ClientType.values());
+        request.setAttribute(Constants.DATE_OPTIONS, DateOption.values());
+        try {
+            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void viewClientsByFilter(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Зашел в метод!");
+        ClientFilter clientFilter = new ClientFilter(request.getParameter("clientType"), request.getParameter("clientDateOption"));
+        request.setAttribute(Constants.USERS, clientService.clientListByFilter(clientFilter));
+        request.setAttribute(Constants.ORDERS, orderService.listAll());
+        request.setAttribute(Constants.CLIENT_TYPES, ClientType.values());
+        request.setAttribute(Constants.ORDER_TYPES, OrderType.values());
+        request.setAttribute(Constants.DATE_OPTIONS, DateOption.values());
+        try {
+            request.getRequestDispatcher(Constants.ADMIN_PANEL_PATH).forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -74,6 +74,7 @@
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
         <url-pattern>/order</url-pattern>
+        <url-pattern>/listOfOrdersByFilter</url-pattern>
         <url-pattern>/updateOrder</url-pattern>
         <url-pattern>/activateOrder</url-pattern>
         <url-pattern>/createNewOrder</url-pattern>
@@ -99,6 +100,8 @@
     <servlet-mapping>
         <servlet-name>AdminController</servlet-name>
         <url-pattern>/adminPanel</url-pattern>
+        <url-pattern>/orderListByFilter</url-pattern>
+        <url-pattern>/clientListByFilter</url-pattern>
     </servlet-mapping>
 
     <!-- <error-page>

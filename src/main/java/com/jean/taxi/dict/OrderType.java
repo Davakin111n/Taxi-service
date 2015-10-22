@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum OrderType {
-    ALL("Все"),
-    NOT_ACTIVE("Выбраковка"),
-    ACTIVE("Некондиция"),
-    ACCOMPLISHED("Новый (-ое)");
+    ALL("All"),
+    NOT_ACTIVE("Not active"),
+    ACTIVE("Active"),
+    ACCOMPLISHED("Accomplished");
 
     private String title;
 

@@ -10,8 +10,11 @@ public class Constants {
     public static final String ORDER = "order";
     public static final String ORDERS = "orders";
     public static final String MODERATORS = "moderators";
-
+    public static final String ALL_USERS = "allUsers";
+    public static final String ALL_ORDERS = "allOrders";
     public static final String ORDER_LIST_BY_CLIENT = "clientOrders";
+    public static final String ORDER_LIST_BY_FILTER = "orderListByFilter";
+    public static final String CLIENT_LIST_BY_FILTER = "clientListByFilter";
     public static final String ACTIVE_ORDER_LIST = "activeOrderList";
     public static final String ACCOMPLISHED_ORDER_LIST = "accomplishedOrderList";
     public static final String NOT_ACTIVE_ORDER_LIST_BY_CLIENT = "notActiveOrderListByClient";
@@ -53,7 +56,24 @@ public class Constants {
     public static final String ORDER_TYPES = "orderTypes";
 
     /**
+     * Clinet types
+     */
+    public static final String CLIENT_TYPES = "clientTypes";
+
+    /**
      * Date options
      */
     public static final String DATE_OPTIONS = "dateOptions";
+    public static final String NO_LIMITS = "noLimits";
+    public static final String BY_TODAY = "byToday";
+    public static final String BY_WEEK = "byWeek";
+    public static final String BY_MONTH = "byMonth";
+
+    /**
+     * Client types
+     */
+    public static final String USERS_ALL = "Все";
+    public static final String USERS_MODERATORS = "Модераторы";
+    public static final String USERS_ACTIVE = "Активные";
+    public static final String USERS_BANNED = "Забаненные";
 }

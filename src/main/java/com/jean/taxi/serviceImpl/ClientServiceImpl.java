@@ -6,6 +6,7 @@ import com.jean.taxi.daoImpl.DaoFactoryImpl;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.Identifier;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.service.ClientService;
 import com.jean.taxi.utils.PasswordUtil;
 
@@ -116,6 +117,11 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     @Override
     public List<User> listSimpleUsers() {
         return dao.listSimpleUsers();
+    }
+
+    @Override
+    public List<User> clientListByFilter(ClientFilter clientFilter) {
+        return dao.clientListByFilter(clientFilter);
     }
 
     @Override

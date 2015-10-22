@@ -1,10 +1,17 @@
 package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.dao.ClientDao;
+import com.jean.taxi.dict.ClientType;
+import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.utils.ConnectionHolder;
 import com.jean.taxi.utils.DataBaseUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,14 +22,15 @@ import java.util.List;
 
 public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
-    private final String CLIENT_TABLE = "jean_taxi_service.client;";
-    private final String CLIENTS_ID = "jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr WHERE cl.id = gr.id_client AND cl.id = ?;";
-    private final String INSERT_NEW_USER = "INSERT INTO jean_taxi_service.client(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    private final String UPDATE_CLIENT = "jean_taxi_service.client SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?;";
-    private final String SELECT_ALL_MODERATORS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND moderator=true AND gr.admin = false;";
-    private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.moderator = false AND gr.admin = false;";
-    private final String SELECT_BAN_LIST_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.active = false AND gr.admin = false;";
-    private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON email =?;";
+    private final String CLIENT_TABLE = "jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.admin = false ";
+    private final String CLIENTS_ID = "jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr WHERE cl.id = gr.id_client AND cl.id = ?";
+    private final String INSERT_NEW_USER = "INSERT INTO jean_taxi_service.client(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_CLIENT = "jean_taxi_service.client SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?";
+    private final String SELECT_ALL_MODERATORS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND moderator=true AND gr.admin = false";
+    private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.moderator = false AND gr.admin = false";
+    private final String SELECT_ALL_ACTIVE_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.admin = false AND gr.active = true";
+    private final String SELECT_BAN_LIST_USERS = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON cl.id = gr.id_client AND gr.active = false AND gr.admin = false";
+    private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM jean_taxi_service.client cl JOIN jean_taxi_service.client_grant gr ON email =?";
 
     private final String CLIENT_ALIAS = "cl";
     private final String CLIENT_GRANT_ALIAS = "gr";
@@ -123,6 +131,64 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<User> clientListByFilter(ClientFilter clientFilter) {
+        DateTime dateTime = new DateTime();
+        LocalDate localDate = new LocalDate();
+        List clientList = null;
+        if (clientFilter.getClientType() != null) {
+            if (StringUtils.equals(clientFilter.getClientType(), ClientType.ALL.getTitle())) {
+                genericStringBuilder.append(SELECT_FROM)
+                        .append(CLIENT_TABLE);
+            } else if (StringUtils.equals(clientFilter.getClientType(), ClientType.MODERATORS.getTitle())) {
+                genericStringBuilder.append(SELECT_ALL_MODERATORS);
+            } else if (StringUtils.equals(clientFilter.getClientType(), ClientType.ACTIVE.getTitle())) {
+                genericStringBuilder.append(SELECT_ALL_ACTIVE_USERS);
+            } else if (StringUtils.equals(clientFilter.getClientType(), ClientType.BANNED.getTitle())) {
+                genericStringBuilder.append(SELECT_BAN_LIST_USERS);
+            }
+        }
+
+        if (clientFilter.getDateValue() != null) {
+            if (StringUtils.equals(clientFilter.getDateValue(), DateOption.NO_LIMITS.getTitle())) {
+                genericStringBuilder.append(";");
+            } else if (StringUtils.equals(clientFilter.getDateValue(), DateOption.BY_TODAY.getTitle())) {
+                genericStringBuilder
+                        .append("AND cl.create_date LIKE '")
+                        .append(dateTime.getYear())
+                        .append("-")
+                        .append(dateTime.getMonthOfYear())
+                        .append("-")
+                        .append(dateTime.getDayOfMonth())
+                        .append("%';");
+            } else if (StringUtils.equals(clientFilter.getDateValue(), DateOption.BY_WEEK.getTitle())) {
+                genericStringBuilder
+                        .append(" AND cl.create_date BETWEEN CAST('")
+                        .append(localDate.withDayOfWeek(DateTimeConstants.MONDAY))
+                        .append("' AS DATE) AND current_timestamp();");
+            } else if (StringUtils.equals(clientFilter.getDateValue(), DateOption.BY_MONTH.getTitle())) {
+                genericStringBuilder
+                        .append(" AND cl.create_date BETWEEN CAST('")
+                        .append(dateTime.getYear())
+                        .append("-")
+                        .append(dateTime.getMonthOfYear())
+                        .append("-01' AS DATE) AND current_timestamp();");
+            }
+        }
+        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(genericStringBuilder.toString())) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            clientList = convertListToEntity(resultSet);
+            return clientList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            dateTime = null;
+            localDate = null;
+            genericStringBuilder.setLength(0);
+        }
+        return clientList;
     }
 
     @Override

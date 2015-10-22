@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum DateOption {
-    NO_LIMITS("Без ограничений"),
-    BY_TODAY("За сегодня"),
-    BY_WEEK("За неделю"),
-    BY_MONTH("За месяц");
+    NO_LIMITS("No limits"),
+    BY_TODAY("By today"),
+    BY_WEEK("By week"),
+    BY_MONTH("By month");
 
     private String title;
 
