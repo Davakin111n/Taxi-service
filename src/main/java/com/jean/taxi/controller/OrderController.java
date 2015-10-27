@@ -165,7 +165,6 @@ public class OrderController extends InitController {
             }
         }
         Order order = orderService.get(Long.parseLong(request.getParameter("orderId")));
-        System.out.println(orderForm.toString());
         order.setTitle(orderForm.getTitle());
         order.setPhone(orderForm.getPhone());
         order.setContactName(orderForm.getContactName());

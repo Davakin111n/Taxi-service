@@ -71,8 +71,6 @@ public class AdminController extends InitController {
 
     private void viewOrdersByFilter(HttpServletRequest request, HttpServletResponse response) {
         OrderFilter orderFilter = new OrderFilter(request.getParameter("orderType"), request.getParameter("orderDateOption"));
-        System.out.println(request.getParameter("orderType"));
-        System.out.println(request.getParameter("orderDateOption"));
         request.setAttribute(Constants.ORDERS, orderService.orderListByFilter(orderFilter));
         request.setAttribute(Constants.USERS, clientService.listAll());
         request.setAttribute(Constants.ORDER_TYPES, OrderType.values());
@@ -88,7 +86,6 @@ public class AdminController extends InitController {
     }
 
     private void viewClientsByFilter(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("Зашел в метод!");
         ClientFilter clientFilter = new ClientFilter(request.getParameter("clientType"), request.getParameter("clientDateOption"));
         request.setAttribute(Constants.USERS, clientService.clientListByFilter(clientFilter));
         request.setAttribute(Constants.ORDERS, orderService.listAll());
