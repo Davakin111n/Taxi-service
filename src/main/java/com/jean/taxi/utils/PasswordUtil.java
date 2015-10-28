@@ -46,11 +46,10 @@ public class PasswordUtil {
      * Расшифровка пароля
      */
     public static String decryptPassword(String decodePassword) {
-
         byte[] keyArray = new byte[24];
         byte[] temporarySetKey;
 
-        String key = "atadampresetnobvcohigh";
+        String key = "ertyuiopdfghjklcvbxcviq";
         String decryptedPasswordValue = "";
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
