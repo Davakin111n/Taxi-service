@@ -171,4 +171,49 @@ public class Order extends Identifier {
                 ", accomplished=" + accomplished +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (active != order.active) return false;
+        if (onPerfomance != order.onPerfomance) return false;
+        if (accomplished != order.accomplished) return false;
+        if (!clientId.equals(order.clientId)) return false;
+        if (!contactName.equals(order.contactName)) return false;
+        if (!phone.equals(order.phone)) return false;
+        if (!title.equals(order.title)) return false;
+        if (!note.equals(order.note)) return false;
+        if (!price.equals(order.price)) return false;
+        if (!createDate.equals(order.createDate)) return false;
+        if (!beginAddress.equals(order.beginAddress)) return false;
+        if (!houseNumber.equals(order.houseNumber)) return false;
+        if (!porchNumber.equals(order.porchNumber)) return false;
+        if (!carOption.equals(order.carOption)) return false;
+        return addressList.equals(order.addressList);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = clientId.hashCode();
+        result = 31 * result + contactName.hashCode();
+        result = 31 * result + phone.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + note.hashCode();
+        result = 31 * result + price.hashCode();
+        result = 31 * result + createDate.hashCode();
+        result = 31 * result + beginAddress.hashCode();
+        result = 31 * result + houseNumber.hashCode();
+        result = 31 * result + porchNumber.hashCode();
+        result = 31 * result + carOption.hashCode();
+        result = 31 * result + addressList.hashCode();
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (onPerfomance ? 1 : 0);
+        result = 31 * result + (accomplished ? 1 : 0);
+        return result;
+    }
 }

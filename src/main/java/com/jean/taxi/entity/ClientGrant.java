@@ -37,4 +37,27 @@ public class ClientGrant extends Identifier {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClientGrant that = (ClientGrant) o;
+
+        if (admin != that.admin) return false;
+        if (active != that.active) return false;
+        if (moderator != that.moderator) return false;
+        return clientId.equals(that.clientId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = clientId.hashCode();
+        result = 31 * result + (admin ? 1 : 0);
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (moderator ? 1 : 0);
+        return result;
+    }
 }

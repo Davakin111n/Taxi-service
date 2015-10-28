@@ -48,4 +48,27 @@ public class OrderAddress extends Identifier {
                 ", destinationPorchNumber='" + destinationPorchNumber + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderAddress that = (OrderAddress) o;
+
+        if (!orderId.equals(that.orderId)) return false;
+        if (!destinationAddress.equals(that.destinationAddress)) return false;
+        if (!destinationHouseNumber.equals(that.destinationHouseNumber)) return false;
+        return destinationPorchNumber.equals(that.destinationPorchNumber);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = orderId.hashCode();
+        result = 31 * result + destinationAddress.hashCode();
+        result = 31 * result + destinationHouseNumber.hashCode();
+        result = 31 * result + destinationPorchNumber.hashCode();
+        return result;
+    }
 }

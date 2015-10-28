@@ -124,4 +124,40 @@ public class User extends Identifier {
                 ", registrationDate=" + registrationDate +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!clientGrant.equals(user.clientGrant)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!address.equals(user.address)) return false;
+        if (!password.equals(user.password)) return false;
+        if (!phone.equals(user.phone)) return false;
+        if (!secondPhone.equals(user.secondPhone)) return false;
+        if (!thirdPhone.equals(user.thirdPhone)) return false;
+        if (!clientName.equals(user.clientName)) return false;
+        if (!clientLastName.equals(user.clientLastName)) return false;
+        if (!skype.equals(user.skype)) return false;
+        return registrationDate.equals(user.registrationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = clientGrant.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + address.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + phone.hashCode();
+        result = 31 * result + secondPhone.hashCode();
+        result = 31 * result + thirdPhone.hashCode();
+        result = 31 * result + clientName.hashCode();
+        result = 31 * result + clientLastName.hashCode();
+        result = 31 * result + skype.hashCode();
+        result = 31 * result + registrationDate.hashCode();
+        return result;
+    }
 }

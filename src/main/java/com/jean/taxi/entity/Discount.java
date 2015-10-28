@@ -38,4 +38,27 @@ public class Discount extends Identifier {
     public void setNote(String note) {
         this.note = note;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Discount discount = (Discount) o;
+
+        if (!clientId.equals(discount.clientId)) return false;
+        if (!type.equals(discount.type)) return false;
+        if (!name.equals(discount.name)) return false;
+        return note.equals(discount.note);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = clientId.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + note.hashCode();
+        return result;
+    }
 }

@@ -33,6 +33,23 @@ public class TransactionHandlerImpl {
         }
     }
 
+    public static void executeTest(Transaction transaction) {
+        try (Connection connection = getConnection()) {
+            try {
+                ConnectionHolder.setLocalConnection(connection);
+                transaction.doTransaction();
+            } catch (Exception e) {
+                e.printStackTrace();
+                rollBack(connection);
+            } finally {
+                rollBack(connection);
+                ConnectionHolder.removeLocalConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void rollBack(Connection connection) {
         if (connection != null) {
             try {

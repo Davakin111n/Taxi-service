@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/jean_taxi_service" docBase="jean_taxi_service" crossContext="true" reloadable="true" debug="1">
+    <Resource name="jdbc/jean_taxi_service"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="-1"
+              maxIdle="-1"
+              maxWait="-1"
+              username="root"
+              password="111111"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/jean_taxi_service"/>
+</Context>
