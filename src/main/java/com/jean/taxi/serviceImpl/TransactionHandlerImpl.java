@@ -4,10 +4,17 @@ package com.jean.taxi.serviceImpl;
 import com.jean.taxi.utils.ConnectionHolder;
 import com.jean.taxi.utils.DataBaseUtil;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class TransactionHandlerImpl {
+
+    private static DataSource dataSource = DataBaseUtil.connectionPool;
+
+    public static void setDataSource(DataSource newDataSource) {
+        dataSource = newDataSource;
+    }
 
     public static void execute(Transaction transaction) {
         try (Connection connection = getConnection()) {
@@ -48,7 +55,7 @@ public class TransactionHandlerImpl {
 
     private static Connection getConnection() {
         try {
-            Connection connection = DataBaseUtil.connectionPool.getConnection();
+            Connection connection = dataSource.getConnection();
             if (connection.getAutoCommit()) {
                 connection.setAutoCommit(false);
             }

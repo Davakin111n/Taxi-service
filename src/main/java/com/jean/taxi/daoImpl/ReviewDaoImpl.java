@@ -2,7 +2,6 @@ package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.dao.ReviewDao;
 import com.jean.taxi.entity.Review;
-import com.jean.taxi.utils.ConnectionHolder;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,7 +65,7 @@ public class ReviewDaoImpl extends GenericDaoImpl<Review> implements ReviewDao {
 
     @Override
     public Long addNew(Review review) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_REVIEW, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_REVIEW, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(review, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();

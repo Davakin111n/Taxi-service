@@ -6,8 +6,6 @@ import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.User;
 import com.jean.taxi.filter.ClientFilter;
-import com.jean.taxi.utils.ConnectionHolder;
-import com.jean.taxi.utils.DataBaseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -93,7 +91,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     @Override
     public Long addNew(User user) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(user, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -110,7 +108,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public List<User> listAllModerators() {
         List moderatorList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             moderatorList = convertListToEntity(resultSet);
             return moderatorList;
@@ -123,7 +121,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public List<User> listSimpleUsers() {
         List simpleUserList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             simpleUserList = convertListToEntity(resultSet);
             return simpleUserList;
@@ -177,7 +175,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
                         .append("-01' AS DATE) AND current_timestamp();");
             }
         }
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(genericStringBuilder.toString())) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(genericStringBuilder.toString())) {
             ResultSet resultSet = preparedStatement.executeQuery();
             clientList = convertListToEntity(resultSet);
             return clientList;
@@ -194,7 +192,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public List<User> banList() {
         List banList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_BAN_LIST_USERS)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_BAN_LIST_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             banList = convertListToEntity(resultSet);
             return banList;
@@ -207,7 +205,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     @Override
     public User getByEmail(String email) {
         User user;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             user = convertToEntity(resultSet);

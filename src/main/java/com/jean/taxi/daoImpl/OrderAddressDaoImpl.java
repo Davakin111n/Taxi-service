@@ -1,7 +1,6 @@
 package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.entity.OrderAddress;
-import com.jean.taxi.utils.ConnectionHolder;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,7 +63,7 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
 
     @Override
     public Long addNew(OrderAddress orderAddress) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_ORDER_ADDRESS, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_ORDER_ADDRESS, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(orderAddress, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();

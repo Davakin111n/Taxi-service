@@ -6,8 +6,6 @@ import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
 import com.jean.taxi.filter.OrderFilter;
-import com.jean.taxi.utils.ConnectionHolder;
-import com.jean.taxi.utils.DataBaseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -102,7 +100,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public Long addNew(Order order) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(order, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -118,7 +116,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public void deleteOrder(Long orderId) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
+        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(DELETE_FROM
                 .concat(ORDERS_ID))) {
             preparedStatement.setLong(GENERIC_FIRST_COLUMN, orderId);
             preparedStatement.executeQuery();
@@ -130,7 +128,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> orderListByClient(Long clientId) {
         List orderList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             preparedStatement.setLong(1, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
@@ -144,7 +142,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> notActiveOrderListByClient(Long clientId) {
         List orderList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             preparedStatement.setLong(1, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
@@ -158,7 +156,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> activeOrderList() {
         List orderList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_ACTIVE_ORDERS)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -171,7 +169,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> notActiveOrderList() {
         List orderList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_NOT_ACTIVE_ORDERS)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_NOT_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -184,7 +182,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> accomplishedOrderList() {
         List orderList;
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(SELECT_ALL_ACCOMPLISHED_ORDERS)) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_ACCOMPLISHED_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -239,7 +237,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                         .append("-01' AS DATE) AND current_timestamp();");
             }
         }
-        try (PreparedStatement preparedStatement = DataBaseUtil.connectionPool.getConnection().prepareStatement(genericStringBuilder.toString())) {
+        try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(genericStringBuilder.toString())) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;

@@ -2,7 +2,6 @@ package com.jean.taxi.daoImpl;
 
 
 import com.jean.taxi.entity.ClientGrant;
-import com.jean.taxi.utils.ConnectionHolder;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -65,7 +64,7 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
 
     @Override
     public Long addNew(ClientGrant clientGrant) {
-        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_CLIENT_GRANT, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_NEW_CLIENT_GRANT, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(clientGrant, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
