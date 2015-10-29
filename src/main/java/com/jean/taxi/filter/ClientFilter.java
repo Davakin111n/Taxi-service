@@ -7,6 +7,10 @@ public class ClientFilter {
     private String dateValue;
     private Date currentDate;
 
+    public ClientFilter() {
+
+    }
+
     public ClientFilter(String clientType, String dateValue) {
         this.clientType = clientType;
         this.dateValue = dateValue;

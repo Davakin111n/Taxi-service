@@ -6,11 +6,13 @@ import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
 import com.jean.taxi.filter.OrderFilter;
+import com.jean.taxi.utils.ConnectionHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +33,10 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     private static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.accomplished = true AND ord.id = ord_ad.id_order";
 
     private static final byte GENERIC_FIRST_COLUMN = 1;
+
+    public OrderDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public String getSelectQuery() {
@@ -100,7 +106,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public Long addNew(Order order) {
-        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(order, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -116,7 +122,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public void deleteOrder(Long orderId) {
-        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(DELETE_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(ORDERS_ID))) {
             preparedStatement.setLong(GENERIC_FIRST_COLUMN, orderId);
             preparedStatement.executeQuery();

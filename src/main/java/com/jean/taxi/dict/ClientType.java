@@ -15,6 +15,11 @@ public enum ClientType {
     public static final List<ClientType> CONDITIONS = new ArrayList<ClientType>(
             Arrays.asList(new ClientType[]{ALL, MODERATORS, ACTIVE, BANNED}));
 
+    public static final List<String> TITLES = new ArrayList<String>(Arrays.asList(new String[]{ALL.getTitle()
+            , MODERATORS.getTitle()
+            , ACTIVE.getTitle()
+            , BANNED.getTitle()}));
+
     ClientType(String title) {
         this.title = title;
     }

@@ -6,11 +6,13 @@ import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.User;
 import com.jean.taxi.filter.ClientFilter;
+import com.jean.taxi.utils.ConnectionHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,6 +34,10 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     private final String CLIENT_ALIAS = "cl";
     private final String CLIENT_GRANT_ALIAS = "gr";
+
+    public ClientDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public String getSelectQuery() {
@@ -91,7 +97,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     @Override
     public Long addNew(User user) {
-        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(user, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();

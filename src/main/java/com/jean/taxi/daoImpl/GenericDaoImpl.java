@@ -3,7 +3,6 @@ package com.jean.taxi.daoImpl;
 import com.jean.taxi.dao.GenericDao;
 import com.jean.taxi.entity.Identifier;
 import com.jean.taxi.utils.ConnectionHolder;
-import com.jean.taxi.utils.DataBaseUtil;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -17,12 +16,13 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     public static final String SELECT_FROM = "SELECT * FROM ";
     public static final String UPDATE = "UPDATE ";
     public static final String DELETE_FROM = "DELETE FROM ";
+
     private static final byte columnNumber = 1;
     private List<T> list;
 
     public static final StringBuilder genericStringBuilder = new StringBuilder();
 
-    protected DataSource dataSource = DataBaseUtil.connectionPool;
+    protected DataSource dataSource;
     protected Connection currentLocalConnection = ConnectionHolder.getLocalConnection();
 
     public void setDataSource(DataSource dataSource) {
@@ -68,7 +68,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public void remove(Long id) {
-        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(DELETE_FROM
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(getDeleteQuery()))) {
             preparedStatement.setLong(columnNumber, id);
             preparedStatement.executeUpdate();
@@ -92,7 +92,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
     }
 
     public void update(Identifier obj) {
-        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(UPDATE
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(UPDATE
                 .concat(getUpdateQuery()))) {
             getStatementForUpdateEntity((T) obj, preparedStatement);
             preparedStatement.executeUpdate();

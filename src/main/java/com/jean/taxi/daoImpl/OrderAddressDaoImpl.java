@@ -1,7 +1,9 @@
 package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.utils.ConnectionHolder;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +17,10 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
     private final String DELETE_ADDRESS = "jean_taxi_service.order_address WHERE id_order=?;";
     private final String INSERT_ORDER_ADDRESS = "INSERT INTO jean_taxi_service.order_address(id_order, destination_address, destination_house_number, destination_porch_number) VALUES(?,?,?,?);";
     private final String UPDATE_ORDER_ADDRESS = "jean_taxi_service.order_address SET destination_address=?, destination_house_number=?, destination_porch_number=? WHERE id=?;";
+
+    public OrderAddressDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public String getSelectQuery() {
@@ -63,7 +69,7 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
 
     @Override
     public Long addNew(OrderAddress orderAddress) {
-        try (PreparedStatement preparedStatement = currentLocalConnection.prepareStatement(INSERT_ORDER_ADDRESS, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_ORDER_ADDRESS, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(orderAddress, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
