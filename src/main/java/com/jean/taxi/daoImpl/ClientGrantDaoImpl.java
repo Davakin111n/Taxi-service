@@ -14,10 +14,10 @@ import java.util.List;
 
 public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
 
-    private final String CLIENT_GRANT_TABLE = "jean_taxi_service.client_grant;";
-    private final String CLIENT_GRANT_ID = "jean_taxi_service.client_grant WHERE id=?;";
-    private final String INSERT_NEW_CLIENT_GRANT = "INSERT INTO jean_taxi_service.client_grant(`id_client`,`admin`,`moderator`,`active`) VALUES(?,?,?,?);";
-    private final String UPDATE_CLIENT_GRANT = "jean_taxi_service.client_grant SET admin=?, moderator=?, active=? WHERE id_client=?;";
+    private final String CLIENT_GRANT_TABLE = "`client_grant`;";
+    private final String CLIENT_GRANT_ID = "`client_grant` WHERE id=?;";
+    private final String INSERT_NEW_CLIENT_GRANT = "INSERT INTO client_grant(`id_client`,`admin`,`moderator`,`active`) VALUES(?,?,?,?);";
+    private final String UPDATE_CLIENT_GRANT = "`client_grant` SET admin=?, moderator=?, active=? WHERE id_client=?;";
 
     public ClientGrantDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;

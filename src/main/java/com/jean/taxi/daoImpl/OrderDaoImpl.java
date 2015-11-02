@@ -22,15 +22,15 @@ import java.util.List;
 
 public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
-    private static final String ORDER_TABLE = "jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id = ord_ad.id_order";
-    private static final String ORDERS_ID = "jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id=? AND ord_ad.id_order = ord.id";
-    private static final String DELETE_QUERY = "jean_taxi_service.order WHERE id=?;";
-    private static final String INSERT_NEW_ORDER = "INSERT INTO jean_taxi_service.order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_ORDER = "jean_taxi_service.order SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?";
-    private static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id";
-    private static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active= true AND ord.id = ord_ad.id_order";
-    private static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.active = false AND ord.id = ord_ad.id_order";
-    private static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM jean_taxi_service.order ord JOIN order_address ord_ad ON ord.accomplished = true AND ord.id = ord_ad.id_order";
+    private static final String ORDER_TABLE = "`order` ord JOIN `order_address` ord_ad ON ord.id = ord_ad.id_order";
+    private static final String ORDERS_ID = "`order` ord JOIN `order_address` ord_ad ON ord.id=? AND ord_ad.id_order = ord.id";
+    private static final String DELETE_QUERY = "`order` ord WHERE id=?;";
+    private static final String INSERT_NEW_ORDER = "INSERT INTO order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_ORDER = "`order` ord SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?";
+    private static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id";
+    private static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.active= true AND ord.id = ord_ad.id_order";
+    private static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.active = false AND ord.id = ord_ad.id_order";
+    private static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.accomplished = true AND ord.id = ord_ad.id_order";
 
     private static final byte GENERIC_FIRST_COLUMN = 1;
 
@@ -135,7 +135,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public List<Order> orderListByClient(Long clientId) {
         List orderList;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
-            preparedStatement.setLong(1, clientId);
+            preparedStatement.setLong(GENERIC_FIRST_COLUMN, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;
@@ -149,7 +149,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public List<Order> notActiveOrderListByClient(Long clientId) {
         List orderList;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
-            preparedStatement.setLong(1, clientId);
+            preparedStatement.setLong(GENERIC_FIRST_COLUMN, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
             return orderList;

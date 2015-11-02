@@ -1,5 +1,7 @@
 package com.jean.taxi.daoImpl;
 
+import com.jean.taxi.dict.DateOption;
+import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
 import com.jean.taxi.filter.OrderFilter;
@@ -79,36 +81,71 @@ public class OrderDaoImplTest extends UnitilsJUnit4 {
 
     @Test
     public void testDeleteOrder() {
-
+        final Order order = new Order();
+        order.setBeginAddress("beginAddress");
+        order.setHouseNumber("houseNumber");
+        order.setPorchNumber("porchNumber");
+        order.setPhone("phone");
+        order.setContactName("contactName");
+        order.setCarOption("option");
+        order.setNote("note");
+        List list = order.getAddressList();
+        OrderAddress orderAddress = new OrderAddress();
+        orderAddress.setDestinationAddress("destAddress");
+        orderAddress.setDestinationHouseNumber("destHouseNumber");
+        orderAddress.setDestinationPorchNumber("destPorchNumber");
+        list.add(orderAddress);
+        order.setAddressList(list);
+        executeTest(new Transaction<Long>() {
+            @Override
+            public void doTransaction() throws Exception {
+                Long orderId = orderDao.addNew(order);
+                order.setId(orderId);
+                assertTrue(assertOrder(orderDao.get(orderId), order));
+                for (OrderAddress address : order.getAddressList()) {
+                    address.setOrderId(orderId);
+                    orderAddressDao.addNew(address);
+                }
+                orderDao.deleteOrder(orderId);
+                assertTrue(assertDeleteOrder(order, orderDao.get(orderId)));
+            }
+        });
     }
 
     @Test
     public void testOrderListByClient() {
-
+        List orderListByClient = orderDao.orderListByClient(1L);
+        assertTrue(assertList(orderListByClient));
     }
 
     @Test
     public void testNotActiveOrderListByClient() {
-
+        List notActiveOrderListByClient = orderDao.notActiveOrderListByClient(1L);
+        assertTrue(assertList(notActiveOrderListByClient));
     }
 
     @Test
     public void testActiveOrderList() {
-
+        List activeOrderList = orderDao.activeOrderList();
+        assertTrue(assertList(activeOrderList));
     }
 
     @Test
     public void testNotActiveOrderList() {
-
+        List notActiveOrderList = orderDao.notActiveOrderList();
+        assertTrue(assertList(notActiveOrderList));
     }
 
     @Test
     public void testAccomplishedOrderList() {
-
+        List accomplishedOrderList = orderDao.accomplishedOrderList();
+        assertTrue(assertList(accomplishedOrderList));
     }
 
     @Test
     public void testOrderListByFilter() {
+        OrderFilter orderFilter = new OrderFilter("All", "No limits");
+        List orderListByFilter = orderDao.orderListByFilter(orderFilter);
 
     }
 
@@ -179,7 +216,34 @@ public class OrderDaoImplTest extends UnitilsJUnit4 {
         return true;
     }
 
+    private boolean assertDeleteOrder(Order current, Order deleted) {
+        if (deleted != null) {
+            return false;
+        } else if (!deleted.equals(current)) {
+            return false;
+        }
+        return true;
+    }
+
     private boolean assertOrderListByFilter(OrderFilter orderFilter, List orderListByFilter) {
+        if (orderFilter == null) {
+            return false;
+        } else if (orderFilter.getOrderType() == null || orderFilter.getDateValue() == null) {
+            return false;
+        } else if (!StringUtils.isNotEmpty(orderFilter.getOrderType()) || !StringUtils.isNotEmpty(orderFilter.getDateValue())) {
+            return false;
+        }
+
+        if (!assertList(orderListByFilter)) {
+            return false;
+        } else if (OrderType.values() != null && DateOption.values() != null) {
+            if (!OrderType.TITLES.contains(orderFilter.getOrderType())) {
+                return false;
+            }
+            if (!DateOption.TITLES.contains(orderFilter.getDateValue())) {
+                return false;
+            }
+        }
         return true;
     }
 }

@@ -15,6 +15,11 @@ public enum OrderType {
     public static final List<OrderType> CONDITIONS = new ArrayList<OrderType>(
             Arrays.asList(new OrderType[]{ALL, NOT_ACTIVE, ACTIVE, ACCOMPLISHED}));
 
+    public static final List<String> TITLES = new ArrayList<String>(Arrays.asList(new String[]{ALL.getTitle()
+            , NOT_ACTIVE.getTitle()
+            , ACTIVE.getTitle()
+            , ACCOMPLISHED.getTitle()}));
+
     OrderType(String title) {
         this.title = title;
     }

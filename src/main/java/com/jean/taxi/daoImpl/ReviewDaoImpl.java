@@ -13,11 +13,11 @@ import java.util.List;
 
 public class ReviewDaoImpl extends GenericDaoImpl<Review> implements ReviewDao {
 
-    private final String REVIEW_TABLE = "jean_taxi_service.review;";
-    private final String REVIEWS_ID = "jean_taxi_service.review WHERE id=?;";
-    private final String INSERT_REVIEW = "INSERT INTO jean_taxi_service.review(id_client, client_name, note) VALUES(?,?,?);";
-    private final String UPDATE_REVIEW = "jean_taxi_service.review SET note=? WHERE id=?;";
-    private final String ACTIVATE_REVIEW = "UPDATE jean_taxi_service.review SET active=? WHERE id=?;";
+    private final String REVIEW_TABLE = "`review`;";
+    private final String REVIEWS_ID = "`review` WHERE id=?;";
+    private final String INSERT_REVIEW = "INSERT INTO review(id_client, client_name, note) VALUES(?,?,?);";
+    private final String UPDATE_REVIEW = "`review` SET note=? WHERE id=?;";
+    private final String ACTIVATE_REVIEW = "UPDATE `review` SET active=? WHERE id=?;";
 
     @Override
     public String getSelectQuery() {
