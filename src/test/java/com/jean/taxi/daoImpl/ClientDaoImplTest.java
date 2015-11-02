@@ -14,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.unitils.UnitilsJUnit4;
 import org.unitils.database.annotations.TestDataSource;
-import org.unitils.database.annotations.Transactional;
-import org.unitils.database.util.TransactionMode;
 import org.unitils.dbunit.annotation.DataSet;
 
 import javax.sql.DataSource;
@@ -24,14 +22,14 @@ import java.util.List;
 import static com.jean.taxi.serviceImpl.TransactionHandlerImpl.executeTest;
 import static org.junit.Assert.assertTrue;
 
-@Transactional(TransactionMode.ROLLBACK)
 @DataSet
 public class ClientDaoImplTest extends UnitilsJUnit4 {
-    @TestDataSource
-    DataSource dataSource;
 
     ClientDaoImpl clientDao = null;
     ClientGrantDaoImpl clientGrantDao = null;
+
+    @TestDataSource
+    DataSource dataSource;
 
     @Before
     public void init() {

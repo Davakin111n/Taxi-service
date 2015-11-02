@@ -10,6 +10,14 @@
     <packaging>war</packaging>
     <name>Taxi-service</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dbunit.version>2.4.9</dbunit.version>
+        <junit.version>4.12</junit.version>
+        <slf4jVersion>1.6.1</slf4jVersion>
+        <log4j.version>1.2.16</log4j.version>
+    </properties>
+
     <dependencies>
 
         <!-- Servlets API dependency -->
@@ -71,28 +79,35 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-core</artifactId>
-            <version>3.4.2</version>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.unitils</groupId>
             <artifactId>unitils-dbunit</artifactId>
-            <version>3.3</version>
+            <version>3.4.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-database</artifactId>
-            <version>3.3</version>
-            <scope>test</scope>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+
 
     </dependencies>
 

@@ -31,7 +31,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     private final String SELECT_ALL_ACTIVE_USERS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.admin = false AND gr.active = true";
     private final String SELECT_BAN_LIST_USERS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.active = false AND gr.admin = false";
     private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM `client` cl JOIN `client_grant` gr ON email =?";
-
+    private static final byte GENERIC_FIRST_COLUMN = 1;
     private final String CLIENT_ALIAS = "cl";
     private final String CLIENT_GRANT_ALIAS = "gr";
 
@@ -212,7 +212,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     public User getByEmail(String email) {
         User user;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
-            preparedStatement.setString(1, email);
+            preparedStatement.setString(GENERIC_FIRST_COLUMN, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             user = convertToEntity(resultSet);
             return user;
