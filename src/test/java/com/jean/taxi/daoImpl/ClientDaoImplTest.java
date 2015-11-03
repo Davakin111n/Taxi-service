@@ -22,7 +22,7 @@ import java.util.List;
 import static com.jean.taxi.serviceImpl.TransactionHandlerImpl.executeTest;
 import static org.junit.Assert.assertTrue;
 
-@DataSet
+@DataSet({"ClientDaoImplTest.xml"})
 public class ClientDaoImplTest extends UnitilsJUnit4 {
 
     ClientDaoImpl clientDao = null;
@@ -55,6 +55,7 @@ public class ClientDaoImplTest extends UnitilsJUnit4 {
         user.setClientName("clientName");
         user.setClientLastName("clientLastName");
         user.setPhone("phone");
+        user.setSkype("skype");
         final ClientGrant clientGrant = user.getClientGrant();
         clientGrant.setClientId(user.getId());
         clientGrant.setActive(true);
@@ -63,6 +64,7 @@ public class ClientDaoImplTest extends UnitilsJUnit4 {
             @Override
             public void doTransaction() throws Exception {
                 Long clientId = clientDao.addNew(user);
+                System.out.println("ТЕСТ ТЕСТ ТЕСТ ТЕСТ" + clientId.toString());
                 user.setId(clientId);
                 clientGrantDao.addNew(user.getClientGrant());
                 assertTrue(assertClient(clientDao.get(clientId), user));

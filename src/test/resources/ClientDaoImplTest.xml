@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <CLIENT ID="1" CLIENT_NAME="clientName" CLIENT_LAST_NAME="clientLastName"
+    <Client ID="1" CLIENT_NAME="clientName" CLIENT_LAST_NAME="clientLastName"
             EMAIL="email" ADDRESS="address" PASSWORD="password"
-            PHONE="phone" SECOND_PHONE="secondPhone" THIRD_PHONE="thirdPhone" CREATE_DATE="2015-10-05 08:35:25"/>
-    <CLIENT_GRANT ID="1" ID_CLIENT="1" ADMIN="false" MODERATOR="false" ACTIVE="true"/>
+            PHONE="phone" SECOND_PHONE="secondPhone" THIRD_PHONE="thirdPhone"
+            SKYPE="skype" CREATE_DATE="2015-10-05 08:35:25"/>
+    <Client_grant ID="1" ID_CLIENT="1" ADMIN="0" MODERATOR="0" ACTIVE="1"/>
 </dataset>
