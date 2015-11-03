@@ -25,7 +25,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     private static final String ORDER_TABLE = "`order` ord JOIN `order_address` ord_ad ON ord.id = ord_ad.id_order";
     private static final String ORDERS_ID = "`order` ord JOIN `order_address` ord_ad ON ord.id=? AND ord_ad.id_order = ord.id";
     private static final String DELETE_QUERY = "`order` ord WHERE id=?;";
-    private static final String INSERT_NEW_ORDER = "INSERT INTO order(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_NEW_ORDER = "INSERT INTO `order`(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_ORDER = "`order` ord SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?";
     private static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id";
     private static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.active= true AND ord.id = ord_ad.id_order";

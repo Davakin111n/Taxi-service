@@ -22,18 +22,18 @@ import java.util.List;
 
 public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
-    private final String CLIENT_TABLE = "`client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.admin = false ";
-    private final String CLIENTS_ID = "`client` cl JOIN `client_grant` gr WHERE cl.id = gr.id_client AND cl.id = ?";
-    private final String INSERT_NEW_USER = "INSERT INTO `client`(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String UPDATE_CLIENT = "`client` SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?";
-    private final String SELECT_ALL_MODERATORS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND moderator=true AND gr.admin = false";
-    private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.moderator = false AND gr.admin = false";
-    private final String SELECT_ALL_ACTIVE_USERS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.admin = false AND gr.active = true";
-    private final String SELECT_BAN_LIST_USERS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.active = false AND gr.admin = false";
-    private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM `client` cl JOIN `client_grant` gr ON email =?";
+    private final String CLIENT_TABLE = "`CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND GR.ADMIN = false ";
+    private final String CLIENTS_ID = "`CLIENT` CL JOIN `CLIENT_GRANT` GR WHERE CL.ID = GR.ID_CLIENT AND CL.ID = ?";
+    private final String INSERT_NEW_USER = "INSERT INTO `CLIENT`(EMAIL, ADDRESS, PASSWORD, PHONE, SECOND_PHONE, THIRD_PHONE, CLIENT_NAME, CLIENT_LAST_NAME, SKYPE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_CLIENT = "`CLIENT` SET EMAIL = ?, ADDRESS = ?, PASSWORD = ?, PHONE = ?, SECOND_PHONE = ?, THIRD_PHONE = ?, CLIENT_NAME = ?, CLIENT_LAST_NAME = ?, SKYPE = ? WHERE ID = ?";
+    private final String SELECT_ALL_MODERATORS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND MODERATOR=true AND GR.ADMIN = false";
+    private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` gr ON CL.ID = GR.ID_CLIENT AND GR.MODERATOR = false AND GR.ADMIN = false";
+    private final String SELECT_ALL_ACTIVE_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND GR.ADMIN = false AND GR.ACTIVE = true";
+    private final String SELECT_BAN_LIST_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND GR.ACTIVE = false AND GR.ADMIN = false";
+    private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON EMAIL =?";
     private static final byte GENERIC_FIRST_COLUMN = 1;
-    private final String CLIENT_ALIAS = "cl";
-    private final String CLIENT_GRANT_ALIAS = "gr";
+    private final String CLIENT_ALIAS = "CL";
+    private final String CLIENT_GRANT_ALIAS = "GR";
 
     public ClientDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
