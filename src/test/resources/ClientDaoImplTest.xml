@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <client id="1" client_name="clientName" client_last_name="clientLastName"
+    <Client id="1" client_name="clientName" client_last_name="clientLastName"
             email="email" address="address" password="password"
-            phone="phone"/>
-    <client_grant id="1" id_client="1" admin="false" moderator="false" active="true"/>
+            phone="phone" second_phone="secondPhone" third_phone="thirdPhone" create_date="2015-10-05 08:35:25"/>
+    <Client_grant id="1" id_client="1" admin="false" moderator="false" active="true"/>
 </dataset>

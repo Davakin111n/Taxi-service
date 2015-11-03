@@ -24,7 +24,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     private final String CLIENT_TABLE = "`client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.admin = false ";
     private final String CLIENTS_ID = "`client` cl JOIN `client_grant` gr WHERE cl.id = gr.id_client AND cl.id = ?";
-    private final String INSERT_NEW_USER = "INSERT INTO client(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String INSERT_NEW_USER = "INSERT INTO `client`(email, address, password, phone, second_phone, third_phone, client_name, client_last_name, skype) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final String UPDATE_CLIENT = "`client` SET email = ?, address = ?, password = ?, phone = ?, second_phone = ?, third_phone = ?, client_name = ?, client_last_name = ?, skype = ? WHERE id = ?";
     private final String SELECT_ALL_MODERATORS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND moderator=true AND gr.admin = false";
     private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM `client` cl JOIN `client_grant` gr ON cl.id = gr.id_client AND gr.moderator = false AND gr.admin = false";
