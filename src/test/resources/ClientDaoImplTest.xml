@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <Client ID="1" CLIENT_NAME="clientName" CLIENT_LAST_NAME="clientLastName"
-            EMAIL="email" ADDRESS="address" PASSWORD="password"
-            PHONE="phone" SECOND_PHONE="secondPhone" THIRD_PHONE="thirdPhone"
-            SKYPE="skype" CREATE_DATE="2015-10-05 08:35:25"/>
-    <Client_grant ID="1" ID_CLIENT="1" ADMIN="0" MODERATOR="0" ACTIVE="1"/>
-</dataset>

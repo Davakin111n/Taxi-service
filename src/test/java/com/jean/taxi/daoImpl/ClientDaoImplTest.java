@@ -14,15 +14,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.unitils.UnitilsJUnit4;
 import org.unitils.database.annotations.TestDataSource;
-import org.unitils.dbunit.annotation.DataSet;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 import static com.jean.taxi.serviceImpl.TransactionHandlerImpl.executeTest;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@DataSet({"ClientDaoImplTest.xml"})
 public class ClientDaoImplTest extends UnitilsJUnit4 {
 
     ClientDaoImpl clientDao = null;
@@ -64,7 +63,6 @@ public class ClientDaoImplTest extends UnitilsJUnit4 {
             @Override
             public void doTransaction() throws Exception {
                 Long clientId = clientDao.addNew(user);
-                System.out.println("ТЕСТ ТЕСТ ТЕСТ ТЕСТ" + clientId.toString());
                 user.setId(clientId);
                 clientGrantDao.addNew(user.getClientGrant());
                 assertTrue(assertClient(clientDao.get(clientId), user));
@@ -94,7 +92,7 @@ public class ClientDaoImplTest extends UnitilsJUnit4 {
     public void testGetByEmail() {
         String email = "midvey@googlemail.com";
         User user = clientDao.getByEmail(email);
-        assertTrue(assertGetByEmail(email, user));
+        assertFalse(assertGetByEmail(email, user));
     }
 
     @Test

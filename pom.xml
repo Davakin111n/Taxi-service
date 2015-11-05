@@ -97,6 +97,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
@@ -115,32 +121,20 @@
         <finalName>Taxi-service</finalName>
 
         <plugins>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
+                <version>2.6</version>
                 <configuration>
-                    <instrumentation>
-                        <includes>
-                            <include>foo/bar/**/*.class</include>
-                        </includes>
-                    </instrumentation>
+                    <formats>
+                        <format>html</format>
+                    </formats>
                     <check/>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>clean</id>
-                        <phase>pre-site</phase>
+                        <phase>package</phase>
                         <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>instrument</id>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>instrument</goal>
                             <goal>cobertura</goal>
                         </goals>
                     </execution>
@@ -157,6 +151,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <skipTests>false</skipTests>
                     <includes>
                         <include>**/*Tests.java</include>
                     </includes>
