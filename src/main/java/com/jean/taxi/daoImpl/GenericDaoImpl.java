@@ -2,6 +2,7 @@ package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.dao.GenericDao;
 import com.jean.taxi.entity.Identifier;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.utils.ConnectionHolder;
 
 import javax.sql.DataSource;
@@ -49,9 +50,9 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
 
     public abstract T parseSingleResultSet(ResultSet resultSet);
 
-    public abstract List<T> parseListResultSet(ResultSet resultSet);
+    public abstract List<T> parseListResultSet(ResultSet resultSet) throws DaoException;
 
-    public abstract Long addNew(T obj);
+    public abstract Long addNew(T obj) throws DaoException;
 
     public T get(Long id) {
         T identifier;

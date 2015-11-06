@@ -8,20 +8,23 @@ import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
 import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.service.OrderService;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> implements OrderService {
-
+    private final static Logger log = Logger.getLogger(OrderServiceImpl.class);
     private OrderDaoImpl orderDao = (OrderDaoImpl) DaoFactoryImpl.getInstance().getOrderDao();
     private OrderAddressDaoImpl orderAddressDao = DaoFactoryImpl.getInstance().getOrderAddressDao();
 
     public OrderServiceImpl() {
+        log.debug("Setting order DAO.");
         super.setDao(orderDao);
     }
 
     @Override
     public void addNew(final Order order) {
+        log.debug("Adding new order.");
         TransactionHandlerImpl.execute(new Transaction<Long>() {
             @Override
             public void doTransaction() {
@@ -51,6 +54,7 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
 
     @Override
     public void deleteOrder(final Long orderId) {
+        log.debug("Deleting order.");
         TransactionHandlerImpl.execute(new Transaction<Long>() {
             @Override
             public void doTransaction() {
@@ -62,6 +66,7 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
 
     @Override
     public void activateOrder(Long orderId) {
+        log.debug("Activating order.");
         Order order = dao.get(orderId);
         order.setActive(true);
         update(order);
@@ -79,6 +84,7 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
 
     @Override
     public List<Order> notActiveOrderListByClient(Long clientId) {
+        log.debug("Output not active order list.");
         return dao.notActiveOrderList();
     }
 
@@ -94,6 +100,7 @@ public class OrderServiceImpl extends GenericServiceImpl<Order, OrderDaoImpl> im
 
     @Override
     public List<Order> orderListByFilter(OrderFilter orderFilter) {
+        log.debug("Output order list by filter.");
         return dao.orderListByFilter(orderFilter);
     }
 }

@@ -5,6 +5,7 @@ import com.jean.taxi.dict.ClientType;
 import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.utils.ConnectionHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -80,23 +81,25 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     }
 
     @Override
-    public List<User> parseListResultSet(ResultSet resultSet) {
+    public List<User> parseListResultSet(ResultSet resultSet) throws DaoException {
         List userList = null;
         try {
             if (!resultSet.next()) {
-                throw new Exception();
+                throw new DaoException("Could not parse result set. Result set is empty!");
             }
             resultSet.previous();
             userList = convertListToEntity(resultSet);
             return userList;
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            throw new DaoException("Could not parse result set!", e);
+        } catch (DaoException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public Long addNew(User user) {
+    public Long addNew(User user) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(user, preparedStatement);
             preparedStatement.executeUpdate();
@@ -105,43 +108,41 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
                 user.setId(resultSet.getLong(1));
                 return user.getId();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Could not add new user " + user, e);
         }
         return null;
     }
 
     @Override
-    public List<User> listAllModerators() {
+    public List<User> listAllModerators() throws DaoException {
         List moderatorList;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             moderatorList = convertListToEntity(resultSet);
             return moderatorList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Could not view moderator list! ", e);
         }
-        return null;
     }
 
     @Override
-    public List<User> listSimpleUsers() {
-        List simpleUserList;
+    public List listSimpleUsers() throws DaoException {
+        List simpleUserList = new ArrayList<User>();
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             simpleUserList = convertListToEntity(resultSet);
             return simpleUserList;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new DaoException("Could not view simple grant user's list! ", e);
         }
-        return null;
     }
 
     @Override
-    public List<User> clientListByFilter(ClientFilter clientFilter) {
+    public List<User> clientListByFilter(ClientFilter clientFilter) throws DaoException {
         DateTime dateTime = new DateTime();
         LocalDate localDate = new LocalDate();
-        List clientList = null;
+        List<User> clientList = new ArrayList<User>();
         if (clientFilter.getClientType() != null) {
             if (StringUtils.equals(clientFilter.getClientType(), ClientType.ALL.getTitle())) {
                 genericStringBuilder.append(SELECT_FROM)
@@ -185,8 +186,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             clientList = convertListToEntity(resultSet);
             return clientList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Could not view client list by filter! ", e);
         } finally {
             dateTime = null;
             localDate = null;

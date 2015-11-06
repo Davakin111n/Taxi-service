@@ -1,17 +1,18 @@
 package com.jean.taxi.dao;
 
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.filter.ClientFilter;
 
 import java.util.List;
 
 public interface ClientDao {
 
-    List<User> listAllModerators();
+    List<User> listAllModerators() throws DaoException;
 
-    List<User> listSimpleUsers();
+    List<User> listSimpleUsers() throws DaoException;
 
-    List<User> clientListByFilter(ClientFilter clientFilter);
+    List clientListByFilter(ClientFilter clientFilter) throws DaoException;
 
     List<User> banList();
 

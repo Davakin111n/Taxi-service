@@ -9,20 +9,23 @@ import com.jean.taxi.entity.User;
 import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.service.ClientService;
 import com.jean.taxi.utils.PasswordUtil;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> implements ClientService {
-
+    private final static Logger log = Logger.getLogger(ClientServiceImpl.class);
     private ClientDaoImpl clientDao = (ClientDaoImpl) DaoFactoryImpl.getInstance().getClientDao();
     private ClientGrantDaoImpl clientGrantDao = DaoFactoryImpl.getInstance().getClientGrantDao();
 
     public ClientServiceImpl() {
+        log.debug("Setting client DAO.");
         super.setDao(clientDao);
     }
 
     @Override
     public void addNew(final User user) {
+        log.debug("Adding new user.");
         execute(new Transaction<Long>() {
             @Override
             public void doTransaction() {
@@ -50,6 +53,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
 
     @Override
     public boolean successLogin(String email, String password) {
+        log.debug("Checking user login information.");
         User user = dao.getByEmail(email);
         if (user != null) {
             return PasswordUtil.encryptPassword(password).equals(user.getPassword());
@@ -100,6 +104,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
 
     @Override
     public void changePassword(Long userId, final String password) throws Exception {
+        log.debug("Changing password to user.");
         final User user = dao.get(userId);
         execute(new Transaction<Long>() {
             @Override
@@ -131,6 +136,7 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
 
     @Override
     public User getByEmail(String clientEmail) {
+        log.debug("Getting user by email.");
         return dao.getByEmail(clientEmail);
     }
 }
