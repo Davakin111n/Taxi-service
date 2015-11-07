@@ -66,17 +66,17 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     }
 
     @Override
-    public void getStatementForUpdateEntity(User user, PreparedStatement preparedStatement) {
+    public void getStatementForUpdateEntity(User user, PreparedStatement preparedStatement) throws DaoException {
         convertUpdateEntity(user, preparedStatement);
     }
 
     @Override
-    public void getStatementForInsertEntity(User user, PreparedStatement preparedStatement) {
+    public void getStatementForInsertEntity(User user, PreparedStatement preparedStatement) throws DaoException {
         convertNewEntity(user, preparedStatement);
     }
 
     @Override
-    public User parseSingleResultSet(ResultSet resultSet) {
+    public User parseSingleResultSet(ResultSet resultSet) throws DaoException {
         return convertToEntity(resultSet);
     }
 
@@ -116,33 +116,33 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     @Override
     public List<User> listAllModerators() throws DaoException {
-        List moderatorList;
+        List moderatorList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_MODERATORS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             moderatorList = convertListToEntity(resultSet);
-            return moderatorList;
         } catch (SQLException e) {
             throw new DaoException("Could not view moderator list! ", e);
         }
+        return moderatorList;
     }
 
     @Override
     public List listSimpleUsers() throws DaoException {
-        List simpleUserList = new ArrayList<User>();
+        List simpleUserList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_SIMPLE_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             simpleUserList = convertListToEntity(resultSet);
-            return simpleUserList;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new DaoException("Could not view simple grant user's list! ", e);
         }
+        return simpleUserList;
     }
 
     @Override
     public List<User> clientListByFilter(ClientFilter clientFilter) throws DaoException {
         DateTime dateTime = new DateTime();
         LocalDate localDate = new LocalDate();
-        List<User> clientList = new ArrayList<User>();
+        List<User> clientList = null;
         if (clientFilter.getClientType() != null) {
             if (StringUtils.equals(clientFilter.getClientType(), ClientType.ALL.getTitle())) {
                 genericStringBuilder.append(SELECT_FROM)
@@ -185,7 +185,6 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(genericStringBuilder.toString())) {
             ResultSet resultSet = preparedStatement.executeQuery();
             clientList = convertListToEntity(resultSet);
-            return clientList;
         } catch (SQLException e) {
             throw new DaoException("Could not view client list by filter! ", e);
         } finally {
@@ -197,34 +196,32 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     }
 
     @Override
-    public List<User> banList() {
-        List banList;
+    public List<User> banList() throws DaoException {
+        List<User> banList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_BAN_LIST_USERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             banList = convertListToEntity(resultSet);
-            return banList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Couldn't load band list.", e);
         }
-        return null;
+        return banList;
     }
 
     @Override
-    public User getByEmail(String email) {
-        User user;
+    public User getByEmail(String email) throws DaoException {
+        User user = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_CLIENT_BY_EMAIL)) {
             preparedStatement.setString(GENERIC_FIRST_COLUMN, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             user = convertToEntity(resultSet);
-            return user;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't get client by email.", e);
         }
-        return null;
+        return user;
     }
 
     @Override
-    public void convertNewEntity(User user, PreparedStatement preparedStatement) {
+    public void convertNewEntity(User user, PreparedStatement preparedStatement) throws DaoException {
         try {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getAddress());
@@ -235,13 +232,13 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             preparedStatement.setString(7, user.getClientName());
             preparedStatement.setString(8, user.getClientLastName());
             preparedStatement.setString(9, user.getSkype());
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Prepared statement error in new Client entity converter", e);
         }
     }
 
     @Override
-    public void convertUpdateEntity(User user, PreparedStatement preparedStatement) {
+    public void convertUpdateEntity(User user, PreparedStatement preparedStatement) throws DaoException {
         try {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getAddress());
@@ -253,16 +250,17 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
             preparedStatement.setString(8, user.getClientLastName());
             preparedStatement.setString(9, user.getSkype());
             preparedStatement.setLong(10, user.getId());
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Prepared statement error in update Client entity converter", e);
         }
     }
 
     @Override
-    public User convertToEntity(ResultSet resultSet) {
+    public User convertToEntity(ResultSet resultSet) throws DaoException {
+        User user = null;
         try {
             while (resultSet.next()) {
-                User user = new User();
+                user = new User();
                 user.setId(resultSet.getLong("cl.id"));
                 user.setEmail(resultSet.getString("cl.email"));
                 user.setPassword(resultSet.getString("cl.password"));
@@ -279,17 +277,16 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
                 clientGrant.setModerator(resultSet.getBoolean("gr.moderator"));
                 clientGrant.setActive(resultSet.getBoolean("gr.active"));
                 user.setClientGrant(clientGrant);
-                return user;
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Result set parse error in converter Client to entity.", e);
         }
-        return null;
+        return user;
     }
 
     @Override
-    public List<User> convertListToEntity(ResultSet resultSet) {
-        ArrayList userList = new ArrayList();
+    public List<User> convertListToEntity(ResultSet resultSet) throws DaoException {
+        List<User> userList = new ArrayList<User>();
         try {
             while (resultSet.next()) {
                 User user = new User();
@@ -302,7 +299,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
                 user.setPhone(resultSet.getString("cl.phone"));
                 user.setSkype(resultSet.getString("cl.skype"));
                 user.setRegistrationDate(resultSet.getDate("cl.create_date"));
-                ClientGrant clientGrant = new ClientGrant();
+                ClientGrant clientGrant = user.getClientGrant();
                 clientGrant.setId(resultSet.getLong("gr.id"));
                 clientGrant.setClientId(resultSet.getLong("gr.id_client"));
                 clientGrant.setAdmin(resultSet.getBoolean("gr.admin"));
@@ -311,10 +308,9 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
                 user.setClientGrant(clientGrant);
                 userList.add(user);
             }
-            return userList;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Couldn't parse user list in converter list to entity", e);
         }
-        return null;
+        return userList;
     }
 }

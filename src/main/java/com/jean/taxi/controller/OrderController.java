@@ -5,6 +5,7 @@ import com.jean.taxi.dict.Constants;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.serviceImpl.OrderServiceImpl;
 import com.jean.taxi.validator.OrderValidator;
 
@@ -21,14 +22,18 @@ public class OrderController extends InitController {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
-            if (request.getRequestURI().contains("/order")) {
-                viewOrder(request, response);
-            } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
-                deleteOrderFromAdmin(request, response);
-            } else if (request.getRequestURI().contains("/editOrderFromAdmin")) {
-                editOrderFromAdmin(request, response);
-            } else if (request.getRequestURI().contains("/activateOrder")) {
-                activateOrder(request, response);
+            try {
+                if (request.getRequestURI().contains("/order")) {
+                    viewOrder(request, response);
+                } else if (request.getRequestURI().contains("/deleteOrderFromAdmin")) {
+                    deleteOrderFromAdmin(request, response);
+                } else if (request.getRequestURI().contains("/editOrderFromAdmin")) {
+                    editOrderFromAdmin(request, response);
+                } else if (request.getRequestURI().contains("/activateOrder")) {
+                    activateOrder(request, response);
+                }
+            } catch (ServiceException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -36,10 +41,14 @@ public class OrderController extends InitController {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
-            if (request.getRequestURI().contains("/createNewOrder")) {
-                createOrder(request, response);
-            } else if (request.getRequestURI().contains("/updateOrder")) {
-                updateOrder(request, response);
+            try {
+                if (request.getRequestURI().contains("/createNewOrder")) {
+                    createOrder(request, response);
+                } else if (request.getRequestURI().contains("/updateOrder")) {
+                    updateOrder(request, response);
+                }
+            } catch (ServiceException e) {
+                e.printStackTrace();
             }
         } else if (request.getRequestURI().contains("/createNonClientOrder")) {
 
@@ -48,7 +57,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void viewOrder(HttpServletRequest request, HttpServletResponse response) {
+    private void viewOrder(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         Order order = null;
         if (request.getParameter("id") != null) {
             order = orderService.get(Long.parseLong(request.getParameter("id")));
@@ -67,7 +76,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void createOrder(HttpServletRequest request, HttpServletResponse response) {
+    private void createOrder(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         if (!OrderValidator.validateNewOrder(request.getParameter("phone"),
                 request.getParameter("beginAddress"),
                 request.getParameter("destinationAddress"))) {
@@ -104,7 +113,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void activateOrder(HttpServletRequest request, HttpServletResponse response) {
+    private void activateOrder(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         if (request.getParameter("id") != null) {
             orderService.activateOrder(Long.parseLong(request.getParameter("id")));
         }
@@ -115,7 +124,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void deleteOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) {
+    private void deleteOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         if (request.getParameter("id") != null) {
             orderService.deleteOrder(Long.parseLong(request.getParameter("id")));
         }
@@ -126,7 +135,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void editOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) {
+    private void editOrderFromAdmin(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         Order order = null;
         if (request.getParameter("id") != null) {
             order = orderService.get(Long.parseLong(request.getParameter("id")));
@@ -141,7 +150,7 @@ public class OrderController extends InitController {
         }
     }
 
-    private void updateOrder(HttpServletRequest request, HttpServletResponse response) {
+    private void updateOrder(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         OrderForm orderForm = new OrderForm();
         orderForm.setTitle(request.getParameter("title"));
         orderForm.setPhone(request.getParameter("phone"));

@@ -4,6 +4,7 @@ import com.jean.taxi.controller.form.PasswordForm;
 import com.jean.taxi.controller.form.PrivateInfoForm;
 import com.jean.taxi.dict.Constants;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.serviceImpl.ClientServiceImpl;
 import com.jean.taxi.utils.PasswordUtil;
 import com.jean.taxi.validator.PrivateAreaValidator;
@@ -22,14 +23,18 @@ public class UserController extends InitController {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null
                 && ((User) request.getSession().getAttribute("user")).getClientGrant().isAdmin()) {
-            if (request.getRequestURI().contains("/madeModerator")) {
-                madeModerator(request, response);
-            } else if (request.getRequestURI().contains("/setLikeSimpleUser")) {
-                madeSimpleUser(request, response);
-            } else if (request.getRequestURI().contains("/banUser")) {
-                banUser(request, response);
-            } else if (request.getRequestURI().contains("/undoBanUser")) {
-                undoBanUser(request, response);
+            try {
+                if (request.getRequestURI().contains("/madeModerator")) {
+                    madeModerator(request, response);
+                } else if (request.getRequestURI().contains("/setLikeSimpleUser")) {
+                    madeSimpleUser(request, response);
+                } else if (request.getRequestURI().contains("/banUser")) {
+                    banUser(request, response);
+                } else if (request.getRequestURI().contains("/undoBanUser")) {
+                    undoBanUser(request, response);
+                }
+            } catch (ServiceException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -37,10 +42,14 @@ public class UserController extends InitController {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute("user") != null) {
-            if (request.getRequestURI().contains("/savePersonData")) {
-                savePersonData(request, response);
-            } else if (request.getRequestURI().contains("/changePassword")) {
-                changePassword(request, response);
+            try {
+                if (request.getRequestURI().contains("/savePersonData")) {
+                    savePersonData(request, response);
+                } else if (request.getRequestURI().contains("/changePassword")) {
+                    changePassword(request, response);
+                }
+            } catch (ServiceException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -88,7 +97,7 @@ public class UserController extends InitController {
         }
     }
 
-    private void savePersonData(HttpServletRequest request, HttpServletResponse response) {
+    private void savePersonData(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         PrivateInfoForm privateInfoForm = new PrivateInfoForm();
         privateInfoForm.setName(request.getParameter("clientName"));
         privateInfoForm.setLastName(request.getParameter("clientLastName"));
@@ -134,7 +143,7 @@ public class UserController extends InitController {
         }
     }
 
-    private void madeSimpleUser(HttpServletRequest request, HttpServletResponse response) {
+    private void madeSimpleUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             clientService.madeSimpleUser(Long.parseLong(request.getParameter("id")));
             response.sendRedirect(Constants.ADMIN_PANEL);
@@ -143,7 +152,7 @@ public class UserController extends InitController {
         }
     }
 
-    private void banUser(HttpServletRequest request, HttpServletResponse response) {
+    private void banUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             clientService.banUser(Long.parseLong(request.getParameter("id")));
             response.sendRedirect(Constants.ADMIN_PANEL);
@@ -152,7 +161,7 @@ public class UserController extends InitController {
         }
     }
 
-    private void undoBanUser(HttpServletRequest request, HttpServletResponse response) {
+    private void undoBanUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             clientService.deleteBanUser(Long.parseLong(request.getParameter("id")));
             response.sendRedirect(Constants.ADMIN_PANEL);

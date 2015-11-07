@@ -4,6 +4,7 @@ import com.jean.taxi.dict.ClientType;
 import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.serviceImpl.Transaction;
 import com.jean.taxi.serviceImpl.TransactionHandlerImpl;
@@ -61,7 +62,7 @@ public class ClientDaoImplTest extends UnitilsJUnit4 {
         user.setClientGrant(clientGrant);
         executeTest(new Transaction<Long>() {
             @Override
-            public void doTransaction() throws Exception {
+            public void doTransaction() throws DaoException {
                 Long clientId = clientDao.addNew(user);
                 user.setId(clientId);
                 clientGrantDao.addNew(user.getClientGrant());
@@ -71,25 +72,25 @@ public class ClientDaoImplTest extends UnitilsJUnit4 {
     }
 
     @Test
-    public void testListModerators() {
+    public void testListModerators() throws DaoException {
         List moderatorList = clientDao.listAllModerators();
         assertTrue(assertList(moderatorList));
     }
 
     @Test
-    public void testListSimpleUsers() {
+    public void testListSimpleUsers() throws DaoException {
         List simpleUsersList = clientDao.listSimpleUsers();
         assertTrue(assertList(simpleUsersList));
     }
 
     @Test
-    public void testBanList() {
+    public void testBanList() throws DaoException {
         List banList = clientDao.banList();
         assertTrue(assertList(banList));
     }
 
     @Test
-    public void testGetByEmail() {
+    public void testGetByEmail() throws DaoException {
         String email = "midvey@googlemail.com";
         User user = clientDao.getByEmail(email);
         assertFalse(assertGetByEmail(email, user));

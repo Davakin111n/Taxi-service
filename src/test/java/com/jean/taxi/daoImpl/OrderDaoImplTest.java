@@ -4,6 +4,7 @@ import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.serviceImpl.Transaction;
 import com.jean.taxi.serviceImpl.TransactionHandlerImpl;
@@ -62,7 +63,7 @@ public class OrderDaoImplTest extends UnitilsJUnit4 {
         order.setAddressList(list);
         executeTest(new Transaction<Long>() {
             @Override
-            public void doTransaction() throws Exception {
+            public void doTransaction() throws DaoException {
                 Long orderId = orderDao.addNew(order);
                 order.setId(orderId);
                 for (OrderAddress address : order.getAddressList()) {
@@ -93,7 +94,7 @@ public class OrderDaoImplTest extends UnitilsJUnit4 {
         order.setAddressList(list);
         executeTest(new Transaction<Long>() {
             @Override
-            public void doTransaction() throws Exception {
+            public void doTransaction() throws DaoException {
                 Long orderId = orderDao.addNew(order);
                 order.setId(orderId);
                 assertTrue(assertOrder(orderDao.get(orderId), order));
@@ -108,37 +109,37 @@ public class OrderDaoImplTest extends UnitilsJUnit4 {
     }
 
     @Test
-    public void testOrderListByClient() {
+    public void testOrderListByClient() throws DaoException {
         List orderListByClient = orderDao.orderListByClient(1L);
         assertTrue(assertList(orderListByClient));
     }
 
     @Test
-    public void testNotActiveOrderListByClient() {
+    public void testNotActiveOrderListByClient() throws DaoException {
         List notActiveOrderListByClient = orderDao.notActiveOrderListByClient(1L);
         assertTrue(assertList(notActiveOrderListByClient));
     }
 
     @Test
-    public void testActiveOrderList() {
+    public void testActiveOrderList() throws DaoException {
         List activeOrderList = orderDao.activeOrderList();
         assertTrue(assertList(activeOrderList));
     }
 
     @Test
-    public void testNotActiveOrderList() {
+    public void testNotActiveOrderList() throws DaoException {
         List notActiveOrderList = orderDao.notActiveOrderList();
         assertTrue(assertList(notActiveOrderList));
     }
 
     @Test
-    public void testAccomplishedOrderList() {
+    public void testAccomplishedOrderList() throws DaoException {
         List accomplishedOrderList = orderDao.accomplishedOrderList();
         assertTrue(assertList(accomplishedOrderList));
     }
 
     @Test
-    public void testOrderListByFilter() {
+    public void testOrderListByFilter() throws DaoException {
         OrderFilter orderFilter = new OrderFilter("All", "No limits");
         List orderListByFilter = orderDao.orderListByFilter(orderFilter);
 

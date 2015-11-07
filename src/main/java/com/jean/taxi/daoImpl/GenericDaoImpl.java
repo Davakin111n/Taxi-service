@@ -44,41 +44,40 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
 
     public abstract String getAllFromTableQuery();
 
-    public abstract void getStatementForUpdateEntity(T obj, PreparedStatement preparedStatement);
+    public abstract void getStatementForUpdateEntity(T obj, PreparedStatement preparedStatement) throws DaoException;
 
-    public abstract void getStatementForInsertEntity(T obj, PreparedStatement preparedStatement);
+    public abstract void getStatementForInsertEntity(T obj, PreparedStatement preparedStatement) throws DaoException;
 
-    public abstract T parseSingleResultSet(ResultSet resultSet);
+    public abstract T parseSingleResultSet(ResultSet resultSet) throws DaoException;
 
     public abstract List<T> parseListResultSet(ResultSet resultSet) throws DaoException;
 
     public abstract Long addNew(T obj) throws DaoException;
 
-    public T get(Long id) {
-        T identifier;
+    public T get(Long id) throws DaoException {
+        T identifier = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(columnNumber, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             identifier = parseSingleResultSet(resultSet);
-            return identifier;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't get entity.");
         }
-        return null;
+        return identifier;
     }
 
-    public void remove(Long id) {
+    public void remove(Long id) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(getDeleteQuery()))) {
             preparedStatement.setLong(columnNumber, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Can't remove entity.");
         }
     }
 
-    public boolean isExists(Long id) {
+    public boolean isExists(Long id) throws DaoException {
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
                 .concat(getSelectQuery()))) {
             preparedStatement.setLong(columnNumber, id);
@@ -86,29 +85,30 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
             if (!list.isEmpty()) {
                 return true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't check is entity exists.");
         }
         return false;
     }
 
-    public void update(Identifier obj) {
+    public void update(Identifier obj) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(UPDATE
                 .concat(getUpdateQuery()))) {
             getStatementForUpdateEntity((T) obj, preparedStatement);
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't check is entity exists.");
         }
+
     }
 
-    public List listAll() {
+    public List listAll() throws DaoException {
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
                 .concat(getAllFromTableQuery()))) {
             ResultSet resultSet = preparedStatement.executeQuery();
             list = parseListResultSet(resultSet);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't list all entities.");
         }
         return list;
     }

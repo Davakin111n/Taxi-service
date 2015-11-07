@@ -3,6 +3,8 @@ package com.jean.taxi.serviceImpl;
 import com.jean.taxi.daoImpl.OrderDaoImpl;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.exception.DaoException;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.filter.OrderFilter;
 import org.junit.After;
 import org.junit.Before;
@@ -70,44 +72,44 @@ public class OrderServiceImplTest extends UnitilsJUnit4 {
     }
 
     @Test
-    public void testAddNew() {
+    public void testAddNew() throws ServiceException, DaoException {
         orderService.addNew(order);
         verify(orderDao, Mockito.times(0)).addNew(order);
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws DaoException, ServiceException {
         orderService.update(order);
         verify(orderDao, Mockito.times(0)).update(order);
     }
 
     @Test
-    public void testDeleteOrder() {
+    public void testDeleteOrder() throws ServiceException, DaoException {
         orderService.addNew(order);
         orderService.deleteOrder(order.getId());
         verify(orderDao, Mockito.times(0)).deleteOrder(order.getId());
     }
 
     @Test
-    public void testActiveOrderList() {
+    public void testActiveOrderList() throws ServiceException, DaoException {
         orderService.activeOrderList();
         verify(orderDao).activeOrderList();
     }
 
     @Test
-    public void testNotActiveOrderList() {
+    public void testNotActiveOrderList() throws DaoException, ServiceException {
         orderService.notActiveOrderList();
         verify(orderDao).notActiveOrderList();
     }
 
     @Test
-    public void testAccomplishedOrderList() {
+    public void testAccomplishedOrderList() throws ServiceException, DaoException {
         orderService.accomplishedOrderList();
         verify(orderDao).accomplishedOrderList();
     }
 
     @Test
-    public void testOrderListByFilter() {
+    public void testOrderListByFilter() throws DaoException, ServiceException {
         OrderFilter orderFilter = new OrderFilter("All", "No limits");
         orderService.orderListByFilter(orderFilter);
         verify(orderDao).orderListByFilter(orderFilter);

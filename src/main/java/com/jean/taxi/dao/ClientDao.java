@@ -14,7 +14,7 @@ public interface ClientDao {
 
     List clientListByFilter(ClientFilter clientFilter) throws DaoException;
 
-    List<User> banList();
+    List<User> banList() throws DaoException;
 
-    User getByEmail(String clientEmail);
+    User getByEmail(String clientEmail) throws DaoException;
 }

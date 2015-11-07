@@ -1,6 +1,7 @@
 package com.jean.taxi.daoImpl;
 
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.utils.ConnectionHolder;
 
 import javax.sql.DataSource;
@@ -48,27 +49,27 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
     }
 
     @Override
-    public void getStatementForUpdateEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) {
+    public void getStatementForUpdateEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) throws DaoException {
         convertUpdateEntity(orderAddress, preparedStatement);
     }
 
     @Override
-    public void getStatementForInsertEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) {
+    public void getStatementForInsertEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) throws DaoException {
         convertNewEntity(orderAddress, preparedStatement);
     }
 
     @Override
-    public OrderAddress parseSingleResultSet(ResultSet resultSet) {
+    public OrderAddress parseSingleResultSet(ResultSet resultSet) throws DaoException {
         return convertToEntity(resultSet);
     }
 
     @Override
-    public List<OrderAddress> parseListResultSet(ResultSet resultSet) {
+    public List<OrderAddress> parseListResultSet(ResultSet resultSet) throws DaoException {
         return convertListToEntity(resultSet);
     }
 
     @Override
-    public Long addNew(OrderAddress orderAddress) {
+    public Long addNew(OrderAddress orderAddress) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_ORDER_ADDRESS, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(orderAddress, preparedStatement);
             preparedStatement.executeUpdate();
@@ -77,57 +78,57 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
                 orderAddress.setId(resultSet.getLong(1));
                 return orderAddress.getId();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't add new order address.", e);
         }
         return null;
     }
 
     @Override
-    public void convertNewEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) {
+    public void convertNewEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) throws DaoException {
         try {
             preparedStatement.setLong(1, orderAddress.getOrderId());
             preparedStatement.setString(2, orderAddress.getDestinationAddress());
             preparedStatement.setString(3, orderAddress.getDestinationHouseNumber());
             preparedStatement.setString(4, orderAddress.getDestinationPorchNumber());
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't convert new order address entity in converter.", e);
         }
     }
 
     @Override
-    public void convertUpdateEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) {
+    public void convertUpdateEntity(OrderAddress orderAddress, PreparedStatement preparedStatement) throws DaoException {
         try {
             preparedStatement.setString(1, orderAddress.getDestinationAddress());
             preparedStatement.setString(2, orderAddress.getDestinationHouseNumber());
             preparedStatement.setString(3, orderAddress.getDestinationPorchNumber());
             preparedStatement.setLong(4, orderAddress.getId());
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't update order address entity in converter.", e);
         }
     }
 
     @Override
-    public OrderAddress convertToEntity(ResultSet resultSet) {
+    public OrderAddress convertToEntity(ResultSet resultSet) throws DaoException {
+        OrderAddress orderAddress = null;
         try {
             while (resultSet.next()) {
-                OrderAddress orderAddress = new OrderAddress();
+                orderAddress = new OrderAddress();
                 orderAddress.setId(resultSet.getLong("id"));
                 orderAddress.setOrderId(resultSet.getLong("id_order"));
                 orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
                 orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
                 orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
-                return orderAddress;
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't convert order address to entity in converter.", e);
         }
-        return null;
+        return orderAddress;
     }
 
     @Override
-    public List<OrderAddress> convertListToEntity(ResultSet resultSet) {
-        ArrayList reviewList = new ArrayList();
+    public List<OrderAddress> convertListToEntity(ResultSet resultSet) throws DaoException {
+        List<OrderAddress> reviewList = new ArrayList<OrderAddress>();
         try {
             while (resultSet.next()) {
                 OrderAddress orderAddress = new OrderAddress();
@@ -138,10 +139,9 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
                 orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
                 reviewList.add(orderAddress);
             }
-            return reviewList;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't convert order address list to entities.", e);
         }
-        return null;
+        return reviewList;
     }
 }

@@ -6,6 +6,8 @@ import com.jean.taxi.daoImpl.DaoFactoryImpl;
 import com.jean.taxi.entity.ClientGrant;
 import com.jean.taxi.entity.Identifier;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.DaoException;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.service.ClientService;
 import com.jean.taxi.utils.PasswordUtil;
@@ -24,11 +26,11 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
-    public void addNew(final User user) {
+    public void addNew(final User user) throws ServiceException {
         log.debug("Adding new user.");
         execute(new Transaction<Long>() {
             @Override
-            public void doTransaction() {
+            public void doTransaction() throws DaoException {
                 user.setPassword(PasswordUtil.encryptPassword(user.getPassword()));
                 user.setId(clientDao.addNew(user));
                 ClientGrant clientGrant = user.getClientGrant();
@@ -40,11 +42,11 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
-    public void update(final Identifier obj) {
+    public void update(final Identifier obj) throws ServiceException {
         final User user = (User) obj;
         execute(new Transaction<Long>() {
             @Override
-            public void doTransaction() {
+            public void doTransaction() throws DaoException {
                 clientDao.update(user);
                 clientGrantDao.update(user.getClientGrant());
             }
@@ -54,16 +56,24 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     @Override
     public boolean successLogin(String email, String password) {
         log.debug("Checking user login information.");
-        User user = dao.getByEmail(email);
-        if (user != null) {
-            return PasswordUtil.encryptPassword(password).equals(user.getPassword());
+        try {
+            User user = dao.getByEmail(email);
+            if (user != null) {
+                return PasswordUtil.encryptPassword(password).equals(user.getPassword());
+            }
+        } catch (DaoException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
     @Override
-    public List<User> listAllModerators() {
-        return dao.listAllModerators();
+    public List<User> listAllModerators() throws ServiceException {
+        try {
+            return dao.listAllModerators();
+        } catch (DaoException e) {
+            throw new ServiceException("Couldn't view moderator list.", e);
+        }
     }
 
     @Override
@@ -76,67 +86,99 @@ public class ClientServiceImpl extends GenericServiceImpl<User, ClientDaoImpl> i
     }
 
     @Override
-    public void madeSimpleUser(Long moderatorId) {
-        User user = dao.get(moderatorId);
-        ClientGrant clientGrant = user.getClientGrant();
-        clientGrant.setModerator(false);
-        user.setClientGrant(clientGrant);
-        update(user);
+    public void madeSimpleUser(Long moderatorId) throws ServiceException {
+        try {
+            User user = dao.get(moderatorId);
+            ClientGrant clientGrant = user.getClientGrant();
+            clientGrant.setModerator(false);
+            user.setClientGrant(clientGrant);
+            update(user);
+        } catch (DaoException e) {
+            throw new ServiceException("Can't made client grant to simple status.");
+        }
     }
 
     @Override
-    public void banUser(Long userId) {
-        User user = dao.get(userId);
-        ClientGrant clientGrant = user.getClientGrant();
-        clientGrant.setActive(false);
-        user.setClientGrant(clientGrant);
-        update(user);
+    public void banUser(Long userId) throws ServiceException {
+        try {
+            User user = dao.get(userId);
+            ClientGrant clientGrant = user.getClientGrant();
+            clientGrant.setActive(false);
+            user.setClientGrant(clientGrant);
+            update(user);
+        } catch (DaoException e) {
+            throw new ServiceException("Can't ban client.");
+        }
     }
 
     @Override
-    public void deleteBanUser(Long userId) {
-        User user = dao.get(userId);
-        ClientGrant clientGrant = user.getClientGrant();
-        clientGrant.setActive(true);
-        user.setClientGrant(clientGrant);
-        update(user);
+    public void deleteBanUser(Long userId) throws ServiceException {
+        try {
+            User user = dao.get(userId);
+            ClientGrant clientGrant = user.getClientGrant();
+            clientGrant.setActive(true);
+            user.setClientGrant(clientGrant);
+            update(user);
+        } catch (DaoException e) {
+            throw new ServiceException("Can't delete ban from user.");
+        }
     }
 
     @Override
-    public void changePassword(Long userId, final String password) throws Exception {
+    public void changePassword(Long userId, final String password) throws ServiceException {
         log.debug("Changing password to user.");
-        final User user = dao.get(userId);
-        execute(new Transaction<Long>() {
-            @Override
-            public void doTransaction() throws Exception {
-                if (user != null) {
-                    user.setPassword(PasswordUtil.encryptPassword(password));
-                    clientDao.update(user);
-                } else {
-                    throw new Exception();
-                }
+        try {
+            final User user = dao.get(userId);
+            if (user != null) {
+                execute(new Transaction<Long>() {
+                    @Override
+                    public void doTransaction() throws DaoException {
+                        user.setPassword(PasswordUtil.encryptPassword(password));
+                        clientDao.update(user);
+                    }
+                });
+            } else {
+                throw new ServiceException("Can't change password - client is empty or null.");
             }
-        });
+        } catch (DaoException e) {
+            throw new ServiceException("Can't change password.", e);
+        }
     }
 
     @Override
-    public List<User> listSimpleUsers() {
-        return dao.listSimpleUsers();
+    public List<User> listSimpleUsers() throws ServiceException {
+        try {
+            return dao.listSimpleUsers();
+        } catch (DaoException e) {
+            throw new ServiceException("Couldn't view simple users list.");
+        }
     }
 
     @Override
-    public List<User> clientListByFilter(ClientFilter clientFilter) {
-        return dao.clientListByFilter(clientFilter);
+    public List<User> clientListByFilter(ClientFilter clientFilter) throws ServiceException {
+        try {
+            return dao.clientListByFilter(clientFilter);
+        } catch (DaoException e) {
+            throw new ServiceException("Couldn't view client list by filter.");
+        }
     }
 
     @Override
-    public List<User> banList() {
-        return dao.banList();
+    public List<User> banList() throws ServiceException {
+        try {
+            return dao.banList();
+        } catch (DaoException e) {
+            throw new ServiceException("Couldn't view client ban list.");
+        }
     }
 
     @Override
-    public User getByEmail(String clientEmail) {
+    public User getByEmail(String clientEmail) throws ServiceException {
         log.debug("Getting user by email.");
-        return dao.getByEmail(clientEmail);
+        try {
+            return dao.getByEmail(clientEmail);
+        } catch (DaoException e) {
+            throw new ServiceException("Can't get client by email.");
+        }
     }
 }

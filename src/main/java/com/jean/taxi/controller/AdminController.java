@@ -5,6 +5,7 @@ import com.jean.taxi.dict.Constants;
 import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.filter.ClientFilter;
 import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.serviceImpl.ClientServiceImpl;
@@ -23,6 +24,7 @@ public class AdminController extends InitController {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
+            System.out.println(((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().toString());
             if (request.getSession().getAttribute(Constants.USER) != null
                     && ((User) request.getSession().getAttribute(Constants.USER)).getClientGrant().isAdmin()) {
                 if (request.getRequestURI().contains(Constants.ADMIN_PANEL)) {
@@ -39,6 +41,8 @@ public class AdminController extends InitController {
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServiceException e) {
             e.printStackTrace();
         }
     }
@@ -66,10 +70,12 @@ public class AdminController extends InitController {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
     }
 
-    private void viewOrdersByFilter(HttpServletRequest request, HttpServletResponse response) {
+    private void viewOrdersByFilter(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         OrderFilter orderFilter = new OrderFilter(request.getParameter("orderType"), request.getParameter("orderDateOption"));
         request.setAttribute(Constants.ORDERS, orderService.orderListByFilter(orderFilter));
         request.setAttribute(Constants.USERS, clientService.listAll());
@@ -85,7 +91,7 @@ public class AdminController extends InitController {
         }
     }
 
-    private void viewClientsByFilter(HttpServletRequest request, HttpServletResponse response) {
+    private void viewClientsByFilter(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         ClientFilter clientFilter = new ClientFilter(request.getParameter("clientType"), request.getParameter("clientDateOption"));
         request.setAttribute(Constants.USERS, clientService.clientListByFilter(clientFilter));
         request.setAttribute(Constants.ORDERS, orderService.listAll());

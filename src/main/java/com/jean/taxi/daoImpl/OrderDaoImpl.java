@@ -5,6 +5,7 @@ import com.jean.taxi.dict.DateOption;
 import com.jean.taxi.dict.OrderType;
 import com.jean.taxi.entity.Order;
 import com.jean.taxi.entity.OrderAddress;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.filter.OrderFilter;
 import com.jean.taxi.utils.ConnectionHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -64,48 +65,47 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
-    public void getStatementForUpdateEntity(Order order, PreparedStatement preparedStatement) {
+    public void getStatementForUpdateEntity(Order order, PreparedStatement preparedStatement) throws DaoException {
         convertUpdateEntity(order, preparedStatement);
     }
 
     @Override
-    public void getStatementForInsertEntity(Order order, PreparedStatement preparedStatement) {
+    public void getStatementForInsertEntity(Order order, PreparedStatement preparedStatement) throws DaoException {
         convertNewEntity(order, preparedStatement);
     }
 
     @Override
-    public Order parseSingleResultSet(ResultSet resultSet) {
+    public Order parseSingleResultSet(ResultSet resultSet) throws DaoException {
+        Order order = null;
         try {
             if (!resultSet.next()) {
-                throw new Exception();
+                throw new DaoException("Can't parse - result set is empty.");
             }
             resultSet.previous();
-            Order order = convertToEntity(resultSet);
-            return order;
-        } catch (Exception e) {
-            e.printStackTrace();
+            order = convertToEntity(resultSet);
+        } catch (SQLException e) {
+            throw new DaoException("Can't parse result set.");
         }
-        return null;
+        return order;
     }
 
     @Override
-    public List<Order> parseListResultSet(ResultSet resultSet) {
-        List orderList = null;
+    public List<Order> parseListResultSet(ResultSet resultSet) throws DaoException {
+        List<Order> orderList = null;
         try {
             if (!resultSet.next()) {
-                throw new Exception();
+                throw new DaoException("Can't parse - order result set is empty.");
             }
             resultSet.previous();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't parse - order result set list is empty.");
         }
-        return null;
+        return orderList;
     }
 
     @Override
-    public Long addNew(Order order) {
+    public Long addNew(Order order) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(order, preparedStatement);
             preparedStatement.executeUpdate();
@@ -114,95 +114,90 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setId(resultSet.getLong(1));
                 return order.getId();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't add new order.");
         }
         return null;
     }
 
     @Override
-    public void deleteOrder(Long orderId) {
+    public void deleteOrder(Long orderId) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(DELETE_FROM
                 .concat(ORDERS_ID))) {
             preparedStatement.setLong(GENERIC_FIRST_COLUMN, orderId);
             preparedStatement.executeQuery();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't delete order.");
         }
     }
 
     @Override
-    public List<Order> orderListByClient(Long clientId) {
-        List orderList;
+    public List<Order> orderListByClient(Long clientId) throws DaoException {
+        List<Order> orderList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             preparedStatement.setLong(GENERIC_FIRST_COLUMN, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't view order list by client.", e);
         }
-        return null;
+        return orderList;
     }
 
     @Override
-    public List<Order> notActiveOrderListByClient(Long clientId) {
-        List orderList;
+    public List<Order> notActiveOrderListByClient(Long clientId) throws DaoException {
+        List<Order> orderList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM_ORDERS_BY_CLIENTS_ID)) {
             preparedStatement.setLong(GENERIC_FIRST_COLUMN, clientId);
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't view not active order list by client.", e);
         }
-        return null;
+        return orderList;
     }
 
     @Override
-    public List<Order> activeOrderList() {
-        List orderList;
+    public List<Order> activeOrderList() throws DaoException {
+        List<Order> orderList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't view active order list.", e);
         }
-        return null;
+        return orderList;
     }
 
     @Override
-    public List<Order> notActiveOrderList() {
-        List orderList;
+    public List<Order> notActiveOrderList() throws DaoException {
+        List<Order> orderList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_NOT_ACTIVE_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't view not active order list.", e);
         }
-        return null;
+        return orderList;
     }
 
     @Override
-    public List<Order> accomplishedOrderList() {
-        List orderList;
+    public List<Order> accomplishedOrderList() throws DaoException {
+        List<Order> orderList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_ALL_ACCOMPLISHED_ORDERS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't view accomplished order list.", e);
         }
-        return null;
+        return orderList;
     }
 
     @Override
-    public List<Order> orderListByFilter(OrderFilter orderFilter) {
+    public List<Order> orderListByFilter(OrderFilter orderFilter) throws DaoException {
         DateTime dateTime = new DateTime();
         LocalDate localDate = new LocalDate();
-        List orderList = null;
+        List<Order> orderList = null;
         if (orderFilter.getOrderType() != null) {
             if (StringUtils.equals(orderFilter.getOrderType(), OrderType.NOT_ACTIVE.getTitle())) {
                 genericStringBuilder.append(SELECT_ALL_NOT_ACTIVE_ORDERS);
@@ -246,9 +241,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(genericStringBuilder.toString())) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
-            return orderList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't view order list by filter.", e);
         } finally {
             dateTime = null;
             localDate = null;
@@ -258,7 +252,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
-    public void convertNewEntity(Order order, PreparedStatement preparedStatement) {
+    public void convertNewEntity(Order order, PreparedStatement preparedStatement) throws DaoException {
         try {
             int statementValueCount = 1;
             preparedStatement.setLong(statementValueCount++, order.getClientId());
@@ -275,12 +269,12 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             preparedStatement.setString(statementValueCount++, order.getContactName());
             preparedStatement.setString(statementValueCount++, order.getCarOption());
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Can't convert new order entity in converter.", e);
         }
     }
 
     @Override
-    public void convertUpdateEntity(Order order, PreparedStatement preparedStatement) {
+    public void convertUpdateEntity(Order order, PreparedStatement preparedStatement) throws DaoException {
         try {
             int statementValueCount = 1;
             preparedStatement.setString(statementValueCount++, order.getTitle());
@@ -297,15 +291,16 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
             preparedStatement.setString(statementValueCount++, order.getCarOption());
             preparedStatement.setLong(statementValueCount++, order.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Can't update order entity in converter.", e);
         }
     }
 
     @Override
-    public Order convertToEntity(ResultSet resultSet) {
+    public Order convertToEntity(ResultSet resultSet) throws DaoException {
+        Order order = null;
         try {
             while (resultSet.next()) {
-                Order order = new Order();
+                order = new Order();
                 order.setId(resultSet.getLong("ord.id"));
                 order.setClientId(resultSet.getLong("ord.id_client"));
                 order.setTitle(resultSet.getString("ord.title"));
@@ -335,15 +330,15 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setAddressList(orderAddressList);
                 return order;
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't convert order to entity in converter.", e);
         }
         return null;
     }
 
     @Override
-    public List<Order> convertListToEntity(ResultSet resultSet) {
-        ArrayList orderList = new ArrayList();
+    public List<Order> convertListToEntity(ResultSet resultSet) throws DaoException {
+        List<Order> orderList = new ArrayList<Order>();
         try {
             while (resultSet.next()) {
                 Order order = new Order();
@@ -376,10 +371,9 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 order.setAddressList(orderAddressList);
                 orderList.add(order);
             }
-            return orderList;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Can't convert order list to entities in converter.", e);
         }
-        return null;
+        return orderList;
     }
 }

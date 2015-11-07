@@ -2,6 +2,7 @@ package com.jean.taxi.controller;
 
 import com.jean.taxi.dict.Constants;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.service.ClientService;
 import com.jean.taxi.validator.LoginValidator;
 
@@ -62,11 +63,13 @@ public class LoginController extends InitController {
                 e.printStackTrace();
             }
         } else {
-            User user = this.clientService.getByEmail(request.getParameter("email"));
-            request.getSession().setAttribute(Constants.USER, user);
             try {
+                User user = this.clientService.getByEmail(request.getParameter("email"));
+                request.getSession().setAttribute(Constants.USER, user);
                 response.sendRedirect(Constants.PRIVATE_AREA);
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServiceException e) {
                 e.printStackTrace();
             }
         }

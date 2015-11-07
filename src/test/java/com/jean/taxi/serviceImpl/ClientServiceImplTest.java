@@ -2,6 +2,8 @@ package com.jean.taxi.serviceImpl;
 
 import com.jean.taxi.daoImpl.ClientDaoImpl;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.DaoException;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.filter.ClientFilter;
 import org.junit.After;
 import org.junit.Before;
@@ -64,31 +66,31 @@ public class ClientServiceImplTest extends UnitilsJUnit4 {
     }
 
     @Test
-    public void testAddNew() {
+    public void testAddNew() throws ServiceException, DaoException {
         clientService.addNew(user);
         verify(clientDao, Mockito.times(0)).addNew(user);
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws ServiceException, DaoException {
         clientService.update(user);
         verify(clientDao, Mockito.times(0)).update(user);
     }
 
     @Test
-    public void testListAllModerators() {
+    public void testListAllModerators() throws ServiceException, DaoException {
         clientService.listAllModerators();
         verify(clientDao).listAllModerators();
     }
 
     @Test
-    public void testListSimpleUsers() {
+    public void testListSimpleUsers() throws DaoException, ServiceException {
         clientService.listSimpleUsers();
         verify(clientDao).listSimpleUsers();
     }
 
     @Test
-    public void testClientListByFilter() {
+    public void testClientListByFilter() throws ServiceException, DaoException {
         ClientFilter clientFilter = new ClientFilter();
         clientFilter.setClientType("All");
         clientFilter.setDateValue("No limits");
@@ -98,13 +100,13 @@ public class ClientServiceImplTest extends UnitilsJUnit4 {
     }
 
     @Test
-    public void testBanList() {
+    public void testBanList() throws ServiceException, DaoException {
         clientService.banList();
         verify(clientDao).banList();
     }
 
     @Test
-    public void testGetByEmail() {
+    public void testGetByEmail() throws ServiceException, DaoException {
         clientService.addNew(user);
         clientService.getByEmail("email");
         verify(clientDao).getByEmail("email");

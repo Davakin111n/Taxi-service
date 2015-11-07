@@ -2,6 +2,7 @@ package com.jean.taxi.daoImpl;
 
 
 import com.jean.taxi.entity.ClientGrant;
+import com.jean.taxi.exception.DaoException;
 import com.jean.taxi.utils.ConnectionHolder;
 
 import javax.sql.DataSource;
@@ -49,27 +50,27 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
     }
 
     @Override
-    public void getStatementForUpdateEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) {
+    public void getStatementForUpdateEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) throws DaoException {
         convertUpdateEntity(clientGrant, preparedStatement);
     }
 
     @Override
-    public void getStatementForInsertEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) {
+    public void getStatementForInsertEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) throws DaoException {
         convertNewEntity(clientGrant, preparedStatement);
     }
 
     @Override
-    public ClientGrant parseSingleResultSet(ResultSet resultSet) {
+    public ClientGrant parseSingleResultSet(ResultSet resultSet) throws DaoException {
         return convertToEntity(resultSet);
     }
 
     @Override
-    public List<ClientGrant> parseListResultSet(ResultSet resultSet) {
+    public List<ClientGrant> parseListResultSet(ResultSet resultSet) throws DaoException {
         return convertListToEntity(resultSet);
     }
 
     @Override
-    public Long addNew(ClientGrant clientGrant) {
+    public Long addNew(ClientGrant clientGrant) throws DaoException {
         try (PreparedStatement preparedStatement = ConnectionHolder.getLocalConnection().prepareStatement(INSERT_NEW_CLIENT_GRANT, Statement.RETURN_GENERATED_KEYS)) {
             convertNewEntity(clientGrant, preparedStatement);
             preparedStatement.executeUpdate();
@@ -78,14 +79,14 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
                 clientGrant.setId(resultSet.getLong(1));
                 return clientGrant.getId();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Couldn't add new client grant.", e);
         }
         return null;
     }
 
     @Override
-    void convertNewEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) {
+    void convertNewEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) throws DaoException {
         byte valueCounter = 1;
         try {
             preparedStatement.setLong(valueCounter++, clientGrant.getClientId());
@@ -93,12 +94,12 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
             preparedStatement.setBoolean(valueCounter++, clientGrant.isModerator());
             preparedStatement.setBoolean(valueCounter++, clientGrant.isActive());
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Couldn't convert client grant new entity.", e);
         }
     }
 
     @Override
-    void convertUpdateEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) {
+    void convertUpdateEntity(ClientGrant clientGrant, PreparedStatement preparedStatement) throws DaoException {
         byte valueCounter = 1;
         try {
             preparedStatement.setBoolean(valueCounter++, clientGrant.isAdmin());
@@ -106,15 +107,16 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
             preparedStatement.setBoolean(valueCounter++, clientGrant.isActive());
             preparedStatement.setLong(valueCounter++, clientGrant.getClientId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Couldn't update client grant entity.", e);
         }
     }
 
     @Override
-    ClientGrant convertToEntity(ResultSet resultSet) {
+    ClientGrant convertToEntity(ResultSet resultSet) throws DaoException {
+        ClientGrant clientGrant = null;
         try {
             while (resultSet.next()) {
-                ClientGrant clientGrant = new ClientGrant();
+                clientGrant = new ClientGrant();
                 clientGrant.setId(resultSet.getLong("id"));
                 clientGrant.setClientId(resultSet.getLong("id_client"));
                 clientGrant.setAdmin(resultSet.getBoolean("admin"));
@@ -122,15 +124,15 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
                 clientGrant.setActive(resultSet.getBoolean("active"));
                 return clientGrant;
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Couldn't convert to client grant entity.", e);
         }
-        return null;
+        return clientGrant;
     }
 
     @Override
-    List<ClientGrant> convertListToEntity(ResultSet resultSet) {
-        ArrayList clientGrantList = new ArrayList();
+    List<ClientGrant> convertListToEntity(ResultSet resultSet) throws DaoException {
+        List<ClientGrant> clientGrantList = new ArrayList<ClientGrant>();
         try {
             while (resultSet.next()) {
                 ClientGrant clientGrant = new ClientGrant();
@@ -141,10 +143,9 @@ public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
                 clientGrant.setActive(resultSet.getBoolean("active"));
                 clientGrantList.add(clientGrant);
             }
-            return clientGrantList;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            throw new DaoException("Couldn't convert list of client's grant's entities.", e);
         }
-        return null;
+        return clientGrantList;
     }
 }

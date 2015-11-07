@@ -2,6 +2,7 @@ package com.jean.taxi.controller;
 
 import com.jean.taxi.dict.Constants;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.service.OrderService;
 
 import javax.servlet.ServletException;
@@ -29,6 +30,8 @@ public class PrivateAreaController extends InitController {
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServiceException e) {
             e.printStackTrace();
         }
     }

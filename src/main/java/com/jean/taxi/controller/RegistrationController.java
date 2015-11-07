@@ -2,6 +2,7 @@ package com.jean.taxi.controller;
 
 import com.jean.taxi.dict.Constants;
 import com.jean.taxi.entity.User;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.service.ClientService;
 import com.jean.taxi.serviceImpl.ClientServiceImpl;
 import com.jean.taxi.validator.RegistrationValidator;
@@ -69,6 +70,8 @@ public class RegistrationController extends InitController {
                 request.getSession().setAttribute(Constants.USER, user);
                 response.sendRedirect(Constants.PRIVATE_AREA);
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServiceException e) {
                 e.printStackTrace();
             }
         }

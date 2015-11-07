@@ -1,6 +1,8 @@
 package com.jean.taxi.serviceImpl;
 
 
+import com.jean.taxi.exception.DaoException;
+import com.jean.taxi.exception.ServiceException;
 import com.jean.taxi.utils.ConnectionHolder;
 import com.jean.taxi.utils.DataBaseUtil;
 
@@ -16,20 +18,20 @@ public class TransactionHandlerImpl {
         dataSource = newDataSource;
     }
 
-    public static void execute(Transaction transaction) {
+    public static void execute(Transaction transaction) throws ServiceException {
         try (Connection connection = getConnection()) {
             try {
                 ConnectionHolder.setLocalConnection(connection);
                 transaction.doTransaction();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (DaoException e) {
                 rollBack(connection);
+                throw new ServiceException("Can't commit transaction in transaction handler.", e);
             } finally {
                 commit(connection);
                 ConnectionHolder.removeLocalConnection();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ServiceException("Transaction not done!", e);
         }
     }
 
@@ -38,9 +40,9 @@ public class TransactionHandlerImpl {
             try {
                 ConnectionHolder.setLocalConnection(connection);
                 transaction.doTransaction();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (DaoException e) {
                 rollBack(connection);
+                e.printStackTrace();
             } finally {
                 rollBack(connection);
                 ConnectionHolder.removeLocalConnection();
@@ -71,8 +73,9 @@ public class TransactionHandlerImpl {
     }
 
     private static Connection getConnection() {
+        Connection connection = null;
         try {
-            Connection connection = dataSource.getConnection();
+            connection = dataSource.getConnection();
             if (connection.getAutoCommit()) {
                 connection.setAutoCommit(false);
             }

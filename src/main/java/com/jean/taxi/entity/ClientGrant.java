@@ -60,4 +60,14 @@ public class ClientGrant extends Identifier {
         result = 31 * result + (moderator ? 1 : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ClientGrant{" +
+                "clientId=" + clientId +
+                ", admin=" + admin +
+                ", active=" + active +
+                ", moderator=" + moderator +
+                '}';
+    }
 }
