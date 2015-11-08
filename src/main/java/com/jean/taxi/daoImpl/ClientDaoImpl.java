@@ -28,10 +28,10 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     private final String INSERT_NEW_USER = "INSERT INTO `CLIENT`(EMAIL, ADDRESS, PASSWORD, PHONE, SECOND_PHONE, THIRD_PHONE, CLIENT_NAME, CLIENT_LAST_NAME, SKYPE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final String UPDATE_CLIENT = "`CLIENT` SET EMAIL = ?, ADDRESS = ?, PASSWORD = ?, PHONE = ?, SECOND_PHONE = ?, THIRD_PHONE = ?, CLIENT_NAME = ?, CLIENT_LAST_NAME = ?, SKYPE = ? WHERE ID = ?";
     private final String SELECT_ALL_MODERATORS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND MODERATOR=true AND GR.ADMIN = false";
-    private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` gr ON CL.ID = GR.ID_CLIENT AND GR.MODERATOR = false AND GR.ADMIN = false";
+    private final String SELECT_ALL_SIMPLE_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND GR.MODERATOR = false AND GR.ADMIN = false";
     private final String SELECT_ALL_ACTIVE_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND GR.ADMIN = false AND GR.ACTIVE = true";
     private final String SELECT_BAN_LIST_USERS = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.ID = GR.ID_CLIENT AND GR.ACTIVE = false AND GR.ADMIN = false";
-    private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON EMAIL =?";
+    private final String SELECT_CLIENT_BY_EMAIL = "SELECT * FROM `CLIENT` CL JOIN `CLIENT_GRANT` GR ON CL.EMAIL =? AND CL.ID = GR.ID_CLIENT";
     private static final byte GENERIC_FIRST_COLUMN = 1;
     private final String CLIENT_ALIAS = "CL";
     private final String CLIENT_GRANT_ALIAS = "GR";
@@ -82,20 +82,7 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
 
     @Override
     public List<User> parseListResultSet(ResultSet resultSet) throws DaoException {
-        List userList = null;
-        try {
-            if (!resultSet.next()) {
-                throw new DaoException("Could not parse result set. Result set is empty!");
-            }
-            resultSet.previous();
-            userList = convertListToEntity(resultSet);
-            return userList;
-        } catch (SQLException e) {
-            throw new DaoException("Could not parse result set!", e);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return convertListToEntity(resultSet);
     }
 
     @Override
@@ -142,7 +129,6 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
     public List<User> clientListByFilter(ClientFilter clientFilter) throws DaoException {
         DateTime dateTime = new DateTime();
         LocalDate localDate = new LocalDate();
-        List<User> clientList = null;
         if (clientFilter.getClientType() != null) {
             if (StringUtils.equals(clientFilter.getClientType(), ClientType.ALL.getTitle())) {
                 genericStringBuilder.append(SELECT_FROM)
@@ -182,6 +168,8 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
                         .append("-01' AS DATE) AND current_timestamp();");
             }
         }
+
+        List<User> clientList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(genericStringBuilder.toString())) {
             ResultSet resultSet = preparedStatement.executeQuery();
             clientList = convertListToEntity(resultSet);
@@ -261,21 +249,21 @@ public class ClientDaoImpl extends GenericDaoImpl<User> implements ClientDao {
         try {
             while (resultSet.next()) {
                 user = new User();
-                user.setId(resultSet.getLong("cl.id"));
-                user.setEmail(resultSet.getString("cl.email"));
-                user.setPassword(resultSet.getString("cl.password"));
-                user.setAddress(resultSet.getString("cl.address"));
-                user.setClientName(resultSet.getString("cl.client_name"));
-                user.setClientLastName(resultSet.getString("cl.client_last_name"));
-                user.setPhone(resultSet.getString("cl.phone"));
-                user.setSkype(resultSet.getString("cl.skype"));
-                user.setRegistrationDate(resultSet.getDate("cl.create_date"));
-                ClientGrant clientGrant = new ClientGrant();
-                clientGrant.setId(resultSet.getLong("gr.id"));
-                clientGrant.setClientId(resultSet.getLong("gr.id_client"));
-                clientGrant.setAdmin(resultSet.getBoolean("gr.admin"));
-                clientGrant.setModerator(resultSet.getBoolean("gr.moderator"));
-                clientGrant.setActive(resultSet.getBoolean("gr.active"));
+                user.setId(resultSet.getLong("CL.ID"));
+                user.setEmail(resultSet.getString("CL.EMAIL"));
+                user.setPassword(resultSet.getString("CL.PASSWORD"));
+                user.setAddress(resultSet.getString("CL.ADDRESS"));
+                user.setClientName(resultSet.getString("CL.CLIENT_NAME"));
+                user.setClientLastName(resultSet.getString("CL.CLIENT_LAST_NAME"));
+                user.setPhone(resultSet.getString("CL.PHONE"));
+                user.setSkype(resultSet.getString("CL.SKYPE"));
+                user.setRegistrationDate(resultSet.getDate("CL.CREATE_DATE"));
+                ClientGrant clientGrant = user.getClientGrant();
+                clientGrant.setId(resultSet.getLong("GR.ID"));
+                clientGrant.setClientId(resultSet.getLong("GR.ID_CLIENT"));
+                clientGrant.setAdmin(resultSet.getBoolean("GR.ADMIN"));
+                clientGrant.setModerator(resultSet.getBoolean("GR.MODERATOR"));
+                clientGrant.setActive(resultSet.getBoolean("GR.ACTIVE"));
                 user.setClientGrant(clientGrant);
             }
         } catch (SQLException e) {

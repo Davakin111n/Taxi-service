@@ -23,15 +23,15 @@ import java.util.List;
 
 public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
-    private static final String ORDER_TABLE = "`order` ord JOIN `order_address` ord_ad ON ord.id = ord_ad.id_order";
-    private static final String ORDERS_ID = "`order` ord JOIN `order_address` ord_ad ON ord.id=? AND ord_ad.id_order = ord.id";
-    private static final String DELETE_QUERY = "`order` ord WHERE id=?;";
-    private static final String INSERT_NEW_ORDER = "INSERT INTO `order`(id_client, title, note, price, active, begin_address, house_number, porch_number, on_performance, accomplished, phone, contact_name, car_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_ORDER = "`order` ord SET title = ?, note = ?, price = ?, active = ?, begin_address =?, house_number = ?, porch_number=?, on_performance = ?, accomplished = ? , phone=?, contact_name=?, car_option=? WHERE id =?";
-    private static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.id_client=? AND ord_ad.id_order = ord.id";
-    private static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.active= true AND ord.id = ord_ad.id_order";
-    private static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.active = false AND ord.id = ord_ad.id_order";
-    private static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM `order` ord JOIN `order_address` ord_ad ON ord.accomplished = true AND ord.id = ord_ad.id_order";
+    private static final String ORDER_TABLE = "`ORDER` ORD JOIN `ORDER_ADDRESS` ORD_AD ON ORD.ID = ORD_AD.ID_ORDER";
+    private static final String ORDERS_ID = "`ORDER` ORD JOIN `ORDER_ADDRESS` ORD_AD ON ORD.ID=? AND ORD_AD.ID_ORDER = ORD.ID";
+    private static final String DELETE_QUERY = "`ORDER` ORD WHERE ORD.ID=?;";
+    private static final String INSERT_NEW_ORDER = "INSERT INTO `ORDER`(ID_CLIENT, TITLE, NOTE, PRICE, ACTIVE, BEGIN_ADDRESS, HOUSE_NUMBER, PORCH_NUMBER, ON_PERFORMANCE, ACCOMPLISHED, PHONE, CONTACT_NAME, CAR_OPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_ORDER = "`ORDER` ORD SET TITLE = ?, NOTE = ?, PRICE = ?, ACTIVE = ?, BEGIN_ADDRESS =?, HOUSE_NUMBER = ?, PORCH_NUMBER=?, ON_PERFORMANCE = ?, ACCOMPLISHED = ? , PHONE=?, CONTACT_NAME=?, CAR_OPTION=? WHERE ORD.ID =?";
+    private static final String SELECT_FROM_ORDERS_BY_CLIENTS_ID = "SELECT * FROM `ORDER` ORD JOIN `ORDER_ADDRESS` ORD_AD ON ORD.ID_CLIENT=? AND ORD_AD.ID_ORDER = ORD.ID";
+    private static final String SELECT_ALL_ACTIVE_ORDERS = "SELECT * FROM `ORDER` ORD JOIN `ORDER_ADDRESS` ORD_AD ON ORD.ACTIVE= true AND ORD.ID = ORD_AD.ID_ORDER";
+    private static final String SELECT_ALL_NOT_ACTIVE_ORDERS = "SELECT * FROM `ORDER` ORD JOIN `ORDER_ADDRESS` ORD_AD ON ORD.ACTIVE = false AND ORD.ID = ORD_AD.ID_ORDER";
+    private static final String SELECT_ALL_ACCOMPLISHED_ORDERS = "SELECT * FROM `ORDER` ORD JOIN `ORDER_ADDRESS` ORD_AD ON ORD.ACCOMPLISHED = true AND ORD.ID = ORD_AD.ID_ORDER";
 
     private static final byte GENERIC_FIRST_COLUMN = 1;
 
@@ -76,32 +76,12 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
 
     @Override
     public Order parseSingleResultSet(ResultSet resultSet) throws DaoException {
-        Order order = null;
-        try {
-            if (!resultSet.next()) {
-                throw new DaoException("Can't parse - result set is empty.");
-            }
-            resultSet.previous();
-            order = convertToEntity(resultSet);
-        } catch (SQLException e) {
-            throw new DaoException("Can't parse result set.");
-        }
-        return order;
+        return convertToEntity(resultSet);
     }
 
     @Override
     public List<Order> parseListResultSet(ResultSet resultSet) throws DaoException {
-        List<Order> orderList = null;
-        try {
-            if (!resultSet.next()) {
-                throw new DaoException("Can't parse - order result set is empty.");
-            }
-            resultSet.previous();
-            orderList = convertListToEntity(resultSet);
-        } catch (SQLException e) {
-            throw new DaoException("Can't parse - order result set list is empty.");
-        }
-        return orderList;
+        return convertListToEntity(resultSet);
     }
 
     @Override
@@ -197,7 +177,6 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     public List<Order> orderListByFilter(OrderFilter orderFilter) throws DaoException {
         DateTime dateTime = new DateTime();
         LocalDate localDate = new LocalDate();
-        List<Order> orderList = null;
         if (orderFilter.getOrderType() != null) {
             if (StringUtils.equals(orderFilter.getOrderType(), OrderType.NOT_ACTIVE.getTitle())) {
                 genericStringBuilder.append(SELECT_ALL_NOT_ACTIVE_ORDERS);
@@ -216,28 +195,30 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
                 genericStringBuilder.append(";");
             } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_TODAY.getTitle())) {
                 genericStringBuilder
-                        .append(" AND ord.create_date LIKE '")
+                        .append(" AND ORD.CREATE_DATE LIKE '")
                         .append(dateTime.getYear())
                         .append("-")
                         .append(dateTime.getMonthOfYear())
                         .append("-")
                         .append(dateTime.getDayOfMonth())
                         .append("%';");
+                System.out.println("Год:" + dateTime.getYear() + dateTime.getMonthOfYear() + dateTime.getDayOfMonth());
             } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_WEEK.getTitle())) {
                 genericStringBuilder
-                        .append(" AND ord.create_date BETWEEN CAST('")
+                        .append(" AND ORD.CREATE_DATE BETWEEN CAST('")
                         .append(localDate.withDayOfWeek(DateTimeConstants.MONDAY))
                         .append("' AS DATE) AND current_timestamp();");
-                System.out.println(genericStringBuilder.toString());
             } else if (StringUtils.equals(orderFilter.getDateValue(), DateOption.BY_MONTH.getTitle())) {
                 genericStringBuilder
-                        .append(" AND ord.create_date BETWEEN CAST('")
+                        .append(" AND ORD.CREATE_DATE BETWEEN CAST('")
                         .append(dateTime.getYear())
                         .append("-")
                         .append(dateTime.getMonthOfYear())
                         .append("-01' AS DATE) AND current_timestamp();");
             }
         }
+
+        List<Order> orderList = null;
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(genericStringBuilder.toString())) {
             ResultSet resultSet = preparedStatement.executeQuery();
             orderList = convertListToEntity(resultSet);
@@ -301,31 +282,31 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         try {
             while (resultSet.next()) {
                 order = new Order();
-                order.setId(resultSet.getLong("ord.id"));
-                order.setClientId(resultSet.getLong("ord.id_client"));
-                order.setTitle(resultSet.getString("ord.title"));
-                order.setNote(resultSet.getString("ord.note"));
-                order.setPrice(resultSet.getString("ord.price"));
-                order.setCreateDate(resultSet.getDate("ord.create_date"));
-                order.setActive(resultSet.getBoolean("ord.active"));
-                order.setBeginAddress(resultSet.getString("ord.begin_address"));
-                order.setHouseNumber(resultSet.getString("ord.house_number"));
-                order.setPorchNumber(resultSet.getString("ord.porch_number"));
-                order.setOnPerfomance(resultSet.getBoolean("ord.on_performance"));
-                order.setAccomplished(resultSet.getBoolean("ord.accomplished"));
-                order.setPhone(resultSet.getString("ord.phone"));
-                order.setContactName(resultSet.getString("ord.contact_name"));
-                order.setCarOption(resultSet.getString("ord.car_option"));
+                order.setId(resultSet.getLong("ORD.ID"));
+                order.setClientId(resultSet.getLong("ORD.ID_CLIENT"));
+                order.setTitle(resultSet.getString("ORD.TITLE"));
+                order.setNote(resultSet.getString("ORD.NOTE"));
+                order.setPrice(resultSet.getString("ORD.PRICE"));
+                order.setCreateDate(resultSet.getDate("ORD.CREATE_DATE"));
+                order.setActive(resultSet.getBoolean("ORD.ACTIVE"));
+                order.setBeginAddress(resultSet.getString("ORD.BEGIN_ADDRESS"));
+                order.setHouseNumber(resultSet.getString("ORD.HOUSE_NUMBER"));
+                order.setPorchNumber(resultSet.getString("ORD.PORCH_NUMBER"));
+                order.setOnPerfomance(resultSet.getBoolean("ORD.ON_PERFORMANCE"));
+                order.setAccomplished(resultSet.getBoolean("ORD.ACCOMPLISHED"));
+                order.setPhone(resultSet.getString("ORD.PHONE"));
+                order.setContactName(resultSet.getString("ORD.CONTACT_NAME"));
+                order.setCarOption(resultSet.getString("ORD.CAR_OPTION"));
                 List orderAddressList = order.getAddressList();
                 do {
                     OrderAddress orderAddress = new OrderAddress();
-                    orderAddress.setId(resultSet.getLong("ord_ad.id"));
-                    orderAddress.setId(resultSet.getLong("ord_ad.id_order"));
-                    orderAddress.setDestinationAddress(resultSet.getString("ord_ad.destination_address"));
-                    orderAddress.setDestinationHouseNumber(resultSet.getString("ord_ad.destination_house_number"));
-                    orderAddress.setDestinationPorchNumber(resultSet.getString("ord_ad.destination_porch_number"));
+                    orderAddress.setId(resultSet.getLong("ORD_AD.ID"));
+                    orderAddress.setId(resultSet.getLong("ORD_AD.ID_ORDER"));
+                    orderAddress.setDestinationAddress(resultSet.getString("ORD_AD.DESTINATION_ADDRESS"));
+                    orderAddress.setDestinationHouseNumber(resultSet.getString("ORD_AD.DESTINATION_HOUSE_NUMBER"));
+                    orderAddress.setDestinationPorchNumber(resultSet.getString("ORD_AD.DESTINATION_PORCH_NUMBER"));
                     orderAddressList.add(orderAddress);
-                } while (resultSet.next() && resultSet.getLong("ord.id") == order.getId());
+                } while (resultSet.next() && resultSet.getLong("ORD.ID") == order.getId());
                 resultSet.previous();
                 order.setAddressList(orderAddressList);
                 return order;
@@ -342,31 +323,31 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         try {
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getLong("ord.id"));
-                order.setClientId(resultSet.getLong("ord.id_client"));
-                order.setTitle(resultSet.getString("ord.title"));
-                order.setNote(resultSet.getString("ord.note"));
-                order.setPrice(resultSet.getString("ord.price"));
-                order.setCreateDate(resultSet.getDate("ord.create_date"));
-                order.setActive(resultSet.getBoolean("ord.active"));
-                order.setBeginAddress(resultSet.getString("ord.begin_address"));
-                order.setHouseNumber(resultSet.getString("ord.house_number"));
-                order.setPorchNumber(resultSet.getString("ord.porch_number"));
-                order.setOnPerfomance(resultSet.getBoolean("ord.on_performance"));
-                order.setAccomplished(resultSet.getBoolean("ord.accomplished"));
-                order.setPhone(resultSet.getString("ord.phone"));
-                order.setContactName(resultSet.getString("ord.contact_name"));
-                order.setCarOption(resultSet.getString("ord.car_option"));
+                order.setId(resultSet.getLong("ORD.ID"));
+                order.setClientId(resultSet.getLong("ORD.ID_CLIENT"));
+                order.setTitle(resultSet.getString("ORD.TITLE"));
+                order.setNote(resultSet.getString("ORD.NOTE"));
+                order.setPrice(resultSet.getString("ORD.PRICE"));
+                order.setCreateDate(resultSet.getDate("ORD.CREATE_DATE"));
+                order.setActive(resultSet.getBoolean("ORD.ACTIVE"));
+                order.setBeginAddress(resultSet.getString("ORD.BEGIN_ADDRESS"));
+                order.setHouseNumber(resultSet.getString("ORD.HOUSE_NUMBER"));
+                order.setPorchNumber(resultSet.getString("ORD.PORCH_NUMBER"));
+                order.setOnPerfomance(resultSet.getBoolean("ORD.ON_PERFORMANCE"));
+                order.setAccomplished(resultSet.getBoolean("ORD.ACCOMPLISHED"));
+                order.setPhone(resultSet.getString("ORD.PHONE"));
+                order.setContactName(resultSet.getString("ORD.CONTACT_NAME"));
+                order.setCarOption(resultSet.getString("ORD.CAR_OPTION"));
                 List orderAddressList = order.getAddressList();
                 do {
                     OrderAddress orderAddress = new OrderAddress();
-                    orderAddress.setId(resultSet.getLong("ord_ad.id"));
-                    orderAddress.setId(resultSet.getLong("ord_ad.id_order"));
-                    orderAddress.setDestinationAddress(resultSet.getString("ord_ad.destination_address"));
-                    orderAddress.setDestinationHouseNumber(resultSet.getString("ord_ad.destination_house_number"));
-                    orderAddress.setDestinationPorchNumber(resultSet.getString("ord_ad.destination_porch_number"));
+                    orderAddress.setId(resultSet.getLong("ORD_AD.ID"));
+                    orderAddress.setId(resultSet.getLong("ORD_AD.ID_ORDER"));
+                    orderAddress.setDestinationAddress(resultSet.getString("ORD_AD.DESTINATION_ADDRESS"));
+                    orderAddress.setDestinationHouseNumber(resultSet.getString("ORD_AD.DESTINATION_HOUSE_NUMBER"));
+                    orderAddress.setDestinationPorchNumber(resultSet.getString("ORD_AD.DESTINATION_PORCH_NUMBER"));
                     orderAddressList.add(orderAddress);
-                } while (resultSet.next() && resultSet.getLong("ord.id") == order.getId());
+                } while (resultSet.next() && resultSet.getLong("ORD.ID") == order.getId());
                 resultSet.previous();
                 order.setAddressList(orderAddressList);
                 orderList.add(order);
@@ -374,6 +355,7 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         } catch (SQLException e) {
             throw new DaoException("Can't convert order list to entities in converter.", e);
         }
+        System.out.println(orderList.toString());
         return orderList;
     }
 }

@@ -65,6 +65,7 @@ public class LoginController extends InitController {
         } else {
             try {
                 User user = this.clientService.getByEmail(request.getParameter("email"));
+                System.out.println(user.getClientGrant().toString());
                 request.getSession().setAttribute(Constants.USER, user);
                 response.sendRedirect(Constants.PRIVATE_AREA);
             } catch (IOException e) {

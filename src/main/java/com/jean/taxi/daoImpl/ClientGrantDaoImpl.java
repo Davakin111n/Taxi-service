@@ -16,7 +16,7 @@ import java.util.List;
 public class ClientGrantDaoImpl extends GenericDaoImpl<ClientGrant> {
 
     private final String CLIENT_GRANT_TABLE = "`CLIENT_GRANT`;";
-    private final String CLIENT_GRANT_ID = "`CLIENT_GRANT` WHERE id=?;";
+    private final String CLIENT_GRANT_ID = "`CLIENT_GRANT` WHERE id_client=?;";
     private final String INSERT_NEW_CLIENT_GRANT = "INSERT INTO client_grant(`ID_CLIENT`,`ADMIN`,`MODERATOR`,`ACTIVE`) VALUES(?,?,?,?);";
     private final String UPDATE_CLIENT_GRANT = "`CLIENT_GRANT` SET ADMIN=?, MODERATOR=?, ACTIVE=? WHERE ID_CLIENT=?;";
 

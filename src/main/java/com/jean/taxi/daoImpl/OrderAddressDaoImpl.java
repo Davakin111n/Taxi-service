@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
-    private final String ORDER_ADDRESS_TABLE = "`order_address` add";
-    private final String ORDER_ADDRESS_ID = "`order_address` WHERE id=?;";
-    private final String DELETE_ADDRESS = "`order_address` WHERE id_order=?;";
-    private final String INSERT_ORDER_ADDRESS = "INSERT INTO order_address(id_order, destination_address, destination_house_number, destination_porch_number) VALUES(?,?,?,?);";
-    private final String UPDATE_ORDER_ADDRESS = "`order_address` SET destination_address=?, destination_house_number=?, destination_porch_number=? WHERE id=?;";
+    private final String ORDER_ADDRESS_TABLE = "`ORDER_ADDRESS` ORD_AD";
+    private final String ORDER_ADDRESS_ID = "`ORDER_ADDRESS` WHERE ORD_AD.ID=?;";
+    private final String DELETE_ADDRESS = "`ORDER_ADDRESS` WHERE ORD_AD.ID_ORDER=?;";
+    private final String INSERT_ORDER_ADDRESS = "INSERT INTO ORDER_ADDRESS(ID_ORDER, DESTINATION_ADDRESS, DESTINATION_HOUSE_NUMBER, DESTINATION_PORCH_NUMBER) VALUES(?,?,?,?);";
+    private final String UPDATE_ORDER_ADDRESS = "`ORDER_ADDRESS` ORD_AD SET DESTINATION_ADDRESS=?, DESTINATION_HOUSE_NUMBER=?, DESTINATION_PORCH_NUMBER=? WHERE ORD_AD.ID=?;";
 
     public OrderAddressDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -114,11 +114,11 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
         try {
             while (resultSet.next()) {
                 orderAddress = new OrderAddress();
-                orderAddress.setId(resultSet.getLong("id"));
-                orderAddress.setOrderId(resultSet.getLong("id_order"));
-                orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
-                orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
-                orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
+                orderAddress.setId(resultSet.getLong("ORD_AD.ID"));
+                orderAddress.setOrderId(resultSet.getLong("ORD_AD.ID_ORDER"));
+                orderAddress.setDestinationAddress(resultSet.getString("ORD_AD.DESTINATION_ADDRESS"));
+                orderAddress.setDestinationHouseNumber(resultSet.getString("ORD_AD.DESTINATION_HOUSE_NUMBER"));
+                orderAddress.setDestinationPorchNumber(resultSet.getString("ORD_AD.DESTINATION_PORCH_NUMBER"));
             }
         } catch (SQLException e) {
             throw new DaoException("Can't convert order address to entity in converter.", e);
@@ -132,11 +132,11 @@ public class OrderAddressDaoImpl extends GenericDaoImpl<OrderAddress> {
         try {
             while (resultSet.next()) {
                 OrderAddress orderAddress = new OrderAddress();
-                orderAddress.setId(resultSet.getLong("id"));
-                orderAddress.setOrderId(resultSet.getLong("id_order"));
-                orderAddress.setDestinationAddress(resultSet.getString("destination_address"));
-                orderAddress.setDestinationHouseNumber(resultSet.getString("destination_house_number"));
-                orderAddress.setDestinationPorchNumber(resultSet.getString("destination_porch_number"));
+                orderAddress.setId(resultSet.getLong("ORD_AD.ID"));
+                orderAddress.setOrderId(resultSet.getLong("ORD_AD.ID_ORDER"));
+                orderAddress.setDestinationAddress(resultSet.getString("ORD_AD.DESTINATION_ADDRESS"));
+                orderAddress.setDestinationHouseNumber(resultSet.getString("ORD_AD.DESTINATION_HOUSE_NUMBER"));
+                orderAddress.setDestinationPorchNumber(resultSet.getString("ORD_AD.DESTINATION_PORCH_NUMBER"));
                 reviewList.add(orderAddress);
             }
         } catch (SQLException e) {

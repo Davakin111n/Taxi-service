@@ -102,7 +102,7 @@ public abstract class GenericDaoImpl<T extends Identifier> extends GenericEntity
 
     }
 
-    public List listAll() throws DaoException {
+    public List<T> listAll() throws DaoException {
         try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(SELECT_FROM
                 .concat(getAllFromTableQuery()))) {
             ResultSet resultSet = preparedStatement.executeQuery();
