@@ -355,7 +355,6 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
         } catch (SQLException e) {
             throw new DaoException("Can't convert order list to entities in converter.", e);
         }
-        System.out.println(orderList.toString());
         return orderList;
     }
 }
